@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>关于我</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css" th:href="@{/css/semantic.min.css}">
+    <link rel="stylesheet" href="./static/css/me.css" th:href="@{/css/me.css}">
+</head>
+<div>
+
+    <!--导航-->
+    <div th:replace="commons/bar::topbar(activeUri='about')"></div>
+
+    <!--中间内容-->
+    <div class="m-container m-padded-tb-big">
+        <div class="ui container">
+            <div class="ui stackable grid">
+                <!--左边布局-->
+                <div class="eleven wide column">
+                    <div class="ui segment">
+                        <img src="https://unsplash.it/800/600?image=1005" alt="" class="ui rounded image">
+                    </div>
+                </div>
+                <!--右边布局-->
+                <div class="five wide column">
+                    <div class="top attached segment">
+                        <div class="ui header">关于我</div>
+                    </div>
+                    <div class="ui attached segment">
+                        <p class="m-text">一个独立开发者，折腾在0和1世界的小哥哥；一个终身学习者，誓将学习进行到底。希望结识可以共同成长的小伙伴。</p>
+                        <p class="m-text">热爱编程，喜欢折腾，正在探索搞笑学习编程技术的方法...</p>
+                    </div>
+                    <div class="ui attached segment">
+                        <div class="ui orange basic left pointing label m-margin-tb-tiny">编程</div>
+                        <div class="ui orange basic left pointing label m-margin-tb-tiny">写作</div>
+                        <div class="ui orange basic left pointing label m-margin-tb-tiny">思考</div>
+                        <div class="ui orange basic left pointing label m-margin-tb-tiny">运动</div>
+                    </div>
+                    <div class="ui attached segment">
+                        <div class="ui teal basic left pointing label m-margin-tb-tiny">Java</div>
+                        <div class="ui teal basic left pointing label m-margin-tb-tiny">JavaScript</div>
+                        <div class="ui teal basic left pointing label m-margin-tb-tiny">Node</div>
+                        <div class="ui teal basic left pointing label m-margin-tb-tiny">C#</div>
+                        <div class="ui teal basic left pointing label m-margin-tb-tiny">.Net</div>
+                        <div class="ui teal basic left pointing label m-margin-tb-tiny">MySQL</div>
+                        <div class="ui teal basic left pointing label m-margin-tb-tiny">SQL Server</div>
+                    </div>
+                    <div class="ui bottom attached segment">
+                        <a href="#" class="ui circular icon button"><i class="github icon"></i></a>
+                        <a href="#" class="ui wechat circular icon button"><i class="weixin icon"></i></a>
+                        <a href="#" class="ui qq circular icon button" data-content="1400822425" data-position="bottom center"><i class="qq icon"></i></a>
+                    </div>
+                    <div class="ui wechat-qr flowing popup transition hidden">
+                        <img src="./static/images/MyWeChat.png" th:src="@{/images/MyWeChat.png}" alt="" class="ui rounded image" style="width: 100px;">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<br>
+<br>
+<!--底部footer-->
+<div th:replace="commons/bar::footerbar"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+
+<script>
+    $('.menu.toggle').click(function () {
+        $('.m-item').toggleClass('m-mobile-hide');
+    });
+    //弹出内容
+    $('.qq').popup(); //弹出QQ号码
+    $('.wechat').popup({ //弹出微信
+        popup : $('.wechat-qr'),
+        position: 'bottom center'
+    });
+</script>
+</body>
+</html>

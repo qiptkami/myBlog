@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yiqiandewo.mapper.TestMapper">
+
+
+    <!--<resultMap id="allEmpMap" type="com.yiqiandewo.pojo.Department">
+        <id property="id" column="id"></id>
+        <id property="departmentName" column="department_name"></id>
+        <id property="id" column="id"></id>
+        &lt;!&ndash; ofType:指定集合里面元素的类型 &ndash;&gt;
+        <collection property="employees" ofType="com.yiqiandewo.pojo.Employee">
+            <result property="name" column="name"></result>
+            <result property="email" column="email"></result>
+            <result property="gender" column="gender"></result>
+            <result property="birth" column="birth"></result>
+            <result property="departmentId" column="department_id"></result>
+        </collection>
+    </resultMap>
+
+    <select id="queryAllEmployee" resultMap="allEmpMap">
+        select d.*, e.* from `department` d left join `employee` e on d.id = e.department_id
+    </select>-->
+
+    <select id="queryAll" resultType="com.yiqiandewo.pojo.Test">
+        select * from `test`
+    </select>
+
+</mapper>

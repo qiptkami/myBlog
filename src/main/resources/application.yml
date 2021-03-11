@@ -1,0 +1,11 @@
+spring:
+  datasource:
+    username: root
+    password: yiqiandewo1
+    url: jdbc:mysql://119.45.192.221:3306/blog?serverTimezone=UTC&useUnicode=true&characterEnconding=utf-8
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  thymeleaf:
+    cache: false
+mybatis:
+  type-aliases-package: com.yiqiandewo.pojo
+  mapper-locations: classpath:com/yiqiandewo/mapper/*.xml
