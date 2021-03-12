@@ -111,7 +111,7 @@
                 - TeX (Based on KaTeX);
                 -Emoji;
                 -Task lists;
-                -HTML tags decode;
+                -HTML tags decode;f
             </textarea>
         </div>
     </div>
