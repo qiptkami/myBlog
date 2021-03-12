@@ -86,4 +86,44 @@
     ```html
     <div th:replace="commons/bar::topbar(activeUri='blog')"></div>
     ```
+    
+- 集成md编辑器
 
+    使用的是editormd
+
+    ```js
+    //初始化Markdown编辑器
+        var contentEditor;
+        $(function () {
+            contentEditor = editormd("md-content",{
+                width:"100%",
+                height:640,
+                syncScrolling:"single",
+                path:"../lib/editormd/lib/"  //路径一定要正确
+            });
+        });
+    ```
+    ```html
+    <div class="field">
+        <div id="md-content" style="z-index: 1 !important;"><!--将markdown文本框放到最上方以免全屏布局错乱-->
+            <textarea name="content" placeholder="博客内容" style="display: none;">
+                ### Disabled options
+                - TeX (Based on KaTeX);
+                -Emoji;
+                -Task lists;
+                -HTML tags decode;
+            </textarea>
+        </div>
+    </div>
+    ```
+<div class="field">
+    <div id="md-content" style="z-index: 1 !important;"><!--将markdown文本框放到最上方以免全屏布局错乱-->
+        <textarea name="content" placeholder="博客内容" style="display: none;">
+            ### Disabled options
+        - TeX (Based on KaTeX);
+        -Emoji;
+        -Task lists;
+        -HTML tags decode;
+        </textarea>
+    </div>
+</div>

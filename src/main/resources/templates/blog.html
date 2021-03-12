@@ -448,12 +448,12 @@
                 <div class="ui orange basic label">
                     <div class="ui images" style="font-size: inherit !important;">
                         <div class="image">
-                            <img src="./static/images/MyWeChart.png" alt="" class="ui rounded bordered image"
+                            <img src="./static/images/MyWeChat.png" th:src="@{/images/MyWeChat.png}" alt="" class="ui rounded bordered image"
                                  style="width: 120px;">
                             <div>支付宝</div>
                         </div>
                         <div class="image">
-                            <img src="./static/images/MyWeChart.png" alt="" class="ui rounded bordered image"
+                            <img src="./static/images/MyWeChat.png" th:src="@{/images/MyWeChat.png}" alt="" class="ui rounded bordered image"
                                  style="width: 120px;">
                             <div>微信</div>
                         </div>
@@ -474,7 +474,7 @@
                     </ui>
                 </div>
                 <div class="five wide column">
-                    <img src="./static/images/MyWeChart.png" alt="" class="ui right floated rounded bordered image"
+                    <img src="./static/images/MyWeChat.png" th:src="@{/images/MyWeChat.png}" alt="" class="ui right floated rounded bordered image"
                          style="width: 110px;">
                 </div>
             </div>
@@ -602,7 +602,7 @@
 
 <!-- 微信图片 -->
 <div id="qrcode" class="ui wechat-qr flowing popup transition hidden" style="width: 130px !important;">
-   <img src="./static/images/MyWeChart.png" th:src="@{/images/MyWeChat.png}" alt="" class="ui rounded image" style="width: 120px !important;">
+   <img src="./static/images/MyWeChat.png" th:src="@{/images/MyWeChat.png}" alt="" class="ui rounded image" style="width: 120px !important;">
 </div>
 
 <br>
@@ -613,11 +613,11 @@
 
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
-<script src="./static/lib/prism/prism.js"></script>
+<script src="./static/lib/prism/prism.js" th:src="@{/lib/prism/prism.js}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.11.1/tocbot.min.js "></script>
-<script src="./static/lib/qrcode/qrcode.min.js"></script>
-<script src="static/lib/scrollTo/jquery.scrollTo.min.js"></script>
-<script src="static/lib/waypoints/jquery.waypoints.min.js"></script>
+<script src="./static/lib/qrcode/qrcode.min.js" th:src="@{/lib/qrcode/qrcode.min.js}"></script>
+<script src="static/lib/scrollTo/jquery.scrollTo.min.js" th:src="@{/lib/scrollTo/jquery.scrollTo.min.js}"></script>
+<script src="static/lib/waypoints/jquery.waypoints.min.js" th:src="@{/lib/waypoints/jquery.waypoints.min.js}"></script>
 
 <script>
     $('.menu.toggle').click(function () {
