@@ -127,3 +127,43 @@
         </textarea>
     </div>
 </div>
+- 异常处理
+
+    > 在templates目录下的error目录，springboot会自动根据错误状态码找到对应的错误页面（html页面以状态码命名）
+
+    同时配置异常处理器
+
+    ```java
+    @ControllerAdvice //拦截所有Controller的控制器
+    public class ControllerExceptionHandler {
+    
+        private Logger logger = LoggerFactory.getLogger(ControllerExceptionHandler.class); //log4j
+    
+        @ExceptionHandler(Exception.class) //异常处理
+        public ModelAndView exceptionHandler(HttpServletRequest request, Exception e) {
+            logger.error("Request Url : {}, exception : {}", request.getRequestURL(), e); //打印访问的url和异常信息
+            ModelAndView mv = new ModelAndView();
+            mv.addObject("url", request.getRequestURL());
+            mv.addObject("exception", e);
+            mv.setViewName("error/error");  //跳转到error.html
+            return mv;
+        }
+    }
+    ```
+
+- 日志处理
+
+    用spring aop对controller进行拦截
+
+    用环绕通知
+
+    ```java
+    ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+    HttpServletRequest request = attributes.getRequest();
+    String url = request.getRequestURL().toString();  //访问的url
+    String ip = request.getRemoteAddr();   //ip
+    String classMethod = pcj.getSignature().getDeclaringTypeName() + "." + pcj.getSignature().getName();  //方法
+    Object[] args = pcj.getArgs();  //参数
+    RequestLog requestLog = new RequestLog(url, ip, classMethod, args);  //封装
+    logger.info("Request : {}" ,requestLog);
+    ```
