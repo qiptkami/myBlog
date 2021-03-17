@@ -1,6 +1,5 @@
 package com.yiqiandewo.controller;
 
-import com.yiqiandewo.pojo.Test;
 import com.yiqiandewo.service.TestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

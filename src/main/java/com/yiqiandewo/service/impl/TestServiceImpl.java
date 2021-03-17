@@ -1,7 +1,6 @@
 package com.yiqiandewo.service.impl;
 
 import com.yiqiandewo.mapper.TestMapper;
-import com.yiqiandewo.pojo.Test;
 import com.yiqiandewo.service.TestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

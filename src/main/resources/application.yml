@@ -8,4 +8,4 @@ spring:
     cache: false
 mybatis:
   type-aliases-package: com.yiqiandewo.pojo
-  mapper-locations: classpath:com/yiqiandewo/mapper/*.xml
+  mapper-location s: classpath:com/yiqiandewo/mapper/*.xml
