@@ -116,17 +116,7 @@
         </div>
     </div>
     ```
-<div class="field">
-    <div id="md-content" style="z-index: 1 !important;"><!--将markdown文本框放到最上方以免全屏布局错乱-->
-        <textarea name="content" placeholder="博客内容" style="display: none;">
-            ### Disabled options
-        - TeX (Based on KaTeX);
-        -Emoji;
-        -Task lists;
-        -HTML tags decode;
-        </textarea>
-    </div>
-</div>
+
 - 异常处理
 
     > 在templates目录下的error目录，springboot会自动根据错误状态码找到对应的错误页面（html页面以状态码命名）
