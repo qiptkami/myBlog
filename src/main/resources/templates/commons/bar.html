@@ -1,11 +1,38 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
+
+
+<nav class="ui inverted attached segment m-padded-tb-mini m-shadow-small" th:fragment="admintopbar">
+    <div class="ui container">
+        <div class="ui inverted secondary stackable menu">
+            <h2 class="ui teal header item">后台管理</h2>
+            <a href="#" class="active m-item item m-mobile-hide" th:class="${activeUri=='blog'?'active m-item item m-mobile-hide':'m-item item m-mobile-hide'}"><i class="home icon"></i>博客</a>
+            <a href="#" class="m-item item m-mobile-hide" th:class="${activeUri=='type'?'active m-item item m-mobile-hide':'m-item item m-mobile-hide'}"><i class="idea icon"></i>分类</a>
+            <a href="#" class="m-item item m-mobile-hide" th:class="${activeUri=='tag'?'active m-item item m-mobile-hide':'m-item item m-mobile-hide'}"><i class="tags icon"></i>标签</a>
+            <div class="right m-item item m-mobile-hide menu">
+                <div class="ui dropdown item">
+                    <div class="text">
+                        <img src="https://unsplash.it/100/100?image=1005" class="ui avatar image">
+                        yiqiandewo
+                    </div>
+                    <i class="dropdown icon"></i>
+                    <div class="menu">
+                        <a href="#" class="item">注销</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <a href="#" class="ui menu toggle black icon button m-right-top m-mobile-show">
+        <i class="sidebar icon"></i>
+    </a>
+</nav>
+
 <!--导航 top bar-->
 <nav class="ui inverted attached segment m-padded-tb-mini m-shadow-small" th:fragment="topbar">
     <div class="ui container">
