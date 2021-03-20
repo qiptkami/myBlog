@@ -14,26 +14,17 @@
 <div>
 
     <!--导航-->
-    <div th:replace="commons/bar::admintopbar(activeUri='blog')"></div>
-
-    <div class="ui attached pointing menu">
-        <div class="ui container">
-            <div class="right menu">
-                <a href="#" class="item">发布</a>
-                <a href="#" class="teal active item">列表</a>
-            </div>
-        </div>
-    </div>
+    <div th:replace="commons/bar::admintopbar(activeUri='')"></div>
 
     <!--中间内容-->
     <div class="m-container-small m-padded-tb-big">
         <div class="ui container">
             <div class="ui success large message">
-                <h3>Hi,</h3>
+                <h3 th:text="${session.user.getUsername()}">Hi</h3>
                 <p>欢迎登录</p>
             </div>
 
-            <img src="" alt="" class="ui rounded bordered fluid image">
+            <img src="https://unsplash.it/800/600?image=1005" alt="" class="ui rounded bordered fluid image">
         </div>
     </div>
 </div>

@@ -101,7 +101,7 @@ public class User {
                 ", avatar='" + avatar + '\'' +
                 ", type='" + type + '\'' +
                 ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
                 '}';
     }
-
 }

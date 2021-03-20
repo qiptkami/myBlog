@@ -1,6 +1,7 @@
 package com.yiqiandewo.config;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -16,9 +17,8 @@ public class MVCConfig implements WebMvcConfigurer {
         registry.addViewController("/tags").setViewName("tags");
         registry.addViewController("/archives").setViewName("archives");
         registry.addViewController("/types").setViewName("types");
-        registry.addViewController("/blogs-input").setViewName("/admin/blogs-input");
-        registry.addViewController("/login").setViewName("/admin/login");
 
     }
+
 
 }
