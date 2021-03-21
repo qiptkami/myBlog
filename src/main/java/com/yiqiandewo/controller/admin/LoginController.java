@@ -2,6 +2,7 @@ package com.yiqiandewo.controller.admin;
 
 import com.yiqiandewo.pojo.User;
 import com.yiqiandewo.service.UserService;
+import com.yiqiandewo.util.MD5Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,7 +25,7 @@ public class LoginController {
 
     @PostMapping("/login")
     public String login(String username, String password, HttpSession session) {
-        User user = userService.check(username, password);
+        User user = userService.check(username, MD5Utils.string2MD5(password));
 
         if (user != null) {
             user.setPassword(null);
@@ -37,9 +38,7 @@ public class LoginController {
 
     @GetMapping("/logout")
     public String logout(HttpSession session) {
-        System.out.println(session.getAttribute("user"));
         session.removeAttribute("user");
-        System.out.println(session.getAttribute("user"));
         return "redirect:/admin";
     }
 }
