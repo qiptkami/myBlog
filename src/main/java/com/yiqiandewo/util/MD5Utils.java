@@ -1,5 +1,7 @@
 package com.yiqiandewo.util;
 
+import org.springframework.data.domain.Pageable;
+
 import java.security.MessageDigest;
 
 public class MD5Utils {

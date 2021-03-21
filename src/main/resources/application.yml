@@ -6,6 +6,16 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   thymeleaf:
     cache: false
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true # Spring Boot 的 META-INF/spring-configuration-metadata.json 配置文件中默认是关闭 Spring 的 hiddenmethod 过滤器的。
+                      # 这时候需要通Springboot配置文件application.yml/properties 中将 hiddenmethod 过滤器设置为启用即可。 可以配置delete put等请求
 mybatis:
   type-aliases-package: com.yiqiandewo.pojo
   mapper-location s: classpath:com/yiqiandewo/mapper/*.xml
+pagehelper:
+  helper-dialect: mysql
+  reasonable: true
+  support-methods-arguments: true
+  params: countSql

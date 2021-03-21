@@ -49,6 +49,34 @@
 
 开发细节：
 
+- mysql表的设计
+
+    er图
+
+    ![image-20210321213712099](ER.png)
+
+    表关系：
+
+    - blog-tag  多对多
+
+        一篇博客可以有多个标签，一个标签下也可以有多篇博客
+
+    - blog-comment 一对多
+
+        一篇博客下可以有多条评论
+
+    - blog-user 多对一
+
+        一篇博客下只能属于一个用户，但一个用户可以有多篇博客
+
+    - blog-type 多对一
+
+        一篇博客只能有一种类型，一种类型下可以有多篇博客
+
+    - comment-childComment 一对多
+
+        一条评论下可以有多个子评论
+
 - 页面冗余部分
 
     使用thymeleaf的th:fragmenthe和th:replace进行简化
@@ -160,5 +188,8 @@
 
 
 
+- pageHelper的细节
 
+    采用的是mybatis的xml方式实现分页查询
 
+    > 在xml中写sql时不应在最后加上分号，因为pageHelper在帮我们分页时，会根据参数pageNo和pageSize给sql语句加limit，如果加上分号会报sql语法错误。
