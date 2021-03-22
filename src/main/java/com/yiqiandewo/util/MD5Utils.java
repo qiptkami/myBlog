@@ -1,7 +1,5 @@
 package com.yiqiandewo.util;
 
-import org.springframework.data.domain.Pageable;
-
 import java.security.MessageDigest;
 
 public class MD5Utils {
@@ -28,7 +26,6 @@ public class MD5Utils {
             hexValue.append(Integer.toHexString(val));
         }
         return hexValue.toString();
-
     }
 
     /**
@@ -44,7 +41,7 @@ public class MD5Utils {
         return s;
     }
 
-    // 测试主函数
+    //测试主函数
     public static void main(String[] args) {
         String s = new String("123");
         System.out.println("原始：" + s);
