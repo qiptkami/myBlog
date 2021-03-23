@@ -16,4 +16,6 @@ public interface TypeMapper {
     void updateType(Type type);
 
     void deleteType(Long id);
+
+    Type queryByName(String name);
 }

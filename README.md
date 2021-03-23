@@ -193,3 +193,61 @@
     采用的是mybatis的xml方式实现分页查询
 
     > 在xml中写sql时不应在最后加上分号，因为pageHelper在帮我们分页时，会根据参数pageNo和pageSize给sql语句加limit，如果加上分号会报sql语法错误。
+
+
+
+- 后端的数据校验
+
+    采用`validation`
+
+    首先`pom.xml`
+
+    ```xml
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-validation</artifactId>
+        <version>2.4.3</version>
+    </dependency>
+    ```
+
+    首先在要校验的字段上叫注解
+
+    ```java
+    @NotBlank(message = "分类名称不能为空")
+    private String name;
+    ```
+
+    是
+
+    ```java
+    @PostMapping("/types")
+    public String addType(@Valid Type type, BindingResult result, RedirectAttributes attributes) {
+        if (typeService.queryByName(type.getName()) != null) {
+            result.rejectValue("name", "nameError", "该分类已存在");
+        }
+        if (result.hasErrors()) {
+            return "admin/types-input";
+        }
+        Type t = typeService.addType(type);
+        if (t == null) {
+            attributes.addFlashAttribute("errMsg","新增失败");
+        } else {
+            attributes.addFlashAttribute("successMsg","新增成功");
+        }
+        return "redirect:/admin/types";  //返回到 /admin/type 请求 再去查询
+    }
+    ```
+
+    前端页面接受  这种注释thymeleaf仍然可以识别
+
+    ```html
+    	<!--/*/
+        <div class="ui negative message" th:if="${#fields.hasErrors('name')}">
+        <i class="close icon"></i>
+        <div class="header">操作失败</div>
+        <p th:errors="*{name}">提交信息不符合规则</p>
+        </div>
+    	/*/-->
+    ```
+
+    

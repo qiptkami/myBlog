@@ -1,10 +1,12 @@
 package com.yiqiandewo.pojo;
 
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 //分类
 public class Type {
     private Long id;
+    @NotBlank(message = "分类名称不能为空")
     private String name;
 
     private List<Blog> blogs; //对多

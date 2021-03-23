@@ -17,6 +17,10 @@
         select * from t_type
     </select>
 
+    <select id="queryByName" resultType="com.yiqiandewo.pojo.Type">
+        select * from t_type where `name` = #{name};
+    </select>
+
     <update id="updateType" parameterType="com.yiqiandewo.pojo.Type">
         update `t_type` set `name` = #{name} where `id` = #{id};
     </update>

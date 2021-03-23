@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
 
@@ -24,7 +25,7 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    public String login(String username, String password, HttpSession session) {
+    public String login(String username, String password, HttpSession session, RedirectAttributes attributes) {
         User user = userService.check(username, MD5Utils.string2MD5(password));
 
         if (user != null) {
@@ -32,7 +33,7 @@ public class LoginController {
             session.setAttribute("user", user);
             return "admin/index";
         }
-        session.setAttribute("message", "用户名或密码错误");
+        attributes.addFlashAttribute("message", "用户名或密码错误");
         return "redirect:/admin";
     }
 

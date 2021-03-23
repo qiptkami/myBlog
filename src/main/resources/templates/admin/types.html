@@ -15,8 +15,8 @@
     <div class="ui attached pointing menu">
         <div class="ui container">
             <div class="right menu">
-                <a href="#" class="item">发布</a>
-                <a href="#" class="teal active item">列表</a>
+                <a href="#" th:href="@{/admin/types/input}" class="item">新增</a>
+                <a href="#" th:href="@{/admin/types}" class="teal active item">列表</a>
             </div>
         </div>
     </div>
@@ -24,6 +24,16 @@
     <!--中间内容-->
     <div class="m-container-small m-padded-tb-big">
         <div class="ui container">
+            <div class="ui success message" th:unless="${#strings.isEmpty(successMsg)}">
+                <i class="close icon"></i>
+                <div class="header">提示：</div>
+                <p th:text="${successMsg}"></p>
+            </div>
+            <div class="ui error message" th:unless="${#strings.isEmpty(errMsg)}">
+                <i class="close icon"></i>
+                <div class="header">提示：</div>
+                <p th:text="${errMsg}"></p>
+            </div>
             <!--表格-->
             <table class="ui celled table">
                 <thead>
@@ -34,17 +44,15 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr th:each="type : ${pageInfo.list}">
-                        <td th:text="${type.id}">1</td>
+                    <tr th:each="type,iterStat : ${pageInfo.list}">
+                        <td th:text="${iterStat.count}">1</td>
                         <td th:text="${type.name}">刻意练习</td>
                         <td>
-                            <a href="#" th:attr="update_uri=@{/admin/type/}+${type.id}" class="ui mini teal basic button">编辑</a>
-                            <a href="#" th:attr="del_uri=@{/admin/type/}+${type.id}" class="ui mini red basic button deleteBtn">删除</a>
+                            <a href="#" th:href="@{/admin/types/}+${type.id}" class="ui mini teal basic button updateBtn">编辑</a>
+                            <a href="#" th:attr="del_uri=@{/admin/types/}+${type.id}" class="ui mini red basic button deleteBtn">删除</a>
                         </td>
                     </tr>
-                    <form id="updateType" method="post">
-                        <input type="hidden" name="_method" value="put">
-                    </form>
+
                     <form id="delType" method="post">
                         <input type="hidden" name="_method" value="delete">
                     </form>
@@ -52,24 +60,12 @@
                 </tbody>
                 <tfoot>
                     <tr>
-                        <th colspan="6">
-                            <!--<div class="ui right floated pagination menu">
-                                <a class="icon item">
-                                    <i class="left chevron icon"></i>
-                                </a>
-                                <a class="item">1</a>
-                                <a class="item">2</a>
-                                <a class="item">3</a>
-                                <a class="item">4</a>
-                                <a class="icon item">
-                                    <i class="right chevron icon"></i>
-                                </a>
-                            </div>-->
+                        <th colspan="6" th:if="${pageInfo.pages}>1">
                             <div class="ui mini pagination menu">
-                                <a class="item">上一页</a>
-                                <a class="item">下一页</a>
+                                <a class="item" th:href="@{/admin/types(page=${pageInfo.pageNum-1})}" th:unless="${pageInfo.isFirstPage}">上一页</a>
+                                <a class="item" th:href="@{/admin/types(page=${pageInfo.pageNum+1})}" th:unless="${pageInfo.isLastPage}">下一页</a>
                             </div>
-                            <a href="#" class="ui mini right floated teal basic button">新增</a>
+                            <a href="" th:href="@{/admin/types/input}" class="ui mini right floated teal basic button">新增</a>
                         </th>
                     </tr>
                 </tfoot>
@@ -95,8 +91,13 @@
 </script>
 <script>
     $(".deleteBtn").click(function () {
-        $("#delType").attr("action", $(this).attr("del_uri")).submit;
-    })
+        $("#delType").attr("action", $(this).attr("del_uri")).submit();
+    });
+
+    //消息提交关闭
+    $('.message .close').on('click', function () {
+        $(this).closest('.message').transition('fade');
+    });
 </script>
 </body>
 </html>

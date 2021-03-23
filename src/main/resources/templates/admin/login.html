@@ -44,7 +44,7 @@
                     </div>
 
                     <div class="ui error mini message"></div>
-                    <div class="ui negative message" th:unless="${#strings.isEmpty(session.message)}" th:text="${session.message}"></div>
+                    <div class="ui negative message" th:unless="${#strings.isEmpty(message)}" th:text="${message}"></div>
                 </form>
 
             </div>

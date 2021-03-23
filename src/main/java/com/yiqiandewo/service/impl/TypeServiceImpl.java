@@ -7,7 +7,6 @@ import com.yiqiandewo.pojo.Type;
 import com.yiqiandewo.service.TypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -18,8 +17,14 @@ public class TypeServiceImpl implements TypeService {
     private TypeMapper typeMapper;
 
     @Override
-    public void addType(Type type) {
+    public Type addType(Type type) {
+        //首先判断数据库中有无这个数据
+        Type t = typeMapper.queryByName(type.getName());
+        if (t != null) {
+            return null;
+        }
         typeMapper.addType(type);
+        return type;
     }
 
     @Override
@@ -36,12 +41,22 @@ public class TypeServiceImpl implements TypeService {
     }
 
     @Override
-    public void updateType(Type type) {
+    public Type updateType(Long id, Type type) {
+        Type t = typeMapper.queryById(id);
+        if (t == null) {
+            return null;
+        }
         typeMapper.updateType(type);
+        return type;
     }
 
     @Override
     public void deleteType(Long id) {
         typeMapper.deleteType(id);
+    }
+
+    @Override
+    public Type queryByName(String name) {
+        return typeMapper.queryByName(name);
     }
 }
