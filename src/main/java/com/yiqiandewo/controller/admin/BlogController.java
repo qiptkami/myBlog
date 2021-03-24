@@ -12,4 +12,9 @@ public class BlogController {
     public String list() {
         return "admin/blogs";
     }
+
+    @GetMapping("/blogs/input")
+    public String input() {
+        return "admin/blogs-input";
+    }
 }

@@ -15,14 +15,12 @@ public class MVCConfig implements WebMvcConfigurer {
         registry.addViewController("/index").setViewName("index");
         registry.addViewController("/about").setViewName("about");
         registry.addViewController("/blog").setViewName("blog");
-        registry.addViewController("/tags").setViewName("tags");
         registry.addViewController("/archives").setViewName("archives");
         registry.addViewController("/types").setViewName("types");
-        registry.addViewController("/t").setViewName("admin/types");
-        registry.addViewController("/wt").setViewName("admin/types-input");
 
     }
 
+    //后台管理的拦截器
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new LoginInterceptor())
