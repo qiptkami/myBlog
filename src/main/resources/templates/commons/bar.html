@@ -12,8 +12,7 @@
         <div class="ui inverted secondary stackable menu">
             <h2 class="ui teal header item">后台管理</h2>
             <a href="#" th:href="@{/admin/blogs}" class="active m-item item m-mobile-hide" th:class="${activeUri=='blog'?'active m-item item m-mobile-hide':'m-item item m-mobile-hide'}"><i class="home icon"></i>博客</a>
-            <a href="#" th:href="@{/admin/types}" class="m-item item m-mobile-hide" th:class="${activeUri=='type'?'active m-item item m-mobile-hide':'m-item item m-mobile-hide'}"><i class="idea icon"></i>分类</a>
-            <a href="#" class="m-item item m-mobile-hide" th:class="${activeUri=='tag'?'active m-item item m-mobile-hide':'m-item item m-mobile-hide'}"><i class="tags icon"></i>标签</a>
+            <a href="#" th:href="@{/admin/types}" class="m-item item m-mobile-hide" th:class="${activeUri=='type'?'active m-item item m-mobile-hide':'m-item item m-mobile-hide'}"><i class="tags icon"></i>分类</a>
             <div class="right m-item item m-mobile-hide menu">
                 <div class="ui dropdown item">
                     <div class="text">
@@ -38,8 +37,7 @@
         <div class="ui inverted secondary stackable menu"> <!--stackable手机移动端相应，屏幕小时会将内容堆叠到一起-->
             <h2 class="ui teal header item">Blog</h2>
             <a href="#" th:href="@{/index}" class="m-item item m-mobile-hide" th:class="${activeUri=='index'?'active m-item item m-mobile-hide':'m-item item m-mobile-hide'}"><i class="home icon"></i>首页</a>
-            <a href="#" th:href="@{/types}" class="m-item item m-mobile-hide" th:class="${activeUri=='types'?'active m-item item m-mobile-hide':'m-item item m-mobile-hide'}"><i class="idea icon"></i>分类</a>
-            <a href="#" th:href="@{/tags}" class="m-item item m-mobile-hide" th:class="${activeUri=='tags'?'active m-item item m-mobile-hide':'m-item item m-mobile-hide'}"><i class="tags icon"></i>标签</a>
+            <a href="#" th:href="@{/types}" class="m-item item m-mobile-hide" th:class="${activeUri=='types'?'active m-item item m-mobile-hide':'m-item item m-mobile-hide'}"><i class="tags icon"></i>分类</a>
             <a href="#" th:href="@{/archives}" class="m-item item m-mobile-hide" th:class="${activeUri=='archives'?'active m-item item m-mobile-hide':'m-item item m-mobile-hide'}"><i class="clone icon"></i>归档</a>
             <a href="#" th:href="@{/about}" class="m-item item m-mobile-hide" th:class="${activeUri=='about'?'active m-item item m-mobile-hide':'m-item item m-mobile-hide'}"><i class="info icon"></i>关于我</a>
             <div class="right m-item item m-mobile-hide">

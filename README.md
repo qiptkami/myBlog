@@ -8,9 +8,6 @@
 - 查看博客数最多的几个分类
 - 查看所有分类
 - 查看某个分类下的博客列表
-- 查看标记博客最多的10个标签
-- 查看所有标签
-- 查看某个标签下的所有博客
 - 根据年度时间线查看博客
 - 查看最新的博客
 - 关键字全局搜索博客
@@ -32,7 +29,6 @@
     - 删除博客
     - 根据标题、分类、标签查看博客
 - 管理博客分类
-- 管理标签
 
 
 
@@ -56,10 +52,6 @@
     ![image-20210321213712099](ER.png)
 
     表关系：
-
-    - blog-tag  多对多
-
-        一篇博客可以有多个标签，一个标签下也可以有多篇博客
 
     - blog-comment 一对多
 
@@ -217,7 +209,7 @@
     private String name;
     ```
 
-    是
+    给需要校验的数据加上`@Valid`，BindingResult result是校验结果
 
     ```java
     @PostMapping("/types")
@@ -238,16 +230,94 @@
     }
     ```
 
-    前端页面接受  这种注释thymeleaf仍然可以识别
+    
 
     ```html
-    	<!--/*/
+    <form action="#" method="post" th:if="*{id}==null" th:object="${type}" th:action="@{/admin/types}" class="ui form">
+        <div class="required field">
+            <div class="ui left labeled input">
+                <label class="ui teal basic label">名称</label>
+                <input type="text" name="name" placeholder="分类名称" th:value="*{name}">
+            </div>
+        </div>
+    
+        <div class="ui error message"></div>
+        <!-- 这里的*{id} 其实就相当于${type.id}，就是从对象中拿属性的值 -->
+    
+        <!-- 
+    		前端页面接收  下面这种注释thymeleaf仍然可以识别
+    		th:if里的是要验证的name域是否有错误
+    		th:errors="*{name}" 会从@NotBlank中的message拿
+    		如果这样写,会报错，需要在上面加一个th:object="${type}"，就是从后端拿到一个Type对象，然后th:value="*{name}"，就是拿到type里的             value值,然后注意还需要从后端传一个type对象
+        -->
+        <!--/*/
         <div class="ui negative message" th:if="${#fields.hasErrors('name')}">
         <i class="close icon"></i>
         <div class="header">操作失败</div>
         <p th:errors="*{name}">提交信息不符合规则</p>
         </div>
-    	/*/-->
+        /*/-->
+        <!--操作按钮-->
+        <div class="ui right aligned container">
+            <button type="button" class="ui button" onclick="window.history.go(-1)">返回</button>
+            <button class="ui teal submit button">提交</button>
+        </div>
+    </form>
+    ```
+
+    
+
+- 新增和编辑用同一个页面
+
+    用了两个form表单是因为使用了restful api，然后新增是post请求，修改是put请求（put请求需要配置`<input type="hidden" name="_method" value="put">`），然后不让两个表单同时生效，使用了th:if，由于修改请求会使用id将需要修改的name输入在页面上，而新增不需要，所以两者的区别就是 数据检验使用的type对象的id是否为null。
+
+    ```html
+    <form action="#" method="post" th:if="*{id}==null" th:object="${type}" th:action="@{/admin/types}" class="ui form">
+        <div class="required field">
+            <div class="ui left labeled input">
+                <label class="ui teal basic label">名称</label>
+                    <input type="text" name="name" placeholder="分类名称" th:value="*{name}">
+            </div>
+         </div>
+    
+         <div class="ui error message"></div>
+         <!--/*/
+         <div class="ui negative message" th:if="${#fields.hasErrors('name')}">
+             <i class="close icon"></i>
+             <div class="header">操作失败</div>
+             <p th:errors="*{name}">提交信息不符合规则</p>
+         </div>
+         /*/-->
+         <!--操作按钮-->
+         <div class="ui right aligned container">
+             <button type="button" class="ui button" onclick="window.history.go(-1)">返回</button>
+             <button class="ui teal submit button">提交</button>
+         </div>
+    </form>
+    
+    <form action="#" method="post" th:if="*{id}!=null" th:object="${type}" th:action="@{/admin/types/{id}(id=*{id})}" class="ui form">
+         <input type="hidden" name="id" th:value="*{id}">
+         <input type="hidden" name="_method" value="put">
+         <div class="required field">
+             <div class="ui left labeled input">
+                 <label class="ui teal basic label">名称</label>
+                 <input type="text" name="name" placeholder="分类名称" th:value="*{name}">
+             </div>
+         </div>
+         <div class="ui error message"></div>
+         <!--/*/
+         <div class="ui negative message" th:if="${#fields.hasErrors('name')}">
+             <i class="close icon"></i>
+             <div class="header">操作失败</div>
+             <p th:errors="*{name}">提交信息不符合规则</p>
+         </div>
+         /*/-->
+         <!--操作按钮-->
+         <div class="ui right aligned container">
+             <button type="button" class="ui button" onclick="window.history.go(-1)">返回</button>
+             <button class="ui teal submit button">提交</button>
+         </div>
+    </form>
     ```
 
     

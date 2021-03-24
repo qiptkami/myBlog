@@ -9,7 +9,7 @@ public interface TypeService {
     Type queryById(Long id);
 
     //分页查询
-    PageInfo<Type> queryAll(int start, int size);
+    PageInfo<Type> queryAll(int page, int size);
 
     Type updateType(Long id, Type type);
 

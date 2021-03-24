@@ -22,7 +22,6 @@ public class Blog {
     新增一个blog时， 如果type和tag不存在，需停先新增type和tag
      */
     private Type type; //对一
-    private List<Tag> tags; //对多
 
     private User user; //对一
 
@@ -33,10 +32,6 @@ public class Blog {
 
     public Type getType() {
         return type;
-    }
-
-    public List<Tag> getTags() {
-        return tags;
     }
 
     public User getUser() {
@@ -153,10 +148,6 @@ public class Blog {
 
     public void setType(Type type) {
         this.type = type;
-    }
-
-    public void setTags(List<Tag> tags) {
-        this.tags = tags;
     }
 
     public void setUser(User user) {

@@ -30,11 +30,11 @@
     <!--中间内容-->
     <div class="m-container-small m-padded-tb-big">
         <div class="ui container">
-            <form action="#" method="post" th:if="*{id}==null" th:object="${type}" th:action="@{/admin/types}" class="ui form">
+            <form action="#" method="post" th:if="${type.getId()}==null" th:object="${type}" th:action="@{/admin/types}" class="ui form">
                 <div class="required field">
                     <div class="ui left labeled input">
                         <label class="ui teal basic label">名称</label>
-                        <input type="text" name="name" placeholder="分类名称">
+                        <input type="text" name="name" placeholder="分类名称" th:value="${type.name}">
                     </div>
                 </div>
 
@@ -53,13 +53,13 @@
                 </div>
             </form>
 
-            <form action="#" method="post" th:if="*{id}!=null" th:object="${type}" th:action="@{/admin/types/{id}(id=*{id})}" class="ui form">
-                <input type="hidden" name="id" th:value="*{id}">
+            <form action="#" method="post" th:if="${type.getId()}!=null" th:object="${type}" th:action="@{/admin/types/{id}(id=*{id})}" class="ui form">
+                <input type="hidden" name="id" th:value="${type.getId()}">
                 <input type="hidden" name="_method" value="put">
                 <div class="required field">
                     <div class="ui left labeled input">
                         <label class="ui teal basic label">名称</label>
-                        <input type="text" name="name" placeholder="分类名称" th:value="*{name}">
+                        <input type="text" name="name" placeholder="分类名称" th:value="${type.name}">
                     </div>
                 </div>
                 <div class="ui error message"></div>
@@ -105,7 +105,7 @@
     $('.ui.form').form({
         fields : {
             title : {
-                identifier : 'name',
+                identifier : 'name1',
                 rules :[{
                     type : 'empty',
                     prompt : '请输入分类名称'
