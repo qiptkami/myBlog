@@ -49,7 +49,7 @@
 
     er图
 
-    ![ER图](./ER.png)
+    ![ER图](https://i.loli.net/2021/03/24/79hCOtSdgEPDr32.png)
 
     表关系：
 
