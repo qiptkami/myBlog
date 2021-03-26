@@ -1,5 +1,9 @@
 package com.yiqiandewo.pojo;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -19,7 +23,7 @@ public class Blog {
     private Date updateTime; //更新时间
 
     /*
-    新增一个blog时， 如果type和tag不存在，需停先新增type和tag
+    新增一个blog时， 如果type不存在，需停先新增type
      */
     private Type type; //对一
 
@@ -139,11 +143,15 @@ public class Blog {
     }
 
     public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+        String nowTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(createTime);
+        Timestamp goodsC_date = Timestamp.valueOf(nowTime);//把时间转换
+        this.createTime = goodsC_date;
     }
 
     public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
+        String nowTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(updateTime);
+        Timestamp goodsC_date = Timestamp.valueOf(nowTime);//把时间转换
+        this.updateTime = goodsC_date;
     }
 
     public void setType(Type type) {

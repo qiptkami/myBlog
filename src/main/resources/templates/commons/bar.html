@@ -11,12 +11,12 @@
     <div class="ui container">
         <div class="ui inverted secondary stackable menu">
             <h2 class="ui teal header item">后台管理</h2>
-            <a href="#" th:href="@{/admin/blogs}" class="active m-item item m-mobile-hide" th:class="${activeUri=='blog'?'active m-item item m-mobile-hide':'m-item item m-mobile-hide'}"><i class="home icon"></i>博客</a>
+            <a href="#" th:href="@{/admin/blogs}" class="m-item item m-mobile-hide" th:class="${activeUri=='blog'?'active m-item item m-mobile-hide':'m-item item m-mobile-hide'}"><i class="home icon"></i>博客</a>
             <a href="#" th:href="@{/admin/types}" class="m-item item m-mobile-hide" th:class="${activeUri=='type'?'active m-item item m-mobile-hide':'m-item item m-mobile-hide'}"><i class="tags icon"></i>分类</a>
             <div class="right m-item item m-mobile-hide menu">
                 <div class="ui dropdown item">
                     <div class="text">
-                        <img src="https://unsplash.it/100/100?image=1005" class="ui avatar image" th:text="${session.user.getUsername()}">
+                        <img src="https://unsplash.it/100/100?image=1005" th:src="${session.user.getAvatar()}" class="ui avatar image" th:text="${session.user.getUsername()}">
                     </div>
                     <i class="dropdown icon"></i>
                     <div class="menu">

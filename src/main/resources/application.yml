@@ -19,3 +19,6 @@ pagehelper:
   reasonable: true
   support-methods-arguments: true
   params: countSql
+logging:
+  level:
+    com.yiqiandewo.mapper: debug  # 控制台打印sql
