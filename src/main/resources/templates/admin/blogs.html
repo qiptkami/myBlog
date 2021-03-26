@@ -24,7 +24,8 @@
     <!--中间内容-->
     <div class="m-container-small m-padded-tb-big">
         <div class="ui container">
-            <form action="#" method="post" class="ui secondary segment form">
+            <div class="ui secondary segment form">
+                <input type="hidden" name="page">
                 <div class="inline fields">
                     <div class="field">
                         <input type="text" name="title" placeholder="标题">
@@ -35,8 +36,7 @@
                             <i class="dropdown icon"></i>
                             <div class="default text">分类</div>
                             <div class="menu">
-                                <div class="item" data-value="1">错误日志</div>
-                                <div class="item" data-value="2">开发者手册</div>
+                                <div th:each="type : ${types}" class="item" data-value="1" th:data-value="${type.id}" th:text="${type.name}">错误日志</div>
                             </div>
                         </div>
                     </div>
@@ -47,13 +47,14 @@
                         </div>
                     </div>
                     <div class="field">
-                        <button class="ui mini teal basic button"><i class="search icon"></i>搜索</button>
+                        <button type="button" id="search-btn" class="ui mini teal basic button"><i class="search icon"></i>搜索</button>
                     </div>
                 </div>
-            </form>
-            <!--表格-->
-            <table class="ui compact teal table">
-                <thead>
+            </div>
+            <div id="table-container">
+                <!--表格-->
+                <table class="ui compact teal table" th:fragment="blogList">
+                    <thead>
                     <tr>
                         <th></th>
                         <th>标题</th>
@@ -62,8 +63,8 @@
                         <th>更新时间</th>
                         <th>操作</th>
                     </tr>
-                </thead>
-                <tbody>
+                    </thead>
+                    <tbody>
                     <tr th:each="blog,iterStat : ${pageInfo.list}">
                         <td th:text="${iterStat.count}">1</td>
                         <td th:text="${blog.title}">刻意练习</td>
@@ -71,23 +72,28 @@
                         <td th:text="${blog.recommend}? 是 : 否">是</td>
                         <td th:text="${blog.updateTime}">2017-10-02 09:45</td>
                         <td>
-                            <a href="#" class="ui mini teal basic button">编辑</a>
-                            <a href="#" class="ui mini red basic button">删除</a>
+                            <a href="#" th:href="@{/admin/blogs/}+${blog.id}" class="ui mini teal basic button">编辑</a>
+                            <a href="#" th:attr="del-uri=@{/admin/blogs/}+${blog.id}" class="ui mini red basic button delete-btn">删除</a>
                         </td>
                     </tr>
-                </tbody>
-                <tfoot>
+                    <form id="del-type" method="post">
+                        <input type="hidden" name="_method" value="delete">
+                    </form>
+                    </tbody>
+                    <tfoot>
                     <tr>
                         <th colspan="6">
-                            <div class="ui mini pagination menu">
-                                <a class="item">上一页</a>
-                                <a class="item">下一页</a>
+                            <div class="ui mini pagination menu" th:if="${pageInfo.pages}>1">
+                                <a onclick="page(this)" th:attr="data-page=${pageInfo.pageNum-1}" class="item" th:unless="${pageInfo.isFirstPage}">上一页</a>
+                                <a onclick="page(this)" th:attr="data-page=${pageInfo.pageNum+1}" class="item" th:unless="${pageInfo.isLastPage}">下一页</a>
                             </div>
-                            <a href="#" class="ui mini right floated teal basic button">新增</a>
+                            <a href="#" th:href="@{/admin/blogs/input}" class="ui mini right floated teal basic button">新增</a>
                         </th>
                     </tr>
-                </tfoot>
-            </table>
+                    </tfoot>
+                </table>
+            </div>
+
         </div>
     </div>
 </div>
@@ -106,6 +112,42 @@
         on: 'hover' //设置为鼠标移动到指定点触发显示
     });
     //$('.ui.dropdown').dropdown();//默认点击显示
+    $(".delete-btn").click(function () {
+        $("#del-type").attr("action", $(this).attr("del-uri")).submit();
+    });
+
+    function page(obj) {
+        $("[name='page']").val($(obj).attr("data-page"));
+        loadData();
+    }
+
+    $("#search-btn").click(function () {
+        loadData();
+    });
+
+    function loadData() {
+        if($("[name='title']").val() == '' && $($("[name='type']").val() == '') && !$("[name='recommend']").prop('checked')) {
+            $.ajax({
+                url: /*[[@{/admin/blogs}]]*/"/admin/blogs",
+                type: "GET",
+                data:{page : $("[name='page']").val()},
+                dataType: "json",
+                success: function(data){
+                },
+                error : function(){
+                }
+            });
+            alert("sss");
+        } else {
+            $("#table-container").load(/*[[@{/admin/blogs/search}]]*/"/admin/blogs/search", {
+                title : $("[name='title']").val(),
+                typeId : $("[name='type']").val(),   //typeId会封装进controller中的与它参数名一致的参数   name='type' 然后找到对应name的value值
+                recommend : $("[name='recommend']").prop('checked'),
+                page : $("[name='page']").val(),
+            });
+        }
+    }
+
 </script>
 </body>
 </html>

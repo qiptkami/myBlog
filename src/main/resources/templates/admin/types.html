@@ -48,12 +48,12 @@
                         <td th:text="${iterStat.count}">1</td>
                         <td th:text="${type.name}">刻意练习</td>
                         <td>
-                            <a href="#" th:href="@{/admin/types/}+${type.id}" class="ui mini teal basic button updateBtn">编辑</a>
-                            <a href="#" th:attr="del_uri=@{/admin/types/}+${type.id}" class="ui mini red basic button deleteBtn">删除</a>
+                            <a href="#" th:href="@{/admin/types/}+${type.id}" class="ui mini teal basic button">编辑</a>
+                            <a href="#" th:attr="del-uri=@{/admin/types/}+${type.id}" class="ui mini red basic button delete-btn">删除</a>
                         </td>
                     </tr>
 
-                    <form id="delType" method="post">
+                    <form id="del-type" method="post">
                         <input type="hidden" name="_method" value="delete">
                     </form>
 
@@ -90,8 +90,8 @@
     //$('.ui.dropdown').dropdown();//默认点击显示
 </script>
 <script>
-    $(".deleteBtn").click(function () {
-        $("#delType").attr("action", $(this).attr("del_uri")).submit();
+    $(".delete-btn").click(function () {
+        $("#del-type").attr("action", $(this).attr("del-uri")).submit();
     });
 
     //消息提交关闭

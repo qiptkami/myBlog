@@ -41,6 +41,11 @@ public class TypeServiceImpl implements TypeService {
     }
 
     @Override
+    public List<Type> queryAll() {
+        return typeMapper.queryAll();
+    }
+
+    @Override
     public Type updateType(Long id, Type type) {
         Type t = typeMapper.queryById(id);
         if (t == null) {
