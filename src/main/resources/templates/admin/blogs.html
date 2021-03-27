@@ -31,13 +31,16 @@
                         <input type="text" name="title" placeholder="标题">
                     </div>
                     <div class="field">
-                        <div class="ui selection dropdown">
-                            <input type="hidden" name="type">
-                            <i class="dropdown icon"></i>
-                            <div class="default text">分类</div>
-                            <div class="menu">
-                                <div th:each="type : ${types}" class="item" data-value="1" th:data-value="${type.id}" th:text="${type.name}">错误日志</div>
+                        <div class="ui labeled action input">
+                            <div class="ui type selection dropdown">
+                                <input type="hidden" name="type">
+                                <i class="dropdown icon"></i>
+                                <div class="default text">分类</div>
+                                <div class="menu">
+                                    <div th:each="type : ${types}" class="item" data-value="1" th:data-value="${type.id}" th:text="${type.name}">错误日志</div>
+                                </div>
                             </div>
+                            <button id="clear-btn" class="ui compact button">clear</button>
                         </div>
                     </div>
                     <div class="field">
@@ -111,6 +114,11 @@
     $('.ui.dropdown').dropdown({
         on: 'hover' //设置为鼠标移动到指定点触发显示
     });
+
+    $('#clear-btn').on('click', function () {
+        $('.ui.type.dropdown').dropdown('clear');
+    });
+
     //$('.ui.dropdown').dropdown();//默认点击显示
     $(".delete-btn").click(function () {
         $("#del-type").attr("action", $(this).attr("del-uri")).submit();
@@ -122,30 +130,17 @@
     }
 
     $("#search-btn").click(function () {
+        $("[name='page']").val(0);
         loadData();
     });
 
     function loadData() {
-        if($("[name='title']").val() == '' && $($("[name='type']").val() == '') && !$("[name='recommend']").prop('checked')) {
-            $.ajax({
-                url: /*[[@{/admin/blogs}]]*/"/admin/blogs",
-                type: "GET",
-                data:{page : $("[name='page']").val()},
-                dataType: "json",
-                success: function(data){
-                },
-                error : function(){
-                }
-            });
-            alert("sss");
-        } else {
-            $("#table-container").load(/*[[@{/admin/blogs/search}]]*/"/admin/blogs/search", {
-                title : $("[name='title']").val(),
-                typeId : $("[name='type']").val(),   //typeId会封装进controller中的与它参数名一致的参数   name='type' 然后找到对应name的value值
-                recommend : $("[name='recommend']").prop('checked'),
-                page : $("[name='page']").val(),
-            });
-        }
+        $("#table-container").load(/*[[@{/admin/blogs/search}]]*/"/admin/blogs/search", {
+            title : $("[name='title']").val(),
+            typeId : $("[name='type']").val(),   //typeId会封装进controller中的与它参数名一致的参数   name='type' 然后找到对应name的value值
+            recommend : $("[name='recommend']").prop('checked'),
+            page : $("[name='page']").val(),
+        });
     }
 
 </script>

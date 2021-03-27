@@ -1,7 +1,5 @@
 package com.yiqiandewo.pojo;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;

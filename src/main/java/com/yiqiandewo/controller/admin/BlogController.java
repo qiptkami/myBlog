@@ -29,13 +29,8 @@ public class BlogController {
                        @RequestParam(name = "size", required = true, defaultValue = "3") Integer size,
                        Model model) {
         PageInfo<Blog> pageInfo = blogService.queryAll(page, size);
-        List<Blog> list = pageInfo.getList();
-
         model.addAttribute("pageInfo", pageInfo);
         model.addAttribute("types", typeService.queryAll());
-        for (Blog blog : list) {
-            System.out.println(blog);
-        }
         return "admin/blogs";
     }
 
@@ -49,7 +44,9 @@ public class BlogController {
     }
 
     @GetMapping("/blogs/input")
-    public String input() {
+    public String input(Model model) {
+        model.addAttribute("blog", new Blog());
+        model.addAttribute("types", typeService.queryAll());
         return "admin/blogs-input";
     }
 
