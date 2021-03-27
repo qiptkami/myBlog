@@ -15,7 +15,7 @@ public interface BlogService {
 
     void deleteBlog(Long id);
 
-    Blog queryByName(String name);
-
     PageInfo<Blog> queryConditional(int page, int size, String title, Long typeId, boolean recommend);
+
+    Blog queryByTitle(String title);
 }

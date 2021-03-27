@@ -98,6 +98,11 @@
         $('.m-item').toggleClass('m-mobile-hide');
     });
 
+    //消息提交关闭
+    $('.message .close').on('click', function () {
+        $(this).closest('.message').transition('fade');
+    });
+
     $('.ui.dropdown').dropdown({
         on: 'hover' //设置为鼠标移动到指定点触发显示
     });

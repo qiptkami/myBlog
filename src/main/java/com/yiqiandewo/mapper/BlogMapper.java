@@ -19,4 +19,6 @@ public interface BlogMapper {
     void deleteBlog(Long id);
 
     List<Blog> queryConditional(String title, Long typeId, boolean recommend);
+
+    Blog queryByTitle(String title);
 }

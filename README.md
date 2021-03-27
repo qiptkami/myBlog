@@ -341,4 +341,63 @@
 
 - Ajax异步请求
 
-    
+    表单的多项查询，查询的时候需要带查询框里的参数过去，所有直接用 ajax刷新页面的form表单里的内容
+  
+  ```html
+  <div id="table-container">
+      <!--表格-->
+      <table class="ui compact teal table" th:fragment="blogList">
+          ...
+          <tfoot>
+              <tr>
+                  <th colspan="7">
+                      <div class="ui mini pagination menu" th:if="${pageInfo.pages}>1">
+                          <a onclick="page(this)" th:attr="data-page=${pageInfo.pageNum-1}" class="item" th:unless="${pageInfo.isFirstPage}">上一页</a>
+                          <a onclick="page(this)" th:attr="data-page=${pageInfo.pageNum+1}" class="item" th:unless="${pageInfo.isLastPage}">下一页</a>
+                      </div>
+                      <a href="#" th:href="@{/admin/blogs/input}" class="ui mini right floated teal basic button">新增</a>
+                  </th>
+              </tr>
+          </tfoot>
+      </table>
+      ...
+  </div>
+  ```
+  
+  js
+  
+  ```javascript
+  function page(obj) {
+      $("[name='page']").val($(obj).attr("data-page")); //点击上一页 下一页 也是使用ajax 同时传递参数page
+      loadData();
+  }
+  
+  $("#search-btn").click(function () {
+      $("[name='page']").val(0);
+      loadData();
+  });
+  
+  function loadData() {
+      $("#table-container").load(/*[[@{/admin/blogs/search}]]*/"/admin/blogs/search", {
+          title : $("[name='title']").val(),
+          typeId : $("[name='type']").val(),//typeId会封装进controller中的与它参数名一致的参数 name='type' 然后找到对应name的value值
+          recommend : $("[name='recommend']").prop('checked'),
+          page : $("[name='page']").val(),
+      });
+  }
+  ```
+  
+  controller
+  
+  ```java
+  @PostMapping("/blogs/search")
+  public String search(@RequestParam(name = "page", required = true, defaultValue = "1") Integer page,
+                       @RequestParam(name = "size", required = true, defaultValue = "3") Integer size,
+                       Model model, String title, Long typeId, boolean recommend) {
+      PageInfo<Blog> pageInfo = blogService.queryConditional(page, size, title, typeId, recommend);
+      model.addAttribute("pageInfo", pageInfo);
+      return "admin/blogs :: blogList";  //这里只刷新页面中 fragment 里的内容
+  }
+  ```
+  
+  

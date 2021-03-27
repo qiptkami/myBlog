@@ -1,5 +1,6 @@
 package com.yiqiandewo.pojo;
 
+import javax.validation.constraints.NotBlank;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -7,6 +8,7 @@ import java.util.List;
 
 public class Blog {
     private Long id;
+    @NotBlank(message = "标题不能为空")
     private String title;  //标题
     private String content;  //内容
     private String firstPicture;  //首图

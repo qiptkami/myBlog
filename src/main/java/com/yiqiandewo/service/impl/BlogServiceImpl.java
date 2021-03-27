@@ -8,6 +8,7 @@ import com.yiqiandewo.service.BlogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -18,7 +19,15 @@ public class BlogServiceImpl implements BlogService {
 
     @Override
     public Blog addBlog(Blog blog) {
-        return null;
+        Blog b = blogMapper.queryByTitle(blog.getTitle());
+        if (b != null) {
+            return null;
+        }
+        blog.setCreateTime(new Date());
+        blog.setUpdateTime(new Date());
+        blog.setViews(0);
+        blogMapper.addBlog(blog);
+        return blog;
     }
 
     @Override
@@ -36,7 +45,14 @@ public class BlogServiceImpl implements BlogService {
 
     @Override
     public Blog updateBlog(Long id, Blog blog) {
-        return null;
+        Blog b = blogMapper.queryById(id);
+        if (b == null) {
+            return null;
+        }
+        //标题 内容 分类 首图   recommend 推荐   shareStatement转载 appreciation赞赏   commentAble评论 updateTime type
+        blog.setUpdateTime(new Date());
+        blogMapper.updateBlog(blog);
+        return blog;
     }
 
     @Override
@@ -45,8 +61,8 @@ public class BlogServiceImpl implements BlogService {
     }
 
     @Override
-    public Blog queryByName(String name) {
-        return null;
+    public Blog queryByTitle(String title) {
+        return blogMapper.queryByTitle(title);
     }
 
     @Override

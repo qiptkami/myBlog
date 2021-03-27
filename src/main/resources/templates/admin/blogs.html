@@ -63,6 +63,7 @@
                         <th>标题</th>
                         <th>类型</th>
                         <th>推荐</th>
+                        <th>发布状态</th>
                         <th>更新时间</th>
                         <th>操作</th>
                     </tr>
@@ -73,6 +74,7 @@
                         <td th:text="${blog.title}">刻意练习</td>
                         <td th:text="${blog.type.name}">认知升级</td>
                         <td th:text="${blog.recommend}? 是 : 否">是</td>
+                        <td th:text="${blog.published}? 发布 : 草稿">是</td>
                         <td th:text="${blog.updateTime}">2017-10-02 09:45</td>
                         <td>
                             <a href="#" th:href="@{/admin/blogs/}+${blog.id}" class="ui mini teal basic button">编辑</a>
@@ -85,7 +87,7 @@
                     </tbody>
                     <tfoot>
                     <tr>
-                        <th colspan="6">
+                        <th colspan="7">
                             <div class="ui mini pagination menu" th:if="${pageInfo.pages}>1">
                                 <a onclick="page(this)" th:attr="data-page=${pageInfo.pageNum-1}" class="item" th:unless="${pageInfo.isFirstPage}">上一页</a>
                                 <a onclick="page(this)" th:attr="data-page=${pageInfo.pageNum+1}" class="item" th:unless="${pageInfo.isLastPage}">下一页</a>
@@ -95,6 +97,16 @@
                     </tr>
                     </tfoot>
                 </table>
+                <div class="ui success message" th:unless="${#strings.isEmpty(successMsg)}">
+                    <i class="close icon"></i>
+                    <div class="header">提示：</div>
+                    <p th:text="${successMsg}"></p>
+                </div>
+                <div class="ui error message" th:unless="${#strings.isEmpty(errMsg)}">
+                    <i class="close icon"></i>
+                    <div class="header">提示：</div>
+                    <p th:text="${errMsg}"></p>
+                </div>
             </div>
 
         </div>
@@ -113,6 +125,11 @@
     });
     $('.ui.dropdown').dropdown({
         on: 'hover' //设置为鼠标移动到指定点触发显示
+    });
+
+    //消息提交关闭
+    $('.message .close').on('click', function () {
+        $(this).closest('.message').transition('fade');
     });
 
     $('#clear-btn').on('click', function () {

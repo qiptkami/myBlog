@@ -54,6 +54,10 @@
         select * from `t_blog` where `id` = #{id};
     </select>
 
+    <select id="queryByTitle" resultType="com.yiqiandewo.pojo.Blog">
+        select * from `t_blog` where `title` = #{title};
+    </select>
+
     <select id="queryConditional" resultMap="allBlogMap">
         select * from `t_blog` b left join `t_type` t on b.`type_id` = t.id
         <where>
@@ -68,7 +72,9 @@
     </select>
 
     <update id="updateBlog" parameterType="com.yiqiandewo.pojo.User">
-
+        update t_blog set `appreciation` = #{appreciation}, `comment_able` = #{commentAble}, `content` = #{content}, `create_time` = #{createTime},
+        `first_picture` = #{firstPicture}, `flag` = #{flag}, `published` = #{published},`recommend` = #{recommend}, `share_statement` = #{shareStatement},
+        `title` = #{title}, `update_time` = #{updateTime}, `type_id` = #{type.id},  where `id` = #{id};
     </update>
 
     <delete id="deleteBlog" parameterType="Long">
