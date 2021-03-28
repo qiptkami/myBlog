@@ -9,10 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
@@ -55,7 +52,7 @@ public class BlogController {
     }
 
     @PostMapping("/blogs/input")
-    public String addBlog(@Valid Blog blog, BindingResult result, RedirectAttributes attributes, HttpSession session) {
+    public String addBlog(@Valid Blog blog, BindingResult result, RedirectAttributes attributes, HttpSession session, Model model) {
         blog.setUser((User) session.getAttribute("user"));
         blog.setType(typeService.queryById(blog.getType().getId()));
         System.out.println(blog.getFlag());
@@ -67,6 +64,7 @@ public class BlogController {
                 result.rejectValue("title", "titleError", "该标题已存在");
             }
             if (result.hasErrors()) {
+                model.addAttribute("types", typeService.queryAll());
                 return "admin/blogs-input";
             }
             b = blogService.addBlog(blog);
@@ -78,6 +76,20 @@ public class BlogController {
             attributes.addFlashAttribute("successMsg", "操作成功");
         }
 
+        return "redirect:/admin/blogs";
+    }
+
+    @PostMapping("/blogs/{id}")
+    public String delBlog(@PathVariable Long id) {
+        System.out.println(id);
+        blogService.deleteBlog(id);
+        return "redirect:/admin/blogs";
+    }
+
+    @DeleteMapping("/blogs/{id}")
+    public String delBlog1(@PathVariable Long id) {
+        System.out.println(id);
+        blogService.deleteBlog(id);
         return "redirect:/admin/blogs";
     }
 

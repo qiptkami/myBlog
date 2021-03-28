@@ -401,3 +401,22 @@
   ```
   
   
+
+- 存在的问题
+
+    ```html
+    <td>
+        <div class="gridContainer">
+            <form th:action="@{/admin/blogs/}+${blog.id}" style="float: left" class="bid-floor-input" method="get">
+                <button type="submit" class="ui mini teal basic button">编辑</button>
+            </form>
+            <form th:action="@{/admin/blogs/}+${blog.id}" class="bid-floor-save" style="float: right" method="post">
+                <input type="hidden" name="_method" value="delete">
+                <button type="submit" class="ui mini red basic button">删除</button>
+            </form>
+        </div>
+    </td>
+    ```
+
+    由于使用的是springmvc配置的delete请求去删除，如果设置a标签，虽然样式没问题，但是在sciprt标签中的绑定的click事件会因为ajax请求提交、渲染页面后失效，导致删除不能用，所以就直接改成了两个form表单
+
