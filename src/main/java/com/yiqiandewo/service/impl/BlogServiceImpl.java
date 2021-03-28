@@ -49,7 +49,6 @@ public class BlogServiceImpl implements BlogService {
         if (b == null) {
             return null;
         }
-        //标题 内容 分类 首图   recommend 推荐   shareStatement转载 appreciation赞赏   commentAble评论 updateTime type
         blog.setUpdateTime(new Date());
         blogMapper.updateBlog(blog);
         return blog;

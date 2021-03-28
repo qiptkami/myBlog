@@ -50,12 +50,12 @@
          select b.*, t.*, u.id, u.username, u.avatar from t_blog b left join t_type t on b.type_id = t.id left JOIN t_user u on u.id = b.user_id
     </select>
 
-    <select id="queryById" resultType="com.yiqiandewo.pojo.Blog">
-        select * from `t_blog` where `id` = #{id};
+    <select id="queryById" resultMap="allBlogMap">
+        select b.*, t.*, u.id, u.username, u.avatar from t_blog b left join t_type t on b.type_id = t.id left JOIN t_user u on u.id = b.user_id where b.`id` = #{id}
     </select>
 
-    <select id="queryByTitle" resultType="com.yiqiandewo.pojo.Blog">
-        select * from `t_blog` where `title` = #{title};
+    <select id="queryByTitle" resultMap="allBlogMap">
+        select b.*, t.*, u.id, u.username, u.avatar from t_blog b left join t_type t on b.type_id = t.id left JOIN t_user u on u.id = b.user_id where b.`title` = #{title}
     </select>
 
     <select id="queryConditional" resultMap="allBlogMap">
@@ -71,10 +71,10 @@
         </where>
     </select>
 
-    <update id="updateBlog" parameterType="com.yiqiandewo.pojo.User">
-        update t_blog set `appreciation` = #{appreciation}, `comment_able` = #{commentAble}, `content` = #{content}, `create_time` = #{createTime},
-        `first_picture` = #{firstPicture}, `flag` = #{flag}, `published` = #{published},`recommend` = #{recommend}, `share_statement` = #{shareStatement},
-        `title` = #{title}, `update_time` = #{updateTime}, `type_id` = #{type.id},  where `id` = #{id};
+    <update id="updateBlog" parameterType="com.yiqiandewo.pojo.Blog">
+        update t_blog set `appreciation` = #{appreciation}, `comment_able` = #{commentAble}, `content` = #{content},
+        `first_picture` = #{firstPicture}, `flag` = #{flag}, `published` = #{published}, `recommend` = #{recommend}, `share_statement` = #{shareStatement},
+        `title` = #{title}, `update_time` = #{updateTime}, `type_id` = #{type.id} where `id` = #{id};
     </update>
 
     <delete id="deleteBlog" parameterType="Long">

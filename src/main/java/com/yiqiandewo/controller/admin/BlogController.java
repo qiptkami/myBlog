@@ -51,12 +51,20 @@ public class BlogController {
         return "admin/blogs-input";
     }
 
+    @GetMapping("/blogs/{id}")
+    public String updatePage(@PathVariable Long id, Model model) {
+        Blog blog = blogService.queryById(id);
+        model.addAttribute("blog", blog);
+        model.addAttribute("types", typeService.queryAll());
+        return "admin/blogs-input";
+    }
+
     @PostMapping("/blogs/input")
     public String addBlog(@Valid Blog blog, BindingResult result, RedirectAttributes attributes, HttpSession session, Model model) {
         blog.setUser((User) session.getAttribute("user"));
         blog.setType(typeService.queryById(blog.getType().getId()));
-        System.out.println(blog.getFlag());
         Blog b = null;
+        System.out.println(blog);
         if (blog.getId() != null) {  //修改的时候blog id 不为null
             b = blogService.updateBlog(blog.getId(), blog);
         } else {  //新增 id为null
@@ -76,13 +84,6 @@ public class BlogController {
             attributes.addFlashAttribute("successMsg", "操作成功");
         }
 
-        return "redirect:/admin/blogs";
-    }
-
-    @PostMapping("/blogs/{id}")
-    public String delBlog(@PathVariable Long id) {
-        System.out.println(id);
-        blogService.deleteBlog(id);
         return "redirect:/admin/blogs";
     }
 
