@@ -15,7 +15,6 @@ public class MVCConfig implements WebMvcConfigurer {
         registry.addViewController("/blog").setViewName("blog");
         registry.addViewController("/archives").setViewName("archives");
         registry.addViewController("/types").setViewName("types");
-
     }
 
     //后台管理的拦截器

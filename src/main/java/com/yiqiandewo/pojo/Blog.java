@@ -23,9 +23,6 @@ public class Blog {
     private Date updateTime; //更新时间
     private String description;  //描述
 
-    /*
-        新增一个blog时， 如果type不存在，需停先新增type
-         */
     private Type type; //对一
 
     private User user; //对一

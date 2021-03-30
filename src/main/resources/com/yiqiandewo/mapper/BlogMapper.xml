@@ -59,6 +59,14 @@
         select b.*, t.*, u.id, u.username, u.avatar from t_blog b left join t_type t on b.type_id = t.id left JOIN t_user u on u.id = b.user_id where b.`title` = #{title}
     </select>
 
+    <select id="total" resultType="Integer">
+        select count(id) from t_blog;
+    </select>
+
+    <select id="queryByUpdateTime" resultMap="allBlogMap" parameterType="Integer">
+        select * from t_blog ORDER BY  UNIX_TIMESTAMP(`update_time`) desc limit 0, #{size};  <!--UNIX_TIMESTAMP() 转换为时间戳-->
+    </select>
+
     <select id="queryConditional" resultMap="allBlogMap">
         select * from `t_blog` b left join `t_type` t on b.`type_id` = t.id
         <where>

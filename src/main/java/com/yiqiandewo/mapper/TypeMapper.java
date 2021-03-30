@@ -18,4 +18,6 @@ public interface TypeMapper {
     void deleteType(Long id);
 
     Type queryByName(String name);
+
+    List<Type> queryAllBlog();
 }

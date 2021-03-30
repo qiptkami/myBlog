@@ -36,6 +36,11 @@ public class BlogServiceImpl implements BlogService {
     }
 
     @Override
+    public Integer getTotal() {
+        return blogMapper.total();
+    }
+
+    @Override
     public PageInfo<Blog> queryAll(int page, int size) {
         PageHelper.startPage(page, size);
         List<Blog> list = blogMapper.queryAll();
@@ -57,6 +62,11 @@ public class BlogServiceImpl implements BlogService {
     @Override
     public void deleteBlog(Long id) {
         blogMapper.deleteBlog(id);
+    }
+
+    @Override
+    public List<Blog> queryByUpdateTime(int size) {
+        return blogMapper.queryByUpdateTime(size);
     }
 
     @Override

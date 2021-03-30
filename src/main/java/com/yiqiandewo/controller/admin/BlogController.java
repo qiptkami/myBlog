@@ -27,7 +27,7 @@ public class BlogController {
 
     @GetMapping("/blogs")
     public String list(@RequestParam(name = "page", required = true, defaultValue = "1") Integer page,
-                       @RequestParam(name = "size", required = true, defaultValue = "3") Integer size,
+                       @RequestParam(name = "size", required = true, defaultValue = "5") Integer size,
                        Model model) {
         PageInfo<Blog> pageInfo = blogService.queryAll(page, size);
         model.addAttribute("pageInfo", pageInfo);
@@ -37,7 +37,7 @@ public class BlogController {
 
     @PostMapping("/blogs/search")
     public String search(@RequestParam(name = "page", required = true, defaultValue = "1") Integer page,
-                         @RequestParam(name = "size", required = true, defaultValue = "3") Integer size,
+                         @RequestParam(name = "size", required = true, defaultValue = "5") Integer size,
                          Model model, String title, Long typeId, boolean recommend) {
         PageInfo<Blog> pageInfo = blogService.queryConditional(page, size, title, typeId, recommend);
         model.addAttribute("pageInfo", pageInfo);

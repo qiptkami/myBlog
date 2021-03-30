@@ -8,6 +8,7 @@ import com.yiqiandewo.service.TypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -25,6 +26,19 @@ public class TypeServiceImpl implements TypeService {
         }
         typeMapper.addType(type);
         return type;
+    }
+
+    @Override
+    public List<Type> queryAllBlog(int size) {
+        List<Type> types = typeMapper.queryAllBlog();  //拿到types中 blog数量最多的size个type
+        types.sort(new Comparator<Type>() {
+            @Override
+            public int compare(Type t1, Type t2) {
+                return t2.getBlogs().size() - t1.getBlogs().size();
+            }
+        });
+
+        return types.subList(0, 6);
     }
 
     @Override

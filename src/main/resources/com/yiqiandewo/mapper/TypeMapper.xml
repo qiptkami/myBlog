@@ -5,9 +5,23 @@
 
 <mapper namespace="com.yiqiandewo.mapper.TypeMapper">
 
+    <resultMap id="allBlogMap" type="com.yiqiandewo.pojo.Type">
+        <id property="id" column="id"></id>
+        <result property="name" column="name"></result>
+
+        <collection property="blogs" ofType="com.yiqiandewo.pojo.Blog">
+            <result property="title" column="title"></result>
+            <result property="type.id" column="type_id"></result>
+        </collection>
+    </resultMap>
+
     <insert id="addType" parameterType="com.yiqiandewo.pojo.Type">
         insert into t_type(name) values(#{name});
     </insert>
+
+    <select id="queryAllBlog" resultMap="allBlogMap">
+        select t.*, b.* from t_type t left join t_blog b on t.id = b.type_id
+    </select>
 
     <select id="queryById" parameterType="Long" resultType="com.yiqiandewo.pojo.Type">
         select * from t_type where `id` = #{id};

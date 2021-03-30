@@ -20,4 +20,6 @@ public interface TypeService {
     void deleteType(Long id);
 
     Type queryByName(String name);
+
+    List<Type> queryAllBlog(int size);
 }

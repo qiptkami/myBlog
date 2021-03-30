@@ -420,3 +420,19 @@
 
     由于使用的是springmvc配置的delete请求去删除，如果设置a标签，虽然样式没问题，但是在sciprt标签中的绑定的click事件会因为ajax请求提交、渲染页面后失效，导致删除不能用，所以就直接改成了两个form表单
 
+
+
+-  mybatis一对多的细节
+
+    ```xml
+    <resultMap id="allBlogMap" type="com.yiqiandewo.pojo.Type">
+        <id property="id" column="id"></id>
+        <result property="name" column="name"></result>
+    
+        <collection property="blogs" ofType="com.yiqiandewo.pojo.Blog">
+            <!-- 如果有一个字段是主键，则标签只能写result，不能写id，否则只能查出一条数据 -->
+            <result property="title" column="title"></result>
+            <result property="type.id" column="type_id"></result>
+        </collection>
+    </resultMap>
+    ```

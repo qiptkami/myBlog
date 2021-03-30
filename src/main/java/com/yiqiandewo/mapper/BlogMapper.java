@@ -21,4 +21,8 @@ public interface BlogMapper {
     List<Blog> queryConditional(String title, Long typeId, boolean recommend);
 
     Blog queryByTitle(String title);
+
+    Integer total();
+
+    List<Blog> queryByUpdateTime(int size);
 }
