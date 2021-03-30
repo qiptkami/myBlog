@@ -21,10 +21,11 @@ public class Blog {
     private boolean recommend; //是否推荐
     private Date createTime; //创建时间
     private Date updateTime; //更新时间
+    private String description;  //描述
 
     /*
-    新增一个blog时， 如果type不存在，需停先新增type
-     */
+        新增一个blog时， 如果type不存在，需停先新增type
+         */
     private Type type; //对一
 
     private User user; //对一
@@ -98,6 +99,10 @@ public class Blog {
         return updateTime;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -142,6 +147,10 @@ public class Blog {
         this.recommend = recommend;
     }
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public void setCreateTime(Date createTime) {
         String nowTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(createTime);
         Timestamp goodsC_date = Timestamp.valueOf(nowTime);//把时间转换
@@ -182,6 +191,10 @@ public class Blog {
                 ", recommend=" + recommend +
                 ", createTime=" + createTime +
                 ", updateTime=" + updateTime +
+                ", description='" + description + '\'' +
+                ", type=" + type +
+                ", user=" + user +
+                ", comments=" + comments +
                 '}';
     }
 }

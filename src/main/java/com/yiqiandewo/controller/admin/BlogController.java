@@ -64,7 +64,6 @@ public class BlogController {
         blog.setUser((User) session.getAttribute("user"));
         blog.setType(typeService.queryById(blog.getType().getId()));
         Blog b = null;
-        System.out.println(blog);
         if (blog.getId() != null) {  //修改的时候blog id 不为null
             b = blogService.updateBlog(blog.getId(), blog);
         } else {  //新增 id为null
@@ -72,6 +71,7 @@ public class BlogController {
                 result.rejectValue("title", "titleError", "该标题已存在");
             }
             if (result.hasErrors()) {
+                System.out.println(result.getAllErrors().toString());
                 model.addAttribute("types", typeService.queryAll());
                 return "admin/blogs-input";
             }

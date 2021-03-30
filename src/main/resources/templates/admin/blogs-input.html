@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css" th:href="@{/css/semantic.min.css}">
     <link rel="stylesheet" href="../static/lib/editormd/css/editormd.min.css" th:href="@{/lib/editormd/css/editormd.min.css}">
     <link rel="stylesheet" href="../static/css/me.css" th:href="@{/css/me.css}">
+    <link rel="icon" th:href="@{/images/favicon.ico}">
 </head>
 <div>
 
@@ -29,7 +30,6 @@
                 <input type="hidden" name="published">
                 <input type="hidden" name="id" th:value="${blog.id}">
                 <input type="hidden" name="views" th:value="${blog.views}">
-                <input type="hidden" name="createTime" th:value="${blog.createTime}">
                 <div class="required field">
                     <div class="ui left labeled input">
                         <div class="ui selection compact teal basic dropdown label">
@@ -80,6 +80,10 @@
                         <label class="ui teal basic label">首图</label>
                         <input type="text" name="firstPicture" placeholder="首图引用地址" th:value="${blog.firstPicture}">
                     </div>
+                </div>
+
+                <div class="required field">
+                    <textarea name="description" placeholder="博客描述..." th:text="${blog.description}" maxlength="200"></textarea>
                 </div>
 
                 <div class="inline fields">

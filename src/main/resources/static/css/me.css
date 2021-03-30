@@ -21,7 +21,7 @@ body {
 .gridContainer{
     display: grid;
     width: 100%;
-    grid-template-columns: 0.4fr 0.4fr;}
+    grid-template-columns: 1fr 1fr;}
 
 .m-padded-tb-mini {
     padding-top: 0.2em !important;

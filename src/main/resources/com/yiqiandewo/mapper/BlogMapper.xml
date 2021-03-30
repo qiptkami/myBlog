@@ -33,6 +33,7 @@
         <result property="title" column="title"></result>
         <result property="updateTime" column="update_time"></result>
         <result property="views" column="views"></result>
+        <result property="description" column="description"></result>
 
         <association property="type" javaType="com.yiqiandewo.pojo.Type">
             <id property="id" column="type_id"></id>
@@ -74,7 +75,7 @@
     <update id="updateBlog" parameterType="com.yiqiandewo.pojo.Blog">
         update t_blog set `appreciation` = #{appreciation}, `comment_able` = #{commentAble}, `content` = #{content},
         `first_picture` = #{firstPicture}, `flag` = #{flag}, `published` = #{published}, `recommend` = #{recommend}, `share_statement` = #{shareStatement},
-        `title` = #{title}, `update_time` = #{updateTime}, `type_id` = #{type.id} where `id` = #{id};
+        `title` = #{title}, `update_time` = #{updateTime}, `type_id` = #{type.id}, `description` = #{description} where `id` = #{id};
     </update>
 
     <delete id="deleteBlog" parameterType="Long">
@@ -82,7 +83,7 @@
     </delete>
 
     <insert id="addBlog" parameterType="com.yiqiandewo.pojo.Blog">
-        insert into t_blog(`appreciation`, `comment_able`, `content`, `create_time`, `first_picture`, `flag`, `published`, `recommend`, `share_statement`, `title`, `update_time`, `views`, `type_id`, `user_id`)
-        values(#{appreciation}, #{commentAble}, #{content}, #{createTime}, #{firstPicture}, #{flag}, #{published}, #{recommend}, #{shareStatement}, #{title}, #{updateTime}, #{views}, #{type.id}, #{user.id});
+        insert into t_blog(`appreciation`, `comment_able`, `content`, `create_time`, `first_picture`, `flag`, `published`, `recommend`, `share_statement`, `title`, `update_time`, `views`, `type_id`, `user_id`, `description`)
+        values(#{appreciation}, #{commentAble}, #{content}, #{createTime}, #{firstPicture}, #{flag}, #{published}, #{recommend}, #{shareStatement}, #{title}, #{updateTime}, #{views}, #{type.id}, #{user.id}, #{description});
     </insert>
 </mapper>
