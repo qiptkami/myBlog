@@ -25,7 +25,7 @@ public class IndexController {
                             @RequestParam(name = "size", required = true, defaultValue = "6") Integer size,
                             Model model) {
         model.addAttribute("total", blogService.getTotal());
-        model.addAttribute("pageInfo", blogService.queryAll(page, size));
+        model.addAttribute("pageInfo", blogService.queryRecommend(page, size)); //只查询发布的  不查询保存的
         model.addAttribute("recommendBlog", blogService.queryByUpdateTime(6));
         List<Type> types = typeService.queryAllBlog(6);
         model.addAttribute("types", types);

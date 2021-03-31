@@ -24,4 +24,6 @@ public interface BlogService {
     Blog queryByTitle(String title);
 
     List<Blog> queryByUpdateTime(int size);
+
+    PageInfo<Blog> queryRecommend(int page, int size);
 }

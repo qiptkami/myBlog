@@ -81,4 +81,11 @@ public class BlogServiceImpl implements BlogService {
         PageInfo<Blog> pageInfo = new PageInfo<>(list);
         return pageInfo;
     }
+
+    public PageInfo<Blog> queryRecommend(int page, int size) {
+        PageHelper.startPage(page, size);
+        List<Blog> list = blogMapper.queryRecommend();
+        PageInfo<Blog> pageInfo = new PageInfo<>(list);
+        return pageInfo;
+    }
 }

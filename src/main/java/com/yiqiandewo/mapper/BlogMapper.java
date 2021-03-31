@@ -25,4 +25,6 @@ public interface BlogMapper {
     Integer total();
 
     List<Blog> queryByUpdateTime(int size);
+
+    List<Blog> queryRecommend();
 }
