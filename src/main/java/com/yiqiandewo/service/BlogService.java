@@ -10,8 +10,6 @@ public interface BlogService {
 
     Blog queryById(Long id);
 
-    Integer getTotal(); //总记录条数
-
     //分页查询
     PageInfo<Blog> queryAll(int page, int size);
 
@@ -25,5 +23,7 @@ public interface BlogService {
 
     List<Blog> queryByUpdateTime(int size);
 
-    PageInfo<Blog> queryRecommend(int page, int size);
+    PageInfo<Blog> queryPublished(int page, int size);
+
+    PageInfo<Blog> query(int page, int size, String query);
 }

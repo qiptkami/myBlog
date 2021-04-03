@@ -59,16 +59,16 @@
         select b.*, t.*, u.id, u.username, u.avatar from t_blog b left join t_type t on b.type_id = t.id left JOIN t_user u on u.id = b.user_id where b.`title` = #{title}
     </select>
 
-    <select id="total" resultType="Integer">
-        select count(id) from t_blog where `published` = 1;
-    </select>
-
     <select id="queryByUpdateTime" resultMap="allBlogMap" parameterType="Integer">
         select * from t_blog ORDER BY  UNIX_TIMESTAMP(`update_time`) desc limit 0, #{size};  <!--UNIX_TIMESTAMP() 转换为时间戳-->
     </select>
 
-    <select id="queryRecommend" resultMap="allBlogMap">
+    <select id="queryPublished" resultMap="allBlogMap">
         select b.*, t.*, u.id, u.username, u.avatar from t_blog b left join t_type t on b.type_id = t.id left JOIN t_user u on u.id = b.user_id where `published` = 1
+    </select>
+
+    <select id="query" resultMap="allBlogMap">
+        select b.*, t.*, u.id, u.username, u.avatar from t_blog b left join t_type t on b.type_id = t.id left JOIN t_user u on u.id = b.user_id where `published` = 1 and (b.title = #{query} or t.name = #{query} or b.content like concat('%', #{query}, '%'))
     </select>
 
     <select id="queryConditional" resultMap="allBlogMap">

@@ -36,16 +36,10 @@ public class BlogServiceImpl implements BlogService {
     }
 
     @Override
-    public Integer getTotal() {
-        return blogMapper.total();
-    }
-
-    @Override
     public PageInfo<Blog> queryAll(int page, int size) {
         PageHelper.startPage(page, size);
         List<Blog> list = blogMapper.queryAll();
-        PageInfo<Blog> pageInfo = new PageInfo<>(list);
-        return pageInfo;
+        return new PageInfo<>(list);
     }
 
     @Override
@@ -57,6 +51,13 @@ public class BlogServiceImpl implements BlogService {
         blog.setUpdateTime(new Date());
         blogMapper.updateBlog(blog);
         return blog;
+    }
+
+    @Override
+    public PageInfo<Blog> query(int page, int size, String query) {
+        PageHelper.startPage(page, size);
+        List<Blog> list = blogMapper.query(query);
+        return new PageInfo<>(list);
     }
 
     @Override
@@ -78,14 +79,12 @@ public class BlogServiceImpl implements BlogService {
     public PageInfo<Blog> queryConditional(int page, int size, String title, Long typeId, boolean recommend) {
         PageHelper.startPage(page, size);
         List<Blog> list = blogMapper.queryConditional(title, typeId, recommend);
-        PageInfo<Blog> pageInfo = new PageInfo<>(list);
-        return pageInfo;
+        return new PageInfo<>(list);
     }
 
-    public PageInfo<Blog> queryRecommend(int page, int size) {
+    public PageInfo<Blog> queryPublished(int page, int size) {
         PageHelper.startPage(page, size);
-        List<Blog> list = blogMapper.queryRecommend();
-        PageInfo<Blog> pageInfo = new PageInfo<>(list);
-        return pageInfo;
+        List<Blog> list = blogMapper.queryPublished();
+        return new PageInfo<>(list);
     }
 }

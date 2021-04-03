@@ -22,9 +22,9 @@ public interface BlogMapper {
 
     Blog queryByTitle(String title);
 
-    Integer total();
-
     List<Blog> queryByUpdateTime(int size);
 
-    List<Blog> queryRecommend();
+    List<Blog> queryPublished();
+
+    List<Blog> query(String query);
 }

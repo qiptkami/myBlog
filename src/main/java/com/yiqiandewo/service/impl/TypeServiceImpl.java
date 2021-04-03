@@ -50,8 +50,7 @@ public class TypeServiceImpl implements TypeService {
     public PageInfo<Type> queryAll(int page, int size) {
         PageHelper.startPage(page, size);
         List<Type> types = typeMapper.queryAll();
-        PageInfo<Type> pageInfo = new PageInfo<>(types);
-        return pageInfo;
+        return new PageInfo<>(types);
     }
 
     @Override
