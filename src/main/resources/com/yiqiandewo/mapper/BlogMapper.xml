@@ -5,21 +5,6 @@
 
 <mapper namespace="com.yiqiandewo.mapper.BlogMapper">
 
-    <!--
-    void addBlog(Blog blog);
-
-    Blog queryById(Long id);
-
-    //分页查询
-    List<Blog> queryAll(int page, int size);
-
-    void updateBlog(Long id, Blog blog);
-
-    void deleteBlog(Long id);
-
-    Blog queryConditional(String title, Long typeId, boolean recommend);
-    -->
-
     <resultMap id="allBlogMap" type="com.yiqiandewo.pojo.Blog">
         <id property="id" column="id"></id>
         <result property="appreciation" column="appreciation"></result>

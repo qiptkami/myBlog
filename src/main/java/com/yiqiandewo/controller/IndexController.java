@@ -5,10 +5,12 @@ import com.yiqiandewo.pojo.Blog;
 import com.yiqiandewo.pojo.Type;
 import com.yiqiandewo.service.BlogService;
 import com.yiqiandewo.service.TypeService;
+import com.yiqiandewo.util.MarkdownUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -43,5 +45,13 @@ public class IndexController {
         model.addAttribute("pageInfo", blogService.query(page, size, query));
         model.addAttribute("query", query);
         return "search";
+    }
+
+    @GetMapping("/blog/{id}")
+    public String blog(@PathVariable Long id, Model model) {
+        Blog blog = blogService.queryById(id);
+        blog.setContent(MarkdownUtils.markdownToHtmlExtensions(blog.getContent()));
+        model.addAttribute("blog", blog);
+        return "blog";
     }
 }

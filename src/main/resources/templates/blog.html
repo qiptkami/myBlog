@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="./static/css/typo.css" th:href="@{/css/typo.css}">
     <link rel="stylesheet" href="./static/lib/prism/prism.css" th:href="@{/lib/prism/prism.css}">
     <link rel="stylesheet" href="./static/css/animate.css" th:href="@{/css/animate.css}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.11.1/tocbot.css ">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.11.1/tocbot.css" th:href="@{/lib/tocbot/tocbot.css}">
     <link rel="stylesheet" href="./static/css/me.css" th:href="@{/css/me.css}">
     <link rel="icon" th:href="@{/images/favicon.ico}">
 
@@ -26,29 +26,29 @@
             <div class="ui horizontal link list">
                 <div class="item">
                     <img src="https://unsplash.it/100/100?image=1005" alt=""
-                         class="ui avatar image">
-                    <div class="content"><a class="header" href="">薛克宇</a></div>
+                         class="ui avatar image" th:src="${blog.user.avatar}">
+                    <div class="content"><a class="header" href="" th:text="${blog.user.username}">yiqiandewo</a></div>
                 </div>
                 <div class="item">
-                    <i class="calendar icon"></i>2020-09-24
+                    <i class="clock icon"></i><span th:text="${#dates.format(blog.updateTime, 'yyyy-MM-dd')}">2020-09-24</span>
                 </div>
                 <div class="item">
-                    <i class="eye icon"></i>2100
+                    <i class="eye icon"></i> <span th:text="${blog.views}">2100</span>
                 </div>
             </div>
         </div>
         <!--图片区域-->
         <div class="ui attached segment">
-            <img class="ui fluid rounded image" src="https://unsplash.it/800/450?image=1010" alt="">
+            <img class="ui fluid rounded image" src="https://unsplash.it/800/450?image=1010" th:src="${blog.firstPicture}" alt="">
         </div>
         <!--内容-->
         <div class="ui attached padded segment">
             <div class="ui right aligned basic segment">
-                <div class="ui orange basic label">原创</div>
+                <div class="ui orange basic label" th:text="${blog.flag}">原创</div>
             </div>
-            <h2 class="ui center aligned header">关于刻意练习的清单</h2>
+            <h2 class="ui center aligned header" th:text="${blog.title}">关于刻意练习的清单</h2>
             <br>
-            <div id="content" class="typo typo-selection js-toc-content m-padded-lr-responsive m-padded-tb-large">
+            <div id="content" class="typo typo-selection js-toc-content m-padded-lr-responsive m-padded-tb-large" th:utext="${blog.content}">
                 <h2 id="section1">一、关于 <i class="serif">Typo.css</i></h2>
                 <!--编程语法高亮-->
                 <pre><code class="language-css">p {color:red}</code></pre>
@@ -420,30 +420,35 @@
 
                 <h5 id="appendix2">2、开源许可</h5>
             </div>
+
+
             <!--标签-->
             <div class="m-padded-lr-responsive m-padded-tb-large">
-                <div class="ui basic teal left pointing label">方法论</div>
+                <div class="ui basic teal left pointing label" th:text="${blog.type.name}">方法论</div>
             </div>
             <!--赞赏-->
-            <div class="ui center aligned basic segment">
-                <button id="payButton" class="ui orange basic circular button">赞赏</button>
-            </div>
-            <div class="ui payQR flowing popup top left transition hidden">
-                <div class="ui orange basic label">
-                    <div class="ui images" style="font-size: inherit !important;">
-                        <div class="image">
-                            <img src="./static/images/zfb.jpg" th:src="@{/images/zfb.jpg}" alt="" class="ui rounded bordered image"
-                                 style="width: 120px;">
-                            <div>支付宝</div>
-                        </div>
-                        <div class="image">
-                            <img src="./static/images/wx.png" th:src="@{/images/wx.png}" alt="" class="ui rounded bordered image"
-                                 style="width: 120px;">
-                            <div>微信</div>
+            <div th:unless="${!blog.appreciation}">
+                <div class="ui center aligned basic segment">
+                    <button id="payButton" class="ui orange basic circular button">赞赏</button>
+                </div>
+                <div class="ui payQR flowing popup top left transition hidden">
+                    <div class="ui orange basic label">
+                        <div class="ui images" style="font-size: inherit !important;">
+                            <div class="image">
+                                <img src="./static/images/zfb.jpg" th:src="@{/images/zfb.jpg}" alt="" class="ui rounded bordered image"
+                                     style="width: 120px;">
+                                <div>支付宝</div>
+                            </div>
+                            <div class="image">
+                                <img src="./static/images/wx.png" th:src="@{/images/wx.png}" alt="" class="ui rounded bordered image"
+                                     style="width: 120px;">
+                                <div>微信</div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+
 
         </div>
         <!--博客信息-->
@@ -451,10 +456,10 @@
             <div class="ui middle aligned grid">
                 <div class="eleven wide column">
                     <ui class="list">
-                        <li>作者：薛克宇（联系作者）</li>
-                        <li>发表时间: 2020-10-05 16:15</li>
-                        <li>版权声明: 自由转载-非商用-非衍生-保持署名（创意共享3.0许可证）</li>
-                        <li>公众号转载: 请在文末添加作者公众号二维码</li>
+                        <li>作者：<span th:text="${blog.user.username}">yiqiandewo</span><a href="" th:href="@{/about}" target="_blank"></a>（联系作者）</li>
+                        <li>发表时间：<span th:text="${#dates.format(blog.updateTime, 'yyyy-MM-dd HH:mm')}">2020-10-05 16:15</span></li>
+                        <li>版权声明：自由转载-非商用-非衍生-保持署名（创意共享3.0许可证）</li>
+                        <li>公众号转载：请在文末添加作者公众号二维码</li>
                     </ui>
                 </div>
                 <div class="five wide column">
@@ -595,15 +600,15 @@
 <!--底部footer-->
 <div th:replace="commons/bar::footerbar"></div>
 
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js" th:src="@{/js/jquery.min.js}"></script>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js" th:src="@{/js/semantic.min.js}"></script>
 <script src="./static/lib/prism/prism.js" th:src="@{/lib/prism/prism.js}"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.11.1/tocbot.min.js "></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.11.1/tocbot.min.js" th:src="@{/lib/tocbot/tocbot.min.js}"></script>
 <script src="./static/lib/qrcode/qrcode.min.js" th:src="@{/lib/qrcode/qrcode.min.js}"></script>
 <script src="static/lib/scrollTo/jquery.scrollTo.min.js" th:src="@{/lib/scrollTo/jquery.scrollTo.min.js}"></script>
 <script src="static/lib/waypoints/jquery.waypoints.min.js" th:src="@{/lib/waypoints/jquery.waypoints.min.js}"></script>
 
-<script>
+<script th:inline="javascript">
     $('.menu.toggle').click(function () {
         $('.m-item').toggleClass('m-mobile-hide');
     })
@@ -631,9 +636,11 @@
         position:'left center'
     });
 
+    var serverUrl = "127.0.0.1:8080";
+    var url = /*[[@{/blog/{id}(id=${blog.id})}]]*/"";
     //动态生成二维码
     var qrcode = new QRCode("qrcode", { //指定div的ID显示生成的二维码
-        text: "http://jindo.dev.naver.com/collie",
+        text: serverUrl + url,
         width: 110,
         height: 110,
         colorDark : "#000000",

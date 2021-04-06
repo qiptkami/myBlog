@@ -18,7 +18,6 @@ class BlogApplicationTests {
     void test() {
 
         List<Blog> java = blogMapper.query("Java");
-
         System.out.println(java.toString());
     }
 }
