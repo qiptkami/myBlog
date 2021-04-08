@@ -436,3 +436,51 @@
         </collection>
     </resultMap>
     ```
+
+
+
+- 关于评论还有子评论
+
+    首先评论是会有子回复的，然后子回复也是可能会有子回复的，所以就采用了递归的写法
+
+    然后再写递归的过程中，遇到了问题，就是无论如何都不能找出所有的子评论
+
+    在进行了几次debug后，发现了recReply()中找出的子评论的回复，是无法被返回的，所以设置了一个全局的List
+
+    ```java
+    private List<Comment> tempList = new ArrayList<>();
+    
+    @Override
+    public List<Comment> queryAllByBlogId(Long blogId) {
+        //首先查询出所有没有parent的comment
+        List<Comment> list = commentMapper.queryAllByBlogId(blogId);
+    
+        for (Comment comment : list) {
+            List<Comment> replyList = commentMapper.queryAllReplyById(comment.getId());
+            for (Comment reply : replyList) {  //回复1...
+                tempList.add(reply);  //这里也需要将reply子回复加进去
+                //回复1的回复2...
+                recReply(reply);
+            }
+            comment.setReplyComment(tempList);  //这里设置子评论的时候参数就是tempList
+            tempList = new ArrayList<>();  //由于有多个评论，将一个评论的子回复设置好，就需将该list重置，否则之前的数据也在里面
+        }
+    
+        return list;
+    }
+    
+    private void recReply(Comment comment) {
+        List<Comment> replyList = commentMapper.queryAllReplyById(comment.getId());
+        if (replyList.size() > 0) {
+            for (Comment reply : replyList) {
+                tempList.add(reply);  //如果不用全局变量  这个reply将无法返回
+                if (commentMapper.queryAllReplyById(reply.getId()).size() > 0) {
+                    //回复1的回复2的回复...
+                    recReply(reply);
+                }
+            }
+        }
+    }
+    ```
+
+    

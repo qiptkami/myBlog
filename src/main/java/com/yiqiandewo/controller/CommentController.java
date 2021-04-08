@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.List;
+
 @Controller
 public class CommentController {
 
@@ -24,7 +26,8 @@ public class CommentController {
 
     @GetMapping("/comments/{blogId}")
     public String commentList(@PathVariable Long blogId, Model model) {
-        model.addAttribute("comments", commentService.queryAllByBlogId(blogId));
+        List<Comment> list = commentService.queryAllByBlogId(blogId);
+        model.addAttribute("comments", list);  //根据blogId查询出所有没有parentComment的Comment
         return "blog :: commentList";
     }
 

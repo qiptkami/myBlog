@@ -10,5 +10,5 @@ public interface CommentService {
 
     List<Comment> queryAllByBlogId(Long blogId);
 
-    Comment queryById(Long id);
+    Comment queryByParentId(Long id);
 }

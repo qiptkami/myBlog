@@ -12,5 +12,9 @@ public interface CommentMapper {
 
     List<Comment> queryAllByBlogId(Long blogId);
 
-    Comment queryById(Long parentCommentId);
+    Comment queryByParentId(Long parentCommentId);
+
+    List<Comment> queryAllReplyById(Long id);
+
+    Comment queryById(Long id);
 }

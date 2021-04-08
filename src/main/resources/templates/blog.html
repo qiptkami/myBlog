@@ -126,6 +126,27 @@
                                     <a class="reply" data-commentid="1" data-commentnickname="yiqiandewo" th:attr="data-commentid=${comment.id}, data-commentnickname=${comment.nickname}" onclick="reply(this)">回复</a>
                                 </div>
                             </div>
+                            <div class="comments" th:unless="${#arrays.length(comment.replyComment)} <= 0">
+                                <div class="comment" th:each="reply : ${comment.replyComment}">
+                                    <a class="avatar">
+                                        <img src="https://unsplash.it/100/100?image=1001" th:src="@{${reply.avatar}}">
+                                    </a>
+                                    <div class="content">
+                                        <a class="author">
+                                            <span th:text="${reply.nickname}">小红</span><span th:text="' @' + ${reply.parentComment.nickname}" class="m-teal">小白</span>
+                                        </a>
+                                        <div class="metadata">
+                                            <span class="date" th:text="${#dates.format(reply.createTime ,'yyyy-MM-dd HH:mm')}">Just now</span>
+                                        </div>
+                                        <div class="text" th:text="${reply.content}">
+                                            Elliot you are always so right :)
+                                        </div>
+                                        <div class="actions">
+                                            <a class="reply" data-commentid="1" data-commentnickname="yiqiandewo" th:attr="data-commentid=${reply.id}, data-commentnickname=${reply.nickname}" onclick="reply(this)">回复</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
