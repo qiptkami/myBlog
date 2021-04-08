@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yiqiandewo.mapper.CommentMapper">
+    <resultMap id="allComment" type="com.yiqiandewo.pojo.Comment">
+        <id property="id" column="id"></id>
+        <result property="nickname" column="nickname"></result>
+        <result property="content" column="content"></result>
+        <result property="avatar" column="avatar"></result>
+        <result property="createTime" column="create_time"></result>
+        <result property="blog.id" column="blog_id"></result>
+        <result property="parentComment.id" column="parent_comment_id"></result>
+    </resultMap>
+
+    <select id="queryAllByBlogId" parameterType="Long" resultMap="allComment">
+        select id, nickname, content, avatar, create_time, blog_id, parent_comment_id from t_comment where blog_id = #{blogId} order by UNIX_TIMESTAMP(`create_time`) desc
+    </select>
+
+    <select id="queryById" parameterType="Long" resultMap="allComment">
+        select id, nickname, content, avatar, create_time, blog_id, parent_comment_id from t_comment where id = #{parentCommentId}
+    </select>
+
+    <insert id="addComment" parameterType="com.yiqiandewo.pojo.Comment">
+        insert into t_comment(nickname, content, avatar, create_time, blog_id, parent_comment_id) values(#{nickname}, #{content}, #{avatar}, #{createTime}, #{blog.id}, #{parentComment.id})
+    </insert>
+</mapper>

@@ -22,3 +22,5 @@ pagehelper:
 logging:
   level:
     com.yiqiandewo.mapper: debug  # 控制台打印sql
+
+comment.avatar: /images/avatar.png

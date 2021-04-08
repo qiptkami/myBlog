@@ -110,73 +110,20 @@
                 <div th:fragment="commentList">
                     <div class="ui threaded comments">
                         <h3 class="ui dividing header" style="max-width: 100%">评论</h3>
-                        <div class="comment">
+                        <div class="comment" th:each="comment : ${comments}">
                             <a class="avatar">
-                                <img src="https://unsplash.it/100/100?image=1008">
+                                <img src="https://unsplash.it/100/100?image=1008" th:src="@{${comment.avatar}}">
                             </a>
                             <div class="content">
-                                <a class="author">Matt</a>
+                                <a class="author" th:text="${comment.nickname}">yiqiandewo</a>
                                 <div class="metadata">
-                                    <span class="date">Today at 5:42PM</span>
+                                    <span class="date" th:text="${#dates.format(comment.createTime ,'yyyy-MM-dd HH:mm')}">Today at 5:42PM</span>
                                 </div>
-                                <div class="text">
+                                <div class="text" th:text="${comment.content}">
                                     How artistic!
                                 </div>
                                 <div class="actions">
-                                    <a class="reply" data-commentid="1" data-commentnickname="yiqiandewo" onclick="reply(this)">回复</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="comment">
-                            <a class="avatar">
-                                <img src="https://unsplash.it/100/100?image=1003">
-                            </a>
-                            <div class="content">
-                                <a class="author">Elliot Fu</a>
-                                <div class="metadata">
-                                    <span class="date">Yesterday at 12:30AM</span>
-                                </div>
-                                <div class="text">
-                                    <p>This has been very useful for my research. Thanks as well!</p>
-                                </div>
-                                <div class="actions">
-                                    <a class="reply">回复</a>
-                                </div>
-                            </div>
-                            <div class="comments">
-                                <div class="comment">
-                                    <a class="avatar">
-                                        <img src="https://unsplash.it/100/100?image=1001">
-                                    </a>
-                                    <div class="content">
-                                        <a class="author">Jenny Hess</a>
-                                        <div class="metadata">
-                                            <span class="date">Just now</span>
-                                        </div>
-                                        <div class="text">
-                                            Elliot you are always so right :)
-                                        </div>
-                                        <div class="actions">
-                                            <a class="reply">回复</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="comment">
-                            <a class="avatar">
-                                <img src="https://unsplash.it/100/100?image=1006">
-                            </a>
-                            <div class="content">
-                                <a class="author">Joe Henderson</a>
-                                <div class="metadata">
-                                    <span class="date">5 days ago</span>
-                                </div>
-                                <div class="text">
-                                    Dude, this is awesome. Thanks so much
-                                </div>
-                                <div class="actions">
-                                    <a class="reply">回复</a>
+                                    <a class="reply" data-commentid="1" data-commentnickname="yiqiandewo" th:attr="data-commentid=${comment.id}, data-commentnickname=${comment.nickname}" onclick="reply(this)">回复</a>
                                 </div>
                             </div>
                         </div>
@@ -186,8 +133,8 @@
             <div class="ui form">
                 <div class="field">
                     <textarea name="content" placeholder="请输入评论信息..."></textarea>
-                    <input type="text" name="blog.id" th:value="${blog.id}">
-                    <input type="text" name="parentComment.id" value="-1">
+                    <input type="hidden" name="blog.id" th:value="${blog.id}">
+                    <input type="hidden" name="parentComment.id" value="-1">
                 </div>
                 <div class="fields">
                     <div class="field m-mobile-wide m-margin-bottom-small">
@@ -330,10 +277,15 @@
         }
     });
 
+    $(function () {
+        $("#comment-container").load(/*[[@{/comments/{id}(id=${blog.id})}]]*/"/comments/6");
+    })
+
     $('#comment-post-btn').click(function () {
         let boo = $('.ui.form').form('validate form');
         if (boo) {
             console.log('success');
+            postData();
         } else {
             console.log('fail');
         }
@@ -350,7 +302,7 @@
             $(window).scrollTo($('#comment-container'), 500);
             clearContent();
         });
-    }
+     }
 
     function reply(obj) {
         let commentId = $(obj).data('commentid');
