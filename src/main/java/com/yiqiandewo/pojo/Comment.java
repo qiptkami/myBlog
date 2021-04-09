@@ -17,6 +17,16 @@ public class Comment {
 
     private Comment parentComment; //父回复
 
+    public boolean isAdminComment() {
+        return isAdminComment;
+    }
+
+    public void setAdminComment(boolean adminComment) {
+        isAdminComment = adminComment;
+    }
+
+    private boolean isAdminComment; //是否是管理员评论
+
     public Comment() {
     }
 

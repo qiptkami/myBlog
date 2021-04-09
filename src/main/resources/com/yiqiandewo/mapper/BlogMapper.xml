@@ -75,6 +75,10 @@
         `title` = #{title}, `update_time` = #{updateTime}, `type_id` = #{type.id}, `description` = #{description} where `id` = #{id};
     </update>
 
+    <update id="updateBlogViews" parameterType="Long">
+        update t_blog set `views` = views+1 where id = #{id}
+    </update>
+
     <delete id="deleteBlog" parameterType="Long">
         delete from t_blog where `id` = #{id};
     </delete>

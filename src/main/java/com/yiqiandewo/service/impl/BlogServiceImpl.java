@@ -32,7 +32,10 @@ public class BlogServiceImpl implements BlogService {
 
     @Override
     public Blog queryById(Long id) {
-        return blogMapper.queryById(id);
+        Blog blog = blogMapper.queryById(id);
+        blog.setViews(blog.getViews()+1);
+        blogMapper.updateBlogViews(blog.getId());
+        return blog;
     }
 
     @Override

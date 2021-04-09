@@ -27,4 +27,6 @@ public interface BlogMapper {
     List<Blog> queryPublished();
 
     List<Blog> query(String query);
+
+    void updateBlogViews(Long id);
 }

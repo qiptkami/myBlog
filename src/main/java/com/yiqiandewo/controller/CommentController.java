@@ -1,7 +1,9 @@
 package com.yiqiandewo.controller;
 import com.yiqiandewo.pojo.Comment;
+import com.yiqiandewo.pojo.User;
 import com.yiqiandewo.service.BlogService;
 import com.yiqiandewo.service.CommentService;
+import org.commonmark.ext.gfm.tables.TableBlock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
@@ -32,10 +35,18 @@ public class CommentController {
     }
 
     @PostMapping("/comments")
-    public String addComment(Comment comment) {
+    public String addComment(Comment comment, HttpSession session) {
         Long blogId = comment.getBlog().getId();
+        User user = (User) session.getAttribute("user");
         comment.setBlog(blogService.queryById(blogId));
-        comment.setAvatar(avatar);
+        if (user != null) {
+            comment.setAvatar(user.getAvatar());
+            comment.setNickname(user.getUsername());
+            comment.setAdminComment(true);
+        } else {
+            comment.setAvatar(avatar);
+            comment.setAdminComment(false);
+        }
         commentService.addComment(comment);
         return "redirect:/comments/" + blogId;
     }
