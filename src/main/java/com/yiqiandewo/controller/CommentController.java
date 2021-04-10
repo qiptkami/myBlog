@@ -29,16 +29,16 @@ public class CommentController {
 
     @GetMapping("/comments/{blogId}")
     public String commentList(@PathVariable Long blogId, Model model) {
-        List<Comment> list = commentService.queryAllByBlogId(blogId);
+        List<Comment> list = commentService.selectList(blogId);
         model.addAttribute("comments", list);  //根据blogId查询出所有没有parentComment的Comment
         return "blog :: commentList";
     }
 
     @PostMapping("/comments")
-    public String addComment(Comment comment, HttpSession session) {
+    public String insert(Comment comment, HttpSession session) {
         Long blogId = comment.getBlog().getId();
         User user = (User) session.getAttribute("user");
-        comment.setBlog(blogService.queryById(blogId));
+        comment.setBlog(blogService.selectOne(blogId));
         if (user != null) {
             comment.setAvatar(user.getAvatar());
             comment.setNickname(user.getUsername());
@@ -47,7 +47,7 @@ public class CommentController {
             comment.setAvatar(avatar);
             comment.setAdminComment(false);
         }
-        commentService.addComment(comment);
+        commentService.insert(comment);
         return "redirect:/comments/" + blogId;
     }
 }

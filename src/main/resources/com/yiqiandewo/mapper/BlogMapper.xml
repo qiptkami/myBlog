@@ -5,7 +5,7 @@
 
 <mapper namespace="com.yiqiandewo.mapper.BlogMapper">
 
-    <resultMap id="allBlogMap" type="com.yiqiandewo.pojo.Blog">
+    <resultMap id="blogToTypeAndUserMap" type="com.yiqiandewo.pojo.Blog">
         <id property="id" column="id"></id>
         <result property="appreciation" column="appreciation"></result>
         <result property="commentAble" column="comment_able"></result>
@@ -32,31 +32,31 @@
         </association>
     </resultMap>
 
-    <select id="queryAll" resultMap="allBlogMap">
-         select b.*, t.*, u.id, u.username, u.avatar from t_blog b left join t_type t on b.type_id = t.id left JOIN t_user u on u.id = b.user_id
-    </select>
-
-    <select id="queryById" resultMap="allBlogMap">
+    <select id="selectOneById" resultMap="blogToTypeAndUserMap">
         select b.*, t.*, u.id, u.username, u.avatar from t_blog b left join t_type t on b.type_id = t.id left JOIN t_user u on u.id = b.user_id where b.`id` = #{id}
     </select>
 
-    <select id="queryByTitle" resultMap="allBlogMap">
+    <select id="selectOneByTitle" resultMap="blogToTypeAndUserMap">
         select b.*, t.*, u.id, u.username, u.avatar from t_blog b left join t_type t on b.type_id = t.id left JOIN t_user u on u.id = b.user_id where b.`title` = #{title}
     </select>
 
-    <select id="queryByUpdateTime" resultMap="allBlogMap" parameterType="Integer">
+    <select id="selectList" resultMap="blogToTypeAndUserMap">
+         select b.*, t.*, u.id, u.username, u.avatar from t_blog b left join t_type t on b.type_id = t.id left JOIN t_user u on u.id = b.user_id
+    </select>
+
+    <select id="selectListByUpdateTime" resultMap="blogToTypeAndUserMap" parameterType="Integer">
         select * from t_blog ORDER BY  UNIX_TIMESTAMP(`update_time`) desc limit 0, #{size};  <!--UNIX_TIMESTAMP() 转换为时间戳-->
     </select>
 
-    <select id="queryPublished" resultMap="allBlogMap">
+    <select id="selectListPublished" resultMap="blogToTypeAndUserMap">
         select b.*, t.*, u.id, u.username, u.avatar from t_blog b left join t_type t on b.type_id = t.id left JOIN t_user u on u.id = b.user_id where `published` = 1
     </select>
 
-    <select id="query" resultMap="allBlogMap">
+    <select id="selectListConditional" resultMap="blogToTypeAndUserMap">
         select b.*, t.*, u.id, u.username, u.avatar from t_blog b left join t_type t on b.type_id = t.id left JOIN t_user u on u.id = b.user_id where `published` = 1 and (b.title = #{query} or t.name = #{query} or b.content like concat('%', #{query}, '%'))
     </select>
 
-    <select id="queryConditional" resultMap="allBlogMap">
+    <select id="selectListMultipleConditional" resultMap="blogToTypeAndUserMap">
         select * from `t_blog` b left join `t_type` t on b.`type_id` = t.id
         <where>
             <if test="title != null and title != ''">
@@ -69,21 +69,21 @@
         </where>
     </select>
 
-    <update id="updateBlog" parameterType="com.yiqiandewo.pojo.Blog">
+    <update id="update" parameterType="com.yiqiandewo.pojo.Blog">
         update t_blog set `appreciation` = #{appreciation}, `comment_able` = #{commentAble}, `content` = #{content},
         `first_picture` = #{firstPicture}, `flag` = #{flag}, `published` = #{published}, `recommend` = #{recommend}, `share_statement` = #{shareStatement},
         `title` = #{title}, `update_time` = #{updateTime}, `type_id` = #{type.id}, `description` = #{description} where `id` = #{id};
     </update>
 
-    <update id="updateBlogViews" parameterType="Long">
+    <update id="updateViews" parameterType="Long">
         update t_blog set `views` = views+1 where id = #{id}
     </update>
 
-    <delete id="deleteBlog" parameterType="Long">
+    <delete id="delete" parameterType="Long">
         delete from t_blog where `id` = #{id};
     </delete>
 
-    <insert id="addBlog" parameterType="com.yiqiandewo.pojo.Blog">
+    <insert id="insert" parameterType="com.yiqiandewo.pojo.Blog">
         insert into t_blog(`appreciation`, `comment_able`, `content`, `create_time`, `first_picture`, `flag`, `published`, `recommend`, `share_statement`, `title`, `update_time`, `views`, `type_id`, `user_id`, `description`)
         values(#{appreciation}, #{commentAble}, #{content}, #{createTime}, #{firstPicture}, #{flag}, #{published}, #{recommend}, #{shareStatement}, #{title}, #{updateTime}, #{views}, #{type.id}, #{user.id}, #{description});
     </insert>

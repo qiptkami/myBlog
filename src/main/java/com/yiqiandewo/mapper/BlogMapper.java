@@ -7,26 +7,31 @@ import java.util.List;
 
 @Mapper
 public interface BlogMapper {
-    void addBlog(Blog blog);
 
-    Blog queryById(Long id);
+    Blog selectOneById(Long id);
 
-    //分页查询
-    List<Blog> queryAll();
+    Blog selectOneByTitle(String title);
 
-    void updateBlog(Blog blog);
+    //查询所有blog
+    List<Blog> selectList();
 
-    void deleteBlog(Long id);
+    //按照updateTime排序 查询size个
+    List<Blog> selectListByUpdateTime(int size);
 
-    List<Blog> queryConditional(String title, Long typeId, boolean recommend);
+    //查询所有published是true
+    List<Blog> selectListPublished();
 
-    Blog queryByTitle(String title);
+    //首页查询
+    List<Blog> selectListConditional(String query);
 
-    List<Blog> queryByUpdateTime(int size);
+    //后端条件查询
+    List<Blog> selectListMultipleConditional(String title, Long typeId, boolean recommend);
 
-    List<Blog> queryPublished();
+    void updateViews(Long id);
 
-    List<Blog> query(String query);
+    void insert(Blog blog);
 
-    void updateBlogViews(Long id);
+    void update(Blog blog);
+
+    void delete(Long id);
 }

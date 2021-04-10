@@ -5,7 +5,7 @@
 
 <mapper namespace="com.yiqiandewo.mapper.TypeMapper">
 
-    <resultMap id="allBlogMap" type="com.yiqiandewo.pojo.Type">
+    <resultMap id="typeToBlogsMap" type="com.yiqiandewo.pojo.Type">
         <id property="id" column="id"></id>
         <result property="name" column="name"></result>
 
@@ -15,33 +15,32 @@
         </collection>
     </resultMap>
 
-    <insert id="addType" parameterType="com.yiqiandewo.pojo.Type">
+    <insert id="insert" parameterType="com.yiqiandewo.pojo.Type">
         insert into t_type(name) values(#{name});
     </insert>
 
-    <select id="queryAllBlog" resultMap="allBlogMap">
-        select t.*, b.* from t_type t left join t_blog b on t.id = b.type_id
+    <select id="selectListAndBlog" resultMap="typeToBlogsMap">
+        select t.id, t.name, b.title, b.type_id from t_type t left join t_blog b on t.id = b.type_id
     </select>
 
-    <select id="queryById" parameterType="Long" resultType="com.yiqiandewo.pojo.Type">
-        select * from t_type where `id` = #{id};
+    <select id="selectList" resultType="com.yiqiandewo.pojo.Type">
+        select `id`, `name` from t_type
     </select>
 
-    <select id="queryAll" resultType="com.yiqiandewo.pojo.Type">
-        select * from t_type
+    <select id="selectOneById" parameterType="Long" resultType="com.yiqiandewo.pojo.Type">
+        select `id`, `name` from t_type where `id` = #{id};
     </select>
 
-    <select id="queryByName" resultType="com.yiqiandewo.pojo.Type">
-        select * from t_type where `name` = #{name};
+    <select id="selectOneByName" resultType="com.yiqiandewo.pojo.Type">
+        select `id`, `name` from t_type where `name` = #{name};
     </select>
 
-    <update id="updateType" parameterType="com.yiqiandewo.pojo.Type">
+    <update id="update" parameterType="com.yiqiandewo.pojo.Type">
         update `t_type` set `name` = #{name} where `id` = #{id};
     </update>
 
-    <delete id="deleteType" parameterType="Long">
+    <delete id="delete" parameterType="Long">
         delete from `t_type` where `id` = #{id};
     </delete>
-
 
 </mapper>

@@ -5,7 +5,7 @@
 
 <mapper namespace="com.yiqiandewo.mapper.UserMapper">
 
-    <select id="findUserByUsernameAndPassword" resultType="com.yiqiandewo.pojo.User">
+    <select id="selectOne" resultType="com.yiqiandewo.pojo.User">
         select * from t_user where `username` = #{username} and `password` = #{password};
     </select>
 

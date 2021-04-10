@@ -6,24 +6,29 @@ import com.yiqiandewo.pojo.Blog;
 import java.util.List;
 
 public interface BlogService {
-    Blog addBlog(Blog blog);
+    Blog insert(Blog blog);
 
-    Blog queryById(Long id);
+    Blog update(Long id, Blog blog);
+
+    void delete(Long id);
+
+    Blog selectOne(Long id);
+
+    Blog selectOne(String title);
+
+    //按照updateTime排序 查询前面size个
+    List<Blog> selectList(int size);
 
     //分页查询
-    PageInfo<Blog> queryAll(int page, int size);
+    PageInfo<Blog> selectList(int page, int size);
 
-    Blog updateBlog(Long id, Blog blog);
+    //分页查询所有已经发布的
+    PageInfo<Blog> selectList(int page, int size, boolean published);
 
-    void deleteBlog(Long id);
+    //首页按照输入框的内容条件查询
+    PageInfo<Blog> selectList(int page, int size, String query);
 
-    PageInfo<Blog> queryConditional(int page, int size, String title, Long typeId, boolean recommend);
+    //查询所有符合联合条件的
+    PageInfo<Blog> selectList(int page, int size, String title, Long typeId, boolean recommend);
 
-    Blog queryByTitle(String title);
-
-    List<Blog> queryByUpdateTime(int size);
-
-    PageInfo<Blog> queryPublished(int page, int size);
-
-    PageInfo<Blog> query(int page, int size, String query);
 }

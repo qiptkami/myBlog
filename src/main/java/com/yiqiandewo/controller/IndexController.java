@@ -29,10 +29,10 @@ public class IndexController {
     public String indexPage(@RequestParam(name = "page", required = true, defaultValue = "1") Integer page,
                             @RequestParam(name = "size", required = true, defaultValue = "6") Integer size,
                             Model model) {
-        PageInfo<Blog> pageInfo = blogService.queryPublished(page, size);
+        PageInfo<Blog> pageInfo = blogService.selectList(page, size, true);
         model.addAttribute("pageInfo", pageInfo); //只查询发布的  不查询保存的
-        model.addAttribute("recommendBlog", blogService.queryByUpdateTime(6));
-        List<Type> types = typeService.queryAllBlog(6);
+        model.addAttribute("recommendBlog", blogService.selectList(6));
+        List<Type> types = typeService.selectList(6);
         model.addAttribute("types", types);
         return "index";
     }
@@ -42,14 +42,14 @@ public class IndexController {
                          @RequestParam(name = "size", required = true, defaultValue = "6") Integer size,
                          String query,
                          Model model) {
-        model.addAttribute("pageInfo", blogService.query(page, size, query));
+        model.addAttribute("pageInfo", blogService.selectList(page, size, query));
         model.addAttribute("query", query);
         return "search";
     }
 
     @GetMapping("/blog/{id}")
     public String blog(@PathVariable Long id, Model model) {
-        Blog blog = blogService.queryById(id);
+        Blog blog = blogService.selectOne(id);
         blog.setContent(MarkdownUtils.markdownToHtmlExtensions(blog.getContent()));
         model.addAttribute("blog", blog);
         return "blog";

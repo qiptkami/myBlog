@@ -6,9 +6,8 @@ import java.util.List;
 
 public interface CommentService {
 
-    void addComment(Comment comment);
+    void insert(Comment comment);
 
-    List<Comment> queryAllByBlogId(Long blogId);
+    List<Comment> selectList(Long blogId);
 
-    Comment queryByParentId(Long id);
 }

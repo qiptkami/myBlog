@@ -7,17 +7,17 @@ import java.util.List;
 
 @Mapper
 public interface TypeMapper {
-    void addType(Type type);
+    void insert(Type type);
 
-    Type queryById(Long id);
+    void update(Type type);
 
-    List<Type> queryAll();
+    void delete(Long id);
 
-    void updateType(Type type);
+    Type selectOneById(Long id);
 
-    void deleteType(Long id);
+    Type selectOneByName(String name);
 
-    Type queryByName(String name);
+    List<Type> selectList();
 
-    List<Type> queryAllBlog();
+    List<Type> selectListAndBlog();
 }

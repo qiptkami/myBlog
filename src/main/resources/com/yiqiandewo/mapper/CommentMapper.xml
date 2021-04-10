@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.yiqiandewo.mapper.CommentMapper">
-    <resultMap id="allComment" type="com.yiqiandewo.pojo.Comment">
+    <resultMap id="commentMap" type="com.yiqiandewo.pojo.Comment">
         <id property="id" column="id"></id>
         <result property="nickname" column="nickname"></result>
         <result property="content" column="content"></result>
@@ -15,23 +15,19 @@
         <result property="isAdminComment" column="is_admin_comment"></result>
     </resultMap>
 
-    <select id="queryAllByBlogId" parameterType="Long" resultMap="allComment">
-        select id, nickname, content, avatar, create_time, blog_id, parent_comment_id, is_admin_comment from t_comment where blog_id = #{blogId} and parent_comment_id is null order by UNIX_TIMESTAMP(`create_time`) asc
-    </select>
-
-    <select id="queryByParentId" parameterType="Long" resultMap="allComment">
-        select id, nickname, content, avatar, create_time, blog_id, parent_comment_id, is_admin_comment from t_comment where id = #{parentCommentId}
-    </select>
-
-    <select id="queryById" parameterType="Long" resultMap="allComment">
+    <select id="selectOne" parameterType="Long" resultMap="commentMap">
         select id, nickname, content, avatar, create_time, blog_id, parent_comment_id, is_admin_comment from t_comment where id = #{id}
     </select>
 
-    <select id="queryAllReplyById" resultMap="allComment">
+    <select id="selectListByBlog" parameterType="Long" resultMap="commentMap">
+        select id, nickname, content, avatar, create_time, blog_id, parent_comment_id, is_admin_comment from t_comment where blog_id = #{blogId} and parent_comment_id is null order by UNIX_TIMESTAMP(`create_time`) asc
+    </select>
+
+    <select id="selectListReply" resultMap="commentMap">
         select id, nickname, content, avatar, create_time, blog_id, parent_comment_id, is_admin_comment from t_comment where parent_comment_id = #{id}
     </select>
 
-    <insert id="addComment" parameterType="com.yiqiandewo.pojo.Comment">
+    <insert id="insert" parameterType="com.yiqiandewo.pojo.Comment">
         insert into t_comment(nickname, content, avatar, create_time, blog_id, parent_comment_id, is_admin_comment) values(#{nickname}, #{content}, #{avatar}, #{createTime}, #{blog.id}, #{parentComment.id}, #{isAdminComment})
     </insert>
 </mapper>

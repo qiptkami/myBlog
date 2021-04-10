@@ -18,19 +18,23 @@ public class TypeServiceImpl implements TypeService {
     private TypeMapper typeMapper;
 
     @Override
-    public Type addType(Type type) {
-        //首先判断数据库中有无这个数据
-        Type t = typeMapper.queryByName(type.getName());
-        if (t != null) {
-            return null;
-        }
-        typeMapper.addType(type);
-        return type;
+    public Type selectOne(Long id) {
+        return typeMapper.selectOneById(id);
     }
 
     @Override
-    public List<Type> queryAllBlog(int size) {
-        List<Type> types = typeMapper.queryAllBlog();  //拿到types中 blog数量最多的size个type
+    public Type selectOne(String name) {
+        return typeMapper.selectOneByName(name);
+    }
+
+    @Override
+    public List<Type> selectList() {
+        return typeMapper.selectList();
+    }
+
+    @Override
+    public List<Type> selectList(int size) {
+        List<Type> types = typeMapper.selectListAndBlog();  //拿到types中 blog数量最多的size个type
         types.sort(new Comparator<Type>() {
             @Override
             public int compare(Type t1, Type t2) {
@@ -42,39 +46,37 @@ public class TypeServiceImpl implements TypeService {
     }
 
     @Override
-    public Type queryById(Long id) {
-        return typeMapper.queryById(id);
-    }
-
-    @Override
-    public PageInfo<Type> queryAll(int page, int size) {
+    public PageInfo<Type> selectList(int page, int size) {
         PageHelper.startPage(page, size);
-        List<Type> types = typeMapper.queryAll();
+        List<Type> types = typeMapper.selectList();
         return new PageInfo<>(types);
     }
 
     @Override
-    public List<Type> queryAll() {
-        return typeMapper.queryAll();
-    }
-
-    @Override
-    public Type updateType(Long id, Type type) {
-        Type t = typeMapper.queryById(id);
-        if (t == null) {
+    public Type insert(Type type) {
+        //首先判断数据库中有无这个数据
+        Type t = typeMapper.selectOneByName(type.getName());
+        if (t != null) {
             return null;
         }
-        typeMapper.updateType(type);
+        typeMapper.insert(type);
         return type;
     }
 
     @Override
-    public void deleteType(Long id) {
-        typeMapper.deleteType(id);
+    public Type update(Long id, Type type) {
+        Type t = typeMapper.selectOneById(id);
+        if (t == null) {
+            return null;
+        }
+        typeMapper.update(type);
+        return type;
     }
 
     @Override
-    public Type queryByName(String name) {
-        return typeMapper.queryByName(name);
+    public void delete(Long id) {
+        typeMapper.delete(id);
     }
+
+
 }

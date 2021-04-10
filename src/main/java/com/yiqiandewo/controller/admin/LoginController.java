@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 @Controller
@@ -20,12 +21,16 @@ public class LoginController {
     private UserService userService;
 
     @GetMapping
-    public String loginPage() {
+    public String loginPage(HttpSession session) {
+        User user = (User) session.getAttribute("user");
+        if (user != null) {
+            return "admin/index";
+        }
         return "admin/login";
     }
 
     @PostMapping("/login")
-    public String login(String username, String password, HttpSession session, RedirectAttributes attributes) {
+    public String login(String username, String password, HttpSession session, RedirectAttributes attributes, HttpServletRequest request) {
         User user = userService.check(username, MD5Utils.string2MD5(password));
 
         if (user != null) {

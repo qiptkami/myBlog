@@ -14,7 +14,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User check(String username, String password) {
-        User user = userMapper.findUserByUsernameAndPassword(username, password);
+        User user = userMapper.selectOne(username, password);
         return user;
     }
 }

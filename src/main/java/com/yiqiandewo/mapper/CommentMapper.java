@@ -8,13 +8,15 @@ import java.util.List;
 @Mapper
 public interface CommentMapper {
 
-    void addComment(Comment comment);
+    //查询给定id的blog下所有的没有父comment的comment
+    List<Comment> selectListByBlog(Long blogId);
 
-    List<Comment> queryAllByBlogId(Long blogId);
+    //查询出给定id的comment的子评论
+    List<Comment> selectListReply(Long id);
 
-    Comment queryByParentId(Long parentCommentId);
+    //通过id查询
+    Comment selectOne(Long id);
 
-    List<Comment> queryAllReplyById(Long id);
+    void insert(Comment comment);
 
-    Comment queryById(Long id);
 }

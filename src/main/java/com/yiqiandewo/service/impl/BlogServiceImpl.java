@@ -18,76 +18,80 @@ public class BlogServiceImpl implements BlogService {
     private BlogMapper blogMapper;
 
     @Override
-    public Blog addBlog(Blog blog) {
-        Blog b = blogMapper.queryByTitle(blog.getTitle());
+    public Blog selectOne(Long id) {
+        Blog blog = blogMapper.selectOneById(id);
+        blog.setViews(blog.getViews()+1);
+        blogMapper.updateViews(blog.getId());
+        return blog;
+    }
+
+    @Override
+    public Blog selectOne(String title) {
+        return blogMapper.selectOneByTitle(title);
+    }
+
+    @Override
+    public List<Blog> selectList(int size) {
+        return blogMapper.selectListByUpdateTime(size);
+    }
+
+    @Override
+    public PageInfo<Blog> selectList(int page, int size) {
+        PageHelper.startPage(page, size);
+        List<Blog> list = blogMapper.selectList();
+        return new PageInfo<>(list);
+    }
+
+    public PageInfo<Blog> selectList(int page, int size, boolean published) {
+        PageHelper.startPage(page, size);
+        List<Blog> list = blogMapper.selectListPublished();
+        return new PageInfo<>(list);
+    }
+
+    @Override
+    public PageInfo<Blog> selectList(int page, int size, String query) {
+        PageHelper.startPage(page, size);
+        List<Blog> list = blogMapper.selectListConditional(query);
+        return new PageInfo<>(list);
+    }
+
+    @Override
+    public PageInfo<Blog> selectList(int page, int size, String title, Long typeId, boolean recommend) {
+        PageHelper.startPage(page, size);
+        List<Blog> list = blogMapper.selectListMultipleConditional(title, typeId, recommend);
+        return new PageInfo<>(list);
+    }
+
+
+    @Override
+    public Blog update(Long id, Blog blog) {
+        Blog b = blogMapper.selectOneById(id);
+        if (b == null) {
+            return null;
+        }
+        blog.setUpdateTime(new Date());
+        blogMapper.update(blog);
+        return blog;
+    }
+
+
+    @Override
+    public Blog insert(Blog blog) {
+        Blog b = blogMapper.selectOneByTitle(blog.getTitle());
         if (b != null) {
             return null;
         }
         blog.setCreateTime(new Date());
         blog.setUpdateTime(new Date());
         blog.setViews(0);
-        blogMapper.addBlog(blog);
+        blogMapper.insert(blog);
         return blog;
     }
 
     @Override
-    public Blog queryById(Long id) {
-        Blog blog = blogMapper.queryById(id);
-        blog.setViews(blog.getViews()+1);
-        blogMapper.updateBlogViews(blog.getId());
-        return blog;
+    public void delete(Long id) {
+        blogMapper.delete(id);
     }
 
-    @Override
-    public PageInfo<Blog> queryAll(int page, int size) {
-        PageHelper.startPage(page, size);
-        List<Blog> list = blogMapper.queryAll();
-        return new PageInfo<>(list);
-    }
 
-    @Override
-    public Blog updateBlog(Long id, Blog blog) {
-        Blog b = blogMapper.queryById(id);
-        if (b == null) {
-            return null;
-        }
-        blog.setUpdateTime(new Date());
-        blogMapper.updateBlog(blog);
-        return blog;
-    }
-
-    @Override
-    public PageInfo<Blog> query(int page, int size, String query) {
-        PageHelper.startPage(page, size);
-        List<Blog> list = blogMapper.query(query);
-        return new PageInfo<>(list);
-    }
-
-    @Override
-    public void deleteBlog(Long id) {
-        blogMapper.deleteBlog(id);
-    }
-
-    @Override
-    public List<Blog> queryByUpdateTime(int size) {
-        return blogMapper.queryByUpdateTime(size);
-    }
-
-    @Override
-    public Blog queryByTitle(String title) {
-        return blogMapper.queryByTitle(title);
-    }
-
-    @Override
-    public PageInfo<Blog> queryConditional(int page, int size, String title, Long typeId, boolean recommend) {
-        PageHelper.startPage(page, size);
-        List<Blog> list = blogMapper.queryConditional(title, typeId, recommend);
-        return new PageInfo<>(list);
-    }
-
-    public PageInfo<Blog> queryPublished(int page, int size) {
-        PageHelper.startPage(page, size);
-        List<Blog> list = blogMapper.queryPublished();
-        return new PageInfo<>(list);
-    }
 }

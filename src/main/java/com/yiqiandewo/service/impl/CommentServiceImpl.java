@@ -16,29 +16,23 @@ public class CommentServiceImpl implements CommentService {
     @Autowired
     private CommentMapper commentMapper;
 
-    @Override
-    public void addComment(Comment comment) {
-        comment.setCreateTime(new Date());
-        Long parentCommentId = comment.getParentComment().getId();
-        if (parentCommentId == -1) {
-            comment.setParentComment(null);
-        } else {
-            Comment parentComment = commentMapper.queryByParentId(parentCommentId);
-            System.out.println(parentCommentId);
-            comment.setParentComment(parentComment);
-        }
-        commentMapper.addComment(comment);
-    }
 
     private List<Comment> tempList = new ArrayList<>();
 
+    /**
+     * 查询给定id的blog下所有的没有父comment的comment
+     * 并且将他们的子评论封装进去
+     * @param blogId
+     * @return
+     */
     @Override
-    public List<Comment> queryAllByBlogId(Long blogId) {
+    public List<Comment> selectList(Long blogId) {
         //首先查询出所有没有parent的comment
-        List<Comment> list = commentMapper.queryAllByBlogId(blogId);
+        List<Comment> list = commentMapper.selectListByBlog(blogId);
 
         for (Comment comment : list) {
-            List<Comment> replyList = commentMapper.queryAllReplyById(comment.getId());
+            //查询出子回复  即所有parentId = comment.id 的评论
+            List<Comment> replyList = commentMapper.selectListReply(comment.getId());
             for (Comment reply : replyList) {
                 tempList.add(reply);
                 //子回复也可能有子回复
@@ -46,8 +40,8 @@ public class CommentServiceImpl implements CommentService {
             }
             comment.setReplyComment(tempList);
 
-            for (Comment comment1 : tempList) {
-                comment1.getParentComment().setNickname(commentMapper.queryById(comment1.getParentComment().getId()).getNickname());
+            for (Comment c : tempList) {
+                c.getParentComment().setNickname(commentMapper.selectOne(c.getParentComment().getId()).getNickname());
             }
 
             tempList = new ArrayList<>();
@@ -57,11 +51,11 @@ public class CommentServiceImpl implements CommentService {
     }
 
     private void recReply(Comment comment) {
-        List<Comment> replyList = commentMapper.queryAllReplyById(comment.getId());
+        List<Comment> replyList = commentMapper.selectListReply(comment.getId());
         if (replyList.size() > 0) {
             for (Comment reply : replyList) {
                 tempList.add(reply);  //如果不用全局变量  这个reply将无法返回
-                if (commentMapper.queryAllReplyById(reply.getId()).size() > 0) {
+                if (commentMapper.selectListReply(reply.getId()).size() > 0) {
                     //子回复也可能有子回复
                     recReply(reply);
                 }
@@ -70,7 +64,18 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Comment queryByParentId(Long id) {
-        return commentMapper.queryByParentId(id);
+    public void insert(Comment comment) {
+        comment.setCreateTime(new Date());
+        Long parentCommentId = comment.getParentComment().getId();
+        if (parentCommentId == -1) {
+            comment.setParentComment(null);
+        } else {
+            //查出父评论 封装
+            Comment parentComment = commentMapper.selectOne(parentCommentId);
+            comment.setParentComment(parentComment);
+        }
+        commentMapper.insert(comment);
     }
+
+
 }
