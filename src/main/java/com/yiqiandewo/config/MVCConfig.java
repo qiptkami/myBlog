@@ -13,7 +13,6 @@ public class MVCConfig implements WebMvcConfigurer {
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/about").setViewName("about");
         registry.addViewController("/archives").setViewName("archives");
-        registry.addViewController("/types").setViewName("types");
     }
 
     //后台管理的拦截器

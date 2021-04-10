@@ -45,7 +45,7 @@
     </select>
 
     <select id="selectListByUpdateTime" resultMap="blogToTypeAndUserMap" parameterType="Integer">
-        select * from t_blog ORDER BY  UNIX_TIMESTAMP(`update_time`) desc limit 0, #{size};  <!--UNIX_TIMESTAMP() 转换为时间戳-->
+        select * from t_blog where `published` = 1 and `recommend` = 1 ORDER BY  UNIX_TIMESTAMP(`update_time`) desc limit 0, #{size};  <!--UNIX_TIMESTAMP() 转换为时间戳-->
     </select>
 
     <select id="selectListPublished" resultMap="blogToTypeAndUserMap">
@@ -57,7 +57,7 @@
     </select>
 
     <select id="selectListMultipleConditional" resultMap="blogToTypeAndUserMap">
-        select * from `t_blog` b left join `t_type` t on b.`type_id` = t.id
+        select * from `t_blog` b left join `t_type` t on b.`type_id` = t.id left JOIN t_user u on u.id = b.user_id
         <where>
             <if test="title != null and title != ''">
                 and b.`title` = #{title}

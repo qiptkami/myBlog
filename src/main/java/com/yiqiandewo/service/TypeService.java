@@ -1,6 +1,7 @@
 package com.yiqiandewo.service;
 
 import com.github.pagehelper.PageInfo;
+import com.yiqiandewo.pojo.Blog;
 import com.yiqiandewo.pojo.Type;
 
 import java.util.List;

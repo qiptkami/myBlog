@@ -12,6 +12,7 @@
         <collection property="blogs" ofType="com.yiqiandewo.pojo.Blog">
             <result property="title" column="title"></result>
             <result property="type.id" column="type_id"></result>
+            <result property="published" column="published"></result>
         </collection>
     </resultMap>
 
@@ -20,7 +21,7 @@
     </insert>
 
     <select id="selectListAndBlog" resultMap="typeToBlogsMap">
-        select t.id, t.name, b.title, b.type_id from t_type t left join t_blog b on t.id = b.type_id
+        select t.id, t.name, b.title, b.type_id from t_type t left join t_blog b on t.id = b.type_id where b.published = 1;
     </select>
 
     <select id="selectList" resultType="com.yiqiandewo.pojo.Type">

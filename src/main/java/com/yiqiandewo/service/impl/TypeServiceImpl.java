@@ -3,6 +3,7 @@ package com.yiqiandewo.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.yiqiandewo.mapper.TypeMapper;
+import com.yiqiandewo.pojo.Blog;
 import com.yiqiandewo.pojo.Type;
 import com.yiqiandewo.service.TypeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,10 @@ public class TypeServiceImpl implements TypeService {
         return typeMapper.selectOneByName(name);
     }
 
+    /**
+     * 仅仅查询所有的type
+     * @return
+     */
     @Override
     public List<Type> selectList() {
         return typeMapper.selectList();
@@ -42,7 +47,10 @@ public class TypeServiceImpl implements TypeService {
             }
         });
 
-        return types.subList(0, 6);
+        if (size >= types.size()) {
+            return types;
+        }
+        return types.subList(0, size);
     }
 
     @Override
@@ -51,6 +59,7 @@ public class TypeServiceImpl implements TypeService {
         List<Type> types = typeMapper.selectList();
         return new PageInfo<>(types);
     }
+
 
     @Override
     public Type insert(Type type) {

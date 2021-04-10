@@ -1,6 +1,9 @@
 package com.yiqiandewo.controller;
 
+import com.github.pagehelper.PageInfo;
+import com.yiqiandewo.pojo.Blog;
 import com.yiqiandewo.pojo.Type;
+import com.yiqiandewo.service.BlogService;
 import com.yiqiandewo.service.TypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,15 +20,39 @@ public class TypeShowController {
     @Autowired
     private TypeService typeService;
 
-    @GetMapping("/types/{id}")
-    public String s(@PathVariable Long id,
-                    @RequestParam(name = "page", required = true, defaultValue = "1") Integer page,
-                    @RequestParam(name = "size", required = true, defaultValue = "6") Integer size,
-                    Model model) {
-        
-        if (id == -1) {
+    @Autowired
+    private BlogService blogService;
 
+    /**
+     * 查询所有type，并且查询所有type下的所有blog，按照数量排序
+     * 并且对blog分页
+     * @param id
+     * @param page
+     * @param size
+     * @param model
+     * @return
+     */
+    @GetMapping({"/types/{id}", "/types"})
+    public String show(@PathVariable(required = false) Long id,
+                    @RequestParam(name = "page", required = true, defaultValue = "1") Integer page,
+                    @RequestParam(name = "size", required = true, defaultValue = "5") Integer size,
+                    Model model) {
+        if (id == null) {
+            id = -1L;
         }
-        return "";
+        //首先查询所有type
+        List<Type> types = typeService.selectList(10000);
+
+        if (id == -1) {  //从导航栏点击过去 默认-1
+            id = types.get(0).getId();  //默认取blog最多的type
+        }
+
+        //查询给定id的type下所有的blog 对blog分页
+        PageInfo<Blog> pageInfo = blogService.selectList(page, size, null, id, true);
+
+        model.addAttribute("types", types);
+        model.addAttribute("pageInfo", pageInfo);
+        model.addAttribute("activeId", id);
+        return "types";
     }
 }

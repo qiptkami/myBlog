@@ -62,7 +62,6 @@ public class BlogServiceImpl implements BlogService {
         return new PageInfo<>(list);
     }
 
-
     @Override
     public Blog update(Long id, Blog blog) {
         Blog b = blogMapper.selectOneById(id);
@@ -73,7 +72,6 @@ public class BlogServiceImpl implements BlogService {
         blogMapper.update(blog);
         return blog;
     }
-
 
     @Override
     public Blog insert(Blog blog) {
