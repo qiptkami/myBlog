@@ -13,14 +13,15 @@ spring:
                       # 这时候需要通Springboot配置文件application.yml/properties 中将 hiddenmethod 过滤器设置为启用即可。 可以配置delete put等请求
 mybatis:
   type-aliases-package: com.yiqiandewo.pojo
-  mapper-location s: classpath:com/yiqiandewo/mapper/*.xml
+  mapper-locations: classpath:com/yiqiandewo/mapper/*.xml
+
 pagehelper:
   helper-dialect: mysql
   reasonable: true
   support-methods-arguments: true
   params: countSql
-#logging:
-#  level:
-#    com.yiqiandewo.mapper: debug  # 控制台打印sql
+logging:
+  level:
+    com.yiqiandewo.mapper: debug  # 控制台打印sql
 
 comment.avatar: /images/avatar.png

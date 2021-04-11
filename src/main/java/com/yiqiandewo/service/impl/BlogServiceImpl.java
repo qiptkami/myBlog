@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class BlogServiceImpl implements BlogService {
@@ -60,6 +62,20 @@ public class BlogServiceImpl implements BlogService {
         PageHelper.startPage(page, size);
         List<Blog> list = blogMapper.selectListMultipleConditional(title, typeId, recommend);
         return new PageInfo<>(list);
+    }
+
+    public Map<String, List<Blog>> selectMap() {
+        Map<String, List<Blog>> map = new HashMap<>();
+        //首先查询出所有的年份
+        List<String> years = blogMapper.selectListYear();
+
+        //然后封装一个 map<年份，blogs>
+        for (String year : years) {
+            List<Blog> list = blogMapper.selectListByYear(year);
+            map.put(year, list);
+        }
+
+        return map;
     }
 
     @Override

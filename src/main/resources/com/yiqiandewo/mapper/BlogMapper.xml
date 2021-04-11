@@ -69,6 +69,14 @@
         </where>
     </select>
 
+    <select id="selectListYear" resultType="String">
+        select date_format(create_time, '%Y') as year from t_blog group by year order by year desc;
+    </select>
+
+    <select id="selectListByYear" parameterType="String" resultMap="blogToTypeAndUserMap">
+        select id, create_time, flag, title from t_blog where date_format(create_time, '%Y') = #{year} and `published` = 1;
+    </select>
+
     <update id="update" parameterType="com.yiqiandewo.pojo.Blog">
         update t_blog set `appreciation` = #{appreciation}, `comment_able` = #{commentAble}, `content` = #{content},
         `first_picture` = #{firstPicture}, `flag` = #{flag}, `published` = #{published}, `recommend` = #{recommend}, `share_statement` = #{shareStatement},

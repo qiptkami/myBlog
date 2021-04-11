@@ -27,6 +27,12 @@ public interface BlogMapper {
     //后端条件查询
     List<Blog> selectListMultipleConditional(String title, Long typeId, boolean recommend);
 
+    //查询所有blog的create年份
+    List<String> selectListYear();
+
+    //通过年份分组查询blog
+    List<Blog> selectListByYear(String year);
+
     void updateViews(Long id);
 
     void insert(Blog blog);

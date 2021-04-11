@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.yiqiandewo.pojo.Blog;
 
 import java.util.List;
+import java.util.Map;
 
 public interface BlogService {
     Blog insert(Blog blog);
@@ -30,5 +31,8 @@ public interface BlogService {
 
     //查询所有符合联合条件的
     PageInfo<Blog> selectList(int page, int size, String title, Long typeId, boolean recommend);
+
+    //归档 key是年份 value是对应的所有blog
+    Map<String, List<Blog>> selectMap();
 
 }
