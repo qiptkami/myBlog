@@ -87,7 +87,7 @@
 
         </div>
         <!--博客信息-->
-        <div class="ui attached positive message">
+        <div class="ui attached positive message" th:if="${blog.shareStatement}">
             <div class="ui middle aligned grid">
                 <div class="eleven wide column">
                     <ui class="list">
@@ -250,7 +250,7 @@
         position:'left center'
     });
 
-    var serverUrl = "127.0.0.1:8080";
+    var serverUrl = /*[[#{blog.serverUrl}]]*/"127.0.0.1:8080";
     var url = /*[[@{/blog/{id}(id=${blog.id})}]]*/"";
     //动态生成二维码
     var qrcode = new QRCode("qrcode", { //指定div的ID显示生成的二维码
