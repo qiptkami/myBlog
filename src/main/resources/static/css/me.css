@@ -1,6 +1,25 @@
 
-body {
-    background: url("../images/bg.png");
+/*body {
+    background: url("../images/bg.png") !important;
+    background-attachment: fixed;
+}*/
+
+body{
+    background-image: url("../images/bg.png") !important;
+    background-attachment: fixed !important;
+    background-repeat: no-repeat !important;
+    background-size: cover !important;
+    background-position: center 0 !important;
+    -webkit-background-size: cover !important;
+    -o-background-size: cover !important;
+    filter: alpha(opacity=80) !important;
+}
+div {
+    opacity: 0.97; !important;
+}
+nav, footer {
+    opacity: 0.6; !important;
+    bottom: 0 !important;
 }
 
 #item1 {
@@ -62,8 +81,8 @@ body {
 }
 
 .m-padded-tb-big {
-    padding-top: 3em !important;
-    padding-bottom: 3em !important;
+    padding-top: 10em !important;
+    padding-bottom: 10em !important;
 }
 
 .m-padded-tb-huge {
@@ -74,6 +93,7 @@ body {
 .m-padded-tb-massive {
     padding-top: 5em !important;
     padding-bottom: 5em !important;
+
 }
 .m-padded-lr{
     padding-left:4em !important;
@@ -146,11 +166,11 @@ body {
 
 /*---------------------- container ------------------------*/
 .m-container {
-    max-width: 72em !important;
+    max-width: 94em !important;
     margin: auto !important;
 }
 .m-container-small {
-    max-width: 60em !important;
+    max-width: 80em !important;
     margin: auto !important;
 }
 /*-------------------- shadow ----------------------*/
