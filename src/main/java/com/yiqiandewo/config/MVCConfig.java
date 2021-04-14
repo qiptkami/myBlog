@@ -1,6 +1,6 @@
 package com.yiqiandewo.config;
 
-import com.yiqiandewo.interceptor.LoginInterceptor;
+import com.yiqiandewo.interceptor.JWTInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -11,7 +11,7 @@ public class MVCConfig implements WebMvcConfigurer {
     //后台管理的拦截器
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new LoginInterceptor())
+        registry.addInterceptor(new JWTInterceptor())
                 .addPathPatterns("/admin/**")
                 .excludePathPatterns("/admin")
                 .excludePathPatterns("/admin/login");

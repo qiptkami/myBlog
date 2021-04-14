@@ -27,7 +27,7 @@
                         管理后台登录
                     </div>
                 </h2>
-                <form class="ui large form" method="post" action="#" th:action="@{/admin/login}">
+                <form class="ui large form" action="#" th:action="@{/admin/login}" method="post">
                     <div class="ui segment">
                         <div class="field">
                             <div class="ui left icon input">
@@ -46,6 +46,9 @@
 
                     <div class="ui error mini message"></div>
                     <div class="ui negative message" th:unless="${#strings.isEmpty(message)}" th:text="${message}"></div>
+                    <th:block th:each="cookie : ${#httpServletRequest.getCookies()}">
+                        <div class="ui negative message" th:if="${cookie.getName().equals('msg')}" th:text="${cookie.getValue()}"></div>
+                    </th:block>
                 </form>
 
             </div>
@@ -77,6 +80,5 @@
         }
     });
 </script>
-
 </body>
 </html>
