@@ -30,7 +30,7 @@
                 <input type="hidden" name="published">
                 <input type="hidden" name="id" th:value="${blog.id}">
                 <input type="hidden" name="views" th:value="${blog.views}">
-                <div class="required field">
+                <div class="required field" style="position: relative; z-index: 99; !important;">
                     <div class="ui left labeled input">
                         <div class="ui selection compact teal basic dropdown label">
                             <input type="hidden" value="原创" name="flag" th:value="${blog.id} != null ? ${blog.flag} : '原创'">
@@ -52,13 +52,13 @@
                     <p th:errors="*{title}">提交信息不符合规则</p>
                 </div>
                 /*/-->
-                <div class="required field">
+                <div class="required field" style="z-index:999; !important;">
                     <div id="md-content" style="z-index: 1 !important;"><!--将markdown文本框放到最上方以免全屏布局错乱-->
                         <textarea name="content" placeholder="博客内容" style="display: none;" th:text="${blog.content}"></textarea>
                     </div>
                 </div>
 
-                <div class="two fields">
+                <div class="two fields"  style="position: relative; z-index: 99; !important;">
                     <!--分类-->
                     <div class="required field">
                         <div class="ui left labeled action input">

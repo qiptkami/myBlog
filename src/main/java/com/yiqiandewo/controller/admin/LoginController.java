@@ -43,8 +43,8 @@ public class LoginController {
         String token = JWTUtils.createToken(username);
         //将token存储在cookie中
         CookieUtils.set(response, "token", token, -1);
-        CookieUtils.set(response, "username", user.getUsername(), -1);
         CookieUtils.set(response, "avatar", user.getAvatar(), -1);
+        CookieUtils.set(response, "username", user.getUsername(), -1);
         CookieUtils.delete(response, "msg");
         return "admin/index";
     }

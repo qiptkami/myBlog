@@ -3,17 +3,13 @@ package com.yiqiandewo.interceptor;
 import com.auth0.jwt.exceptions.AlgorithmMismatchException;
 import com.auth0.jwt.exceptions.SignatureVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yiqiandewo.util.CookieUtils;
 import com.yiqiandewo.util.JWTUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
-import java.util.Map;
 
 public class JWTInterceptor implements HandlerInterceptor {
 
