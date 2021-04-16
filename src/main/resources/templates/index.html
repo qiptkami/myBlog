@@ -46,7 +46,7 @@
                                             <div class="item">
                                                 <img src="" th:src="${blog.user.avatar}" alt="" class="ui avatar image">
                                                 <div class="content">
-                                                    <a class="header" href="" th:text="${blog.user.username}">yiqiandewo</a>
+                                                    <a class="header" href="" th:href="@{/about}" th:text="${blog.user.username}">yiqiandewo</a>
                                                 </div>
                                             </div>
                                             <div class="item" id="item2">
@@ -60,7 +60,7 @@
                                         </div>
                                     </div>
                                     <div class="right aligned five wide column">
-                                        <a href="" target="_blank" class="ui teal basic label m-padded-tiny m-text-thin" th:text="${blog.type.name}">认知升级</a>
+                                        <a href="" th:href="@{/types/{id}(id=${blog.type.id})}" target="_blank" class="ui teal basic label m-padded-tiny m-text-thin" th:text="${blog.type.name}">认知升级</a>
                                     </div>
                                 </div>
                             </div>
