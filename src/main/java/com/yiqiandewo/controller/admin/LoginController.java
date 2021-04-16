@@ -6,6 +6,7 @@ import com.yiqiandewo.util.CookieUtils;
 import com.yiqiandewo.util.JWTUtils;
 import com.yiqiandewo.util.MD5Utils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -22,7 +23,7 @@ public class LoginController {
     private UserService userService;
 
     @GetMapping
-    public String loginPage(HttpServletRequest request, HttpServletResponse response) {
+    public String loginPage(HttpServletRequest request) {
         Cookie token = CookieUtils.get(request, "token");
         if (token != null) {  //如果token没失效
             return "admin/index";

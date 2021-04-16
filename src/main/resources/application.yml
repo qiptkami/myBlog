@@ -13,6 +13,9 @@ spring:
                       # 这时候需要通Springboot配置文件application.yml/properties 中将 hiddenmethod 过滤器设置为启用即可。 可以配置delete put等请求
   messages:
     basename: i18n.messages # 国际化的配置文件路径
+  redis:
+    host: 119.45.192.221
+    port: 6379
 mybatis:
   type-aliases-package: com.yiqiandewo.pojo
   mapper-locations: classpath:com/yiqiandewo/mapper/*.xml

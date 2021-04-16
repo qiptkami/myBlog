@@ -35,6 +35,10 @@ public class JWTInterceptor implements HandlerInterceptor {
             e.printStackTrace();
             System.out.println("token无效");
         }
+        CookieUtils.delete(response, "token");
+        CookieUtils.delete(response, "username");
+        CookieUtils.delete(response, "avatar");
+
         //将msg 发出去
         CookieUtils.set(response, "msg", "请先登录！", -1);
         response.sendRedirect("/admin");
