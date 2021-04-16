@@ -26,6 +26,13 @@ public class ArchivesController {
             counts += map.get(s).size();
         }
         model.addAttribute("map", map);
+
+        Set<Map.Entry<String, List<Blog>>> entries = map.entrySet();
+        for (Map.Entry<String, List<Blog>> entry : entries) {
+            System.out.println(entry.getKey());
+            System.out.println(entry.getValue());
+        }
+
         model.addAttribute("counts", counts); //拿到blog总数
         return "archives";
     }

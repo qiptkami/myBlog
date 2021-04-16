@@ -8,10 +8,7 @@ import com.yiqiandewo.service.BlogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class BlogServiceImpl implements BlogService {
@@ -65,7 +62,7 @@ public class BlogServiceImpl implements BlogService {
     }
 
     public Map<String, List<Blog>> selectMap() {
-        Map<String, List<Blog>> map = new HashMap<>();
+        Map<String, List<Blog>> map = new LinkedHashMap<>();  //改成LinkedHashMap  排序的hashmap
         //首先查询出所有的年份
         List<String> years = blogMapper.selectListYear();
 
