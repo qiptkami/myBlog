@@ -10,20 +10,15 @@ import java.util.*;
 public class JWTUtils {
 
     /**
-     * 过期时间为30分钟
+     * 过期时间为1天
      */
-    private static final long EXPIRE_TIME = 30*1000;
+    private static final long EXPIRE_TIME = 24*60*60*1000;
 
     /**
      * token私钥
      */
     private static final String TOKEN_SECRET = "joijsdfjlsjfljfljl5135313135";
 
-    /**
-     * 生成签名,15分钟后过期
-     * @param username
-     * @return
-     */
     public static String createToken(String username) {
         //过期时间
         Date date = new Date(System.currentTimeMillis() + EXPIRE_TIME);
