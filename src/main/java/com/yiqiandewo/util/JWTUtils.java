@@ -21,7 +21,7 @@ public class JWTUtils {
 
     public static String createToken(String username) {
         //过期时间
-        Date date = new Date(System.currentTimeMillis() + EXPIRE_TIME);
+        Date date = new Date(System.currentTimeMillis() + EXPIRE_TIME);  //前面加上currentTimeMillis来保证每次生成的token不一样
 
         //私钥及加密算法
         Algorithm algorithm = Algorithm.HMAC256(TOKEN_SECRET);
