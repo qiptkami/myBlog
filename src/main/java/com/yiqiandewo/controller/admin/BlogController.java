@@ -5,6 +5,8 @@ import com.yiqiandewo.pojo.Blog;
 import com.yiqiandewo.pojo.User;
 import com.yiqiandewo.service.BlogService;
 import com.yiqiandewo.service.TypeService;
+import com.yiqiandewo.service.UserService;
+import com.yiqiandewo.util.CookieUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +14,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
@@ -24,6 +28,9 @@ public class BlogController {
 
     @Autowired
     private TypeService typeService;
+
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/blogs")
     public String list(@RequestParam(name = "page", required = true, defaultValue = "1") Integer page,
@@ -60,8 +67,11 @@ public class BlogController {
     }
 
     @PostMapping("/blogs/input")
-    public String insert(@Valid Blog blog, BindingResult result, RedirectAttributes attributes, HttpSession session, Model model) {
-        blog.setUser((User) session.getAttribute("user"));
+    public String insert(@Valid Blog blog, BindingResult result, RedirectAttributes attributes, HttpServletRequest request, Model model) {
+        String username = CookieUtils.get(request, "username").getValue();
+        User user = userService.selectOne(username);
+        user.setPassword(null);
+        blog.setUser(user);
         blog.setType(typeService.selectOne(blog.getType().getId()));
         Blog b = null;
         if (blog.getId() != null) {  //修改的时候blog id 不为null

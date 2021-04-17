@@ -74,7 +74,7 @@
     </select>
 
     <select id="selectListByYear" parameterType="String" resultMap="blogToTypeAndUserMap">
-        select id, create_time, flag, title from t_blog where date_format(create_time, '%Y') = #{year} and `published` = 1;
+        select id, create_time, flag, title from t_blog where date_format(create_time, '%Y') = #{year} and `published` = 1 order by UNIX_TIMESTAMP(`create_time`) desc
     </select>
 
     <update id="update" parameterType="com.yiqiandewo.pojo.Blog">

@@ -13,8 +13,7 @@ public class UserServiceImpl implements UserService {
     private UserMapper userMapper;
 
     @Override
-    public User check(String username, String password) {
-        User user = userMapper.selectOne(username, password);
-        return user;
+    public User selectOne(String username) {
+        return userMapper.selectOne(username);
     }
 }
