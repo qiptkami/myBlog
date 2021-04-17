@@ -47,7 +47,7 @@
                     <div class="ui error mini message"></div>
                     <div class="ui negative message" th:unless="${#strings.isEmpty(message)}" th:text="${message}"></div>
                     <th:block th:each="cookie : ${#httpServletRequest.getCookies()}">
-                        <div class="ui negative message" th:if="${cookie.getName().equals('msg')}" th:text="${cookie.getValue()}"></div>
+                        <div class="ui negative message" th:if="${cookie.getName().equals('tokenInvalid')}" th:text="${cookie.getValue()}"></div>
                     </th:block>
                 </form>
 

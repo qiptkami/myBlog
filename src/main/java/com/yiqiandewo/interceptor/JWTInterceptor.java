@@ -35,12 +35,15 @@ public class JWTInterceptor implements HandlerInterceptor {
             e.printStackTrace();
             System.out.println("token无效");
         }
-        CookieUtils.delete(response, "token");
-        CookieUtils.delete(response, "username");
-        CookieUtils.delete(response, "avatar");
 
-        //将msg 发出去
-        CookieUtils.set(response, "msg", "请先登录！", -1);
+        CookieUtils.delete(request, response, "username");
+        CookieUtils.delete(request, response, "avatar");
+        CookieUtils.delete(request, response, "token");
+
+        if (CookieUtils.get(request, "tokenInvalid") == null) {
+            CookieUtils.set(response, "tokenInvalid", "请先登录", -1);
+        }
+
         response.sendRedirect("/admin");
         return false;  //拦截
     }
