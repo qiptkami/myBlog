@@ -21,9 +21,8 @@
     <div class="m-container-small m-padded-tb-big">
         <div class="ui container">
             <div class="ui success large message">
-                <th:block th:each="cookie : ${#httpServletRequest.getCookies()}">
-                <h3 th:if="${cookie.getName().equals('username')}" th:text="${cookie.getValue()}"></h3>
-                    <p th:if="${cookie.getName().equals('username')}">欢迎登录</p>
+                <h3 th:text="${#httpServletRequest.getAttribute('username')}"></h3>
+                    <p>欢迎登录</p>
             </div>
             <img src="https://i.loli.net/2021/03/29/h76qkT2t1zWNMCJ.jpg" alt=""  class="ui rounded bordered fluid image">
         </div>

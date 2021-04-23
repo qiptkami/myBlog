@@ -16,10 +16,8 @@
             <div class="right m-item item m-mobile-hide menu">
                 <div class="ui dropdown item">
                     <div class="text">
-                        <th:block th:each="cookie : ${#httpServletRequest.getCookies()}">
-                            <img src="https://unsplash.it/100/100?image=1005" th:if="${cookie.getName().equals('avatar')}" th:src="${cookie.getValue()}" class="ui avatar image">
-                            <span th:if="${cookie.getName().equals('username')}" th:text="${cookie.getValue()}"></span>
-                        </th:block>
+                        <img src="https://unsplash.it/100/100?image=1005" th:src="${#httpServletRequest.getAttribute('avatar')}" class="ui avatar image">
+                        <span th:text="${#httpServletRequest.getAttribute('username')}"></span>
                     </div>
                     <i class="dropdown icon"></i>
                     <div class="menu">

@@ -1,9 +1,14 @@
 package com.yiqiandewo.util;
 
 import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTCreator;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.impl.JWTParser;
+import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
+import com.auth0.jwt.interfaces.Payload;
+import com.yiqiandewo.pojo.User;
 
 import java.util.*;
 
@@ -19,7 +24,7 @@ public class JWTUtils {
      */
     private static final String TOKEN_SECRET = "joijsdfjlsjfljfljl5135313135";
 
-    public static String createToken(String username) {
+    public static String createToken(User user) {
         //过期时间
         Date date = new Date(System.currentTimeMillis() + EXPIRE_TIME);  //前面加上currentTimeMillis来保证每次生成的token不一样
 
@@ -31,7 +36,7 @@ public class JWTUtils {
         header.put("typ", "JWT");
         header.put("alg", "HS256");
 
-        String token = JWT.create().withHeader(header).withClaim("loginName", username)
+        String token = JWT.create().withHeader(header).withClaim("username", user.getUsername()).withClaim("avatar", user.getAvatar())
                 .withExpiresAt(date).sign(algorithm);  //withHeader是封装Token的header //withClaim是传入payload  //sign 是signature
 
         return token;
@@ -44,4 +49,7 @@ public class JWTUtils {
         return verifier.verify(token);
     }
 
+    public static String parserToken(String token, String claim) {
+        return JWT.decode(token).getClaim(claim).asString();
+    }
 }

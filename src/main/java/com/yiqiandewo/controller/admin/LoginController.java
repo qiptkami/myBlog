@@ -40,8 +40,6 @@ public class LoginController {
             if (CookieUtils.get(request, "tokenInvalid") == null) {
                 CookieUtils.set(response, "tokenInvalid", "请先登录", -1);
             }
-            CookieUtils.delete(request, response, "username");
-            CookieUtils.delete(request, response, "avatar");
             CookieUtils.delete(request, response, "token");
         }
         return "admin/login";
@@ -64,23 +62,22 @@ public class LoginController {
 
         //验证通过
         //生成token
-        String token = JWTUtils.createToken(username);
+        String token = JWTUtils.createToken(user);
         //将token存储在cookie中
         CookieUtils.set(response, "token", token, -1);
-        CookieUtils.set(response, "avatar", user.getAvatar(), -1);
-        CookieUtils.set(response, "username", user.getUsername(), -1);
 
         CookieUtils.delete(request, response, "tokenInvalid");
 
-        CookieUtils.delete(request, response, "JSESSIONID");
+        return "redirect:/admin/index";
+    }
 
+    @GetMapping("/index")
+    public String mainPage() {
         return "admin/index";
     }
 
     @GetMapping("/logout")
     public String logout(HttpServletRequest request, HttpServletResponse response) {
-        CookieUtils.delete(request, response, "avatar");
-        CookieUtils.delete(request, response, "username");
         CookieUtils.delete(request, response, "token");
         CookieUtils.delete(request, response, "tokenInvalid");
         return "redirect:/admin";

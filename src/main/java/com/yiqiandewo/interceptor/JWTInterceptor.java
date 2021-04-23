@@ -10,6 +10,8 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
+import java.util.Map;
 
 public class JWTInterceptor implements HandlerInterceptor {
 
@@ -21,6 +23,12 @@ public class JWTInterceptor implements HandlerInterceptor {
             Cookie cookie = CookieUtils.get(request, "token");
             String token = cookie.getValue();
             JWTUtils.verifyToken(token);//验证token令牌
+            //验证成功
+            //拿到token payload中的username
+            String username = JWTUtils.parserToken(token, "username");
+            String avatar = JWTUtils.parserToken(token, "avatar");
+            request.setAttribute("username", username);
+            request.setAttribute("avatar", avatar);
             return true;  //放行
         } catch (SignatureVerificationException e) {
             e.printStackTrace();
@@ -36,8 +44,6 @@ public class JWTInterceptor implements HandlerInterceptor {
             System.out.println("token无效");
         }
 
-        CookieUtils.delete(request, response, "username");
-        CookieUtils.delete(request, response, "avatar");
         CookieUtils.delete(request, response, "token");
 
         if (CookieUtils.get(request, "tokenInvalid") == null) {
