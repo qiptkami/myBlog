@@ -68,7 +68,7 @@ public class BlogController {
 
     @PostMapping("/blogs/input")
     public String insert(@Valid Blog blog, BindingResult result, RedirectAttributes attributes, HttpServletRequest request, Model model) {
-        String username = CookieUtils.get(request, "username").getValue();
+        String username = (String) request.getAttribute("username");
         User user = userService.selectOne(username);
         user.setPassword(null);
         blog.setUser(user);

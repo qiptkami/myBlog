@@ -33,7 +33,7 @@ public class LoginController {
             try {
                 JWTUtils.verifyToken(token.getValue());
                 CookieUtils.delete(request, response, "tokenInvalid");
-                return "admin/index";
+                return "redirect:/admin/index";
             } catch (Exception e) { //发生异常说明token失效
                 e.printStackTrace();
             }
