@@ -23,15 +23,15 @@
                         <h3 class="ui teal header">分类</h3>
                     </div>
                     <div class="right aligned column">
-                        共 <h2 class="ui orange header m-inline-block m-text thin" th:text="${#arrays.length(types)}">14</h2>个
+                        共 <h2 class="ui orange header m-inline-block m-text thin" th:text="${typeMap.size()}">14</h2>个
                     </div>
                 </div>
             </div>
             <!--分类-->
             <div class="ui attached segment m-padded-tb-large">
-                <div class="ui labeled button m-margin-tb-tiny" th:each="type : ${types}">
-                    <a href="#" th:href="@{/types/{id}(id=${type.id})}" class="ui basic button" th:text="${type.name}" th:classappend="${activeId} == ${type.id} ? 'teal' : ''">Java</a>
-                    <div class="ui basic left pointing label" th:classappend="${activeId} == ${type.id} ? 'teal' : ''" th:text="${#arrays.length(type.blogs)}">24</div>
+                <div class="ui labeled button m-margin-tb-tiny" th:each="entry : ${typeMap}">
+                    <a href="#" th:href="@{/types/{id}(id=${entry.key.id})}" class="ui basic button" th:text="${entry.key.name}" th:classappend="${activeId} == ${entry.key.id} ? 'teal' : ''">Java</a>
+                    <div class="ui basic left pointing label" th:classappend="${activeId} == ${entry.key.id} ? 'teal' : ''" th:text="${entry.value}">24</div>
                 </div>
             </div>
 

@@ -3,70 +3,107 @@ package com.yiqiandewo.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.yiqiandewo.mapper.TypeMapper;
-import com.yiqiandewo.pojo.Blog;
 import com.yiqiandewo.pojo.Type;
 import com.yiqiandewo.service.TypeService;
+import com.yiqiandewo.util.RedisUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
-@CacheConfig(cacheNames = "type")  //配置缓存名字 的前缀
 @Service
 public class TypeServiceImpl implements TypeService {
 
     @Autowired
     private TypeMapper typeMapper;
 
-    /*
-    首先先去查cache，按照指定的cacheNames获取，然后根据指定的key去获取，如果没有查到，就调用方法，然后将结果放入缓存
-     */
-    @Cacheable(key = "#id")  //缓存中的key 就是 cacheNames+key 即 type::id
+    @Autowired
+    private RedisUtils redisUtils;
+
     @Override
     public Type selectOne(Long id) {
-        return typeMapper.selectOneById(id);
+        String key = "type_id:" + id;
+        //首先查缓存
+        Type type = (Type) redisUtils.get(key);
+
+        if (type == null) {
+            type = typeMapper.selectOneById(id);
+            redisUtils.set(key, type);
+        }
+
+        return type;
     }
 
-    @Cacheable(key = "#name")
     @Override
     public Type selectOne(String name) {
         return typeMapper.selectOneByName(name);
     }
 
     /**
-     * 仅仅查询所有的type
+     * 仅仅查询出所有的type
      * @return
      */
-    @Cacheable() //如果没有参数；key=new SimpleKey();
     @Override
     public List<Type> selectList() {
-        return typeMapper.selectList();
-    }
+        String pattern = "type_id*";
+        List<Type> types = new ArrayList<>();
+        Set<String> keys = redisUtils.keys(pattern);
 
-    @Cacheable(key = "#size")
-    @Override
-    public List<Type> selectList(int size) {
-        List<Type> types = typeMapper.selectListAndBlog();  //拿到types中 blog数量最多的size个type
-        types.sort(new Comparator<Type>() {
-            @Override
-            public int compare(Type t1, Type t2) {
-                return t2.getBlogs().size() - t1.getBlogs().size();
+        if (keys == null) {
+            types = typeMapper.selectList();
+            for (Type type : types) {
+                redisUtils.set("type_id:" + type.getId(), type);
             }
-        });
-
-        if (size >= types.size()) {
-            return types;
+        } else {
+            for (String key : keys) {
+                types.add((Type) redisUtils.get(key));
+            }
         }
-        return types.subList(0, size);
+
+        return types;
     }
 
+    /**
+     * 拿到types中 blog数量最多的size个type  排序由redis的zset完成
+     * 缓存可以采用zset  每个type的blog size作为score type id作为
+     * @param size
+     * @return
+     */
+    @Override
+    public Map<Type, Integer> selectList(int size) {
+        String key = "type_blogs";
+        Map<Type, Integer> map = new LinkedHashMap<>();
+        List<Type> types;
+        boolean exists = redisUtils.exists(key);
+        if (!exists) {
+            types = typeMapper.selectListAndBlog();  //未排序
+            for (Type type : types) {
+                redisUtils.zAdd(key, type.getId(), (double) type.getBlogs().size());  //放入zset中
+            }
+        }
 
-    @Cacheable() //如果有多个参数：key=new SimpleKey(params);
+        Set<ZSetOperations.TypedTuple<Object>> typedTuples = redisUtils.zRevRangeWithScores(key, 0, -1);
+
+        if (size >= typedTuples.size()) {
+            size = typedTuples.size();
+        }
+
+        int i = 0;
+        for (ZSetOperations.TypedTuple<Object> typedTuple: typedTuples) {
+            if (i >= size) {
+                break;
+            }
+            Object typeId =  typedTuple.getValue();
+            Integer score = typedTuple.getScore().intValue(); //数量
+            Type type = (Type) redisUtils.get("type_id:" + typeId);
+            map.put(type, score);
+            i++;
+        }
+
+        return map;
+    }
+
     @Override
     public PageInfo<Type> selectList(int page, int size) {
         PageHelper.startPage(page, size);
@@ -82,11 +119,11 @@ public class TypeServiceImpl implements TypeService {
             return null;
         }
         typeMapper.insert(type);
+        //放入缓存
+        redisUtils.set("type_id:" + type.getId(), type);
         return type;
     }
 
-    //既调用方法，又更新缓存数据；同步更新缓存
-    @CachePut(key = "#result.id")   //方法返回值不能为null
     @Override
     public Type update(Long id, Type type) {
         Type t = typeMapper.selectOneById(id);
@@ -94,19 +131,33 @@ public class TypeServiceImpl implements TypeService {
             return null;
         }
         typeMapper.update(type);
+        //更新缓存
+        redisUtils.set("type_id:" + type.getId(), type);
         return type;
     }
 
-    /*
-      @CacheEvict：缓存清除 key：指定要清除的数据 allEntries = true：指定清除这个缓存中所有的数据
-      beforeInvocation = false：缓存的清除是否在方法之前执行
-       默认代表缓存清除操作是在方法执行之后执行;如果出现异常缓存就不会清除
-      beforeInvocation = true： 代表清除缓存操作是在方法运行之前执行，无论方法是否出现异常，缓存都清除
-     */
-    @CacheEvict(beforeInvocation = true, key = "#id")
     @Override
     public void delete(Long id) {
-        typeMapper.delete(id);
+        boolean flag = false;  //是否可以删除
+        //首先需要先判断是否有博客是这个类型
+        Map<Type, Integer> map = this.selectList(10000000);
+
+        for (Type type : map.keySet()) {
+            if (type.getId().equals(id)) { //Long类型比较大小用equals
+                if (map.get(type) == 0) {
+                    flag = true;
+                }
+            }
+        }
+
+        if (flag) {
+            //如果没有，才能删除
+            typeMapper.delete(id);
+            redisUtils.del("type_id:" + id);
+        } else {
+            throw new RuntimeException("该类型下还有所属博客！！！");
+        }
+
     }
 
 }

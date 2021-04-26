@@ -1,10 +1,13 @@
 package com.yiqiandewo.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
 import java.util.List;
 
 //分类
-public class Type {
+public class Type implements Serializable {
     private Long id;
     @NotBlank(message = "分类名称不能为空")
     private String name;

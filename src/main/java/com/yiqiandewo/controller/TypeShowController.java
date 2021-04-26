@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @Controller
 public class TypeShowController {
@@ -41,16 +43,21 @@ public class TypeShowController {
             id = -1L;
         }
         //首先查询所有type
-        List<Type> types = typeService.selectList(10000);
+        Map<Type, Integer> map = typeService.selectList(10000);
 
         if (id == -1) {  //从导航栏点击过去 默认-1
-            id = types.get(0).getId();  //默认取blog最多的type
+            Set<Type> types = map.keySet();
+            for (Type type : types) {
+                if (type != null) {
+                    id = type.getId();  //默认取blog最多的type
+                    break;
+                }
+            }
         }
 
         //查询给定id的type下所有的blog 对blog分页
         PageInfo<Blog> pageInfo = blogService.selectList(page, size, null, id, true);
-
-        model.addAttribute("types", types);
+        model.addAttribute("typeMap", map);
         model.addAttribute("pageInfo", pageInfo);
         model.addAttribute("activeId", id);
         return "types";

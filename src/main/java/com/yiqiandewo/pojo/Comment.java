@@ -1,10 +1,11 @@
 package com.yiqiandewo.pojo;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
 //评论
-public class Comment {
+public class Comment implements Serializable {
     private Long id;
     private String nickname; //昵称
     private String content; //内容

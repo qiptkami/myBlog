@@ -1,12 +1,13 @@
 package com.yiqiandewo.pojo;
 
 import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-public class Blog {
+public class Blog implements Serializable {
     private Long id;
     @NotBlank(message = "标题不能为空")
     private String title;  //标题

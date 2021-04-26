@@ -8,7 +8,6 @@ import org.springframework.cache.annotation.EnableCaching;
 
 @MapperScan("com.yiqiandewo.mapper")
 @SpringBootApplication
-@EnableCaching  //开启缓存
 public class BlogApplication extends SpringBootServletInitializer {
 
     public static void main(String[] args) {

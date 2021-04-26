@@ -5,6 +5,7 @@ import com.yiqiandewo.pojo.Blog;
 import com.yiqiandewo.pojo.Type;
 
 import java.util.List;
+import java.util.Map;
 
 public interface TypeService {
     Type insert(Type type);
@@ -20,7 +21,7 @@ public interface TypeService {
     List<Type> selectList();
 
     //查询所有type和一对多的blog
-    List<Type> selectList(int size);
+    Map<Type, Integer> selectList(int size);
 
     //分页查询
     PageInfo<Type> selectList(int page, int size);

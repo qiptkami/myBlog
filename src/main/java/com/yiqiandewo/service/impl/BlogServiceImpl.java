@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.yiqiandewo.mapper.BlogMapper;
 import com.yiqiandewo.pojo.Blog;
 import com.yiqiandewo.service.BlogService;
+import com.yiqiandewo.util.RedisUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,12 +15,17 @@ import java.util.*;
 public class BlogServiceImpl implements BlogService {
 
     @Autowired
+    private RedisUtils redisUtils;
+
+    @Autowired
     private BlogMapper blogMapper;
 
     @Override
     public Blog selectOne(Long id) {
+        //首先查缓存   k - v
+        String key = "blog::" + id;
         Blog blog = blogMapper.selectOneById(id);
-        blog.setViews(blog.getViews()+1);
+        blog.setViews(blog.getViews() + 1);
         blogMapper.updateViews(blog.getId());
         return blog;
     }
@@ -96,6 +102,13 @@ public class BlogServiceImpl implements BlogService {
         blog.setUpdateTime(new Date());
         blog.setViews(0);
         blogMapper.insert(blog);
+
+        String key = "type_blogs";
+
+        boolean exist = redisUtils.exists(key);
+        if (exist) {
+            redisUtils.zIncrby(key, blog.getType().getId());
+        }
         return blog;
     }
 

@@ -100,10 +100,10 @@
                         </div>
                     </div>
                     <div class="ui segment">
-                        <div class="ui fluid vertical menu" th:each="type : ${types}">
-                            <a href="" class="item" th:href="@{/types/{id}(id=${type.id})}">
-                                <span th:text="${type.name}"></span>
-                                <div class="ui teal basic left pointing label" th:text="${#arrays.length(type.blogs)}">15</div>
+                        <div class="ui fluid vertical menu" th:each="entry : ${typeMap}">
+                            <a href="" class="item" th:href="@{/types/{id}(id=${entry.key.id})}">
+                                <span th:text="${entry.key.name}"></span>
+                                <div class="ui teal basic left pointing label" th:text="${entry.value}">15</div>
                             </a>
 
                         </div>

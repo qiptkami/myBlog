@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class IndexController {
@@ -32,8 +33,8 @@ public class IndexController {
         PageInfo<Blog> pageInfo = blogService.selectList(page, size, true);
         model.addAttribute("pageInfo", pageInfo); //只查询发布的  不查询保存的
         model.addAttribute("recommendBlog", blogService.selectList(6));
-        List<Type> types = typeService.selectList(6);
-        model.addAttribute("types", types);
+        Map<Type, Integer> map = typeService.selectList(6);
+        model.addAttribute("typeMap", map);
         return "index";
     }
 
@@ -56,7 +57,7 @@ public class IndexController {
     }
 
     @GetMapping("/footer/newBlog")
-    public String v(Model model){
+    public String footer(Model model){
         List<Blog> list = blogService.selectList(3);
         model.addAttribute("newBlogs", list);
         return "commons/bar :: newBlogList";
