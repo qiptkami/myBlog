@@ -31,7 +31,7 @@
             <div class="ui attached segment m-padded-tb-large">
                 <div class="ui labeled button m-margin-tb-tiny" th:each="entry : ${typeMap}">
                     <a href="#" th:href="@{/types/{id}(id=${entry.key.id})}" class="ui basic button" th:text="${entry.key.name}" th:classappend="${activeId} == ${entry.key.id} ? 'teal' : ''">Java</a>
-                    <div class="ui basic left pointing label" th:classappend="${activeId} == ${entry.key.id} ? 'teal' : ''" th:text="${entry.value}">24</div>
+                    <div class="ui basic left pointing label"  th:classappend="${activeId} == ${entry.key.id} ? 'teal' : ''" th:text="${entry.value}">24</div>
                 </div>
             </div>
 

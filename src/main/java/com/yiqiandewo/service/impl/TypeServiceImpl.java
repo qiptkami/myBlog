@@ -1,5 +1,6 @@
 package com.yiqiandewo.service.impl;
 
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.yiqiandewo.mapper.TypeMapper;
@@ -23,13 +24,13 @@ public class TypeServiceImpl implements TypeService {
 
     @Override
     public Type selectOne(Long id) {
-        String key = "type_id:" + id;
+        String key = "type";
         //首先查缓存
-        Type type = (Type) redisUtils.get(key);
+        Type type = (Type) redisUtils.hGet(key, String.valueOf(id));
 
         if (type == null) {
             type = typeMapper.selectOneById(id);
-            redisUtils.set(key, type);
+            redisUtils.hSet(key, String.valueOf(id), type);
         }
 
         return type;
@@ -46,18 +47,19 @@ public class TypeServiceImpl implements TypeService {
      */
     @Override
     public List<Type> selectList() {
-        String pattern = "type_id*";
+        String key = "type";
         List<Type> types = new ArrayList<>();
-        Set<String> keys = redisUtils.keys(pattern);
+        Map<Object, Object> map = redisUtils.hGetAll(key);
 
-        if (keys == null) {
+        if (map == null || map.size() == 0) {
             types = typeMapper.selectList();
             for (Type type : types) {
-                redisUtils.set("type_id:" + type.getId(), type);
+                redisUtils.hSet(key, String.valueOf(type.getId()), type);
             }
         } else {
-            for (String key : keys) {
-                types.add((Type) redisUtils.get(key));
+            Set<Map.Entry<Object, Object>> entries = map.entrySet();
+            for (Map.Entry<Object, Object> entry : entries) {
+                types.add((Type) entry.getValue());
             }
         }
 
@@ -65,8 +67,10 @@ public class TypeServiceImpl implements TypeService {
     }
 
     /**
+     * 排行榜 ranking
+     *
      * 拿到types中 blog数量最多的size个type  排序由redis的zset完成
-     * 缓存可以采用zset  每个type的blog size作为score type id作为
+     * 缓存可以采用zset  每个type的blog size作为score  type id作为value
      * @param size
      * @return
      */
@@ -83,7 +87,7 @@ public class TypeServiceImpl implements TypeService {
             }
         }
 
-        Set<ZSetOperations.TypedTuple<Object>> typedTuples = redisUtils.zRevRangeWithScores(key, 0, -1);
+        Set<ZSetOperations.TypedTuple<Object>> typedTuples = redisUtils.zRevRangeWithScores(key, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
 
         if (size >= typedTuples.size()) {
             size = typedTuples.size();
@@ -96,7 +100,10 @@ public class TypeServiceImpl implements TypeService {
             }
             Object typeId =  typedTuple.getValue();
             Integer score = typedTuple.getScore().intValue(); //数量
-            Type type = (Type) redisUtils.get("type_id:" + typeId);
+            Type type = (Type) redisUtils.hGet("type", String.valueOf(typeId));
+            if (type == null) {
+                this.selectList();
+            }
             map.put(type, score);
             i++;
         }
@@ -104,11 +111,36 @@ public class TypeServiceImpl implements TypeService {
         return map;
     }
 
+    /**
+     * 分页缓存
+     * @param page
+     * @param size
+     * @return
+     */
     @Override
     public PageInfo<Type> selectList(int page, int size) {
-        PageHelper.startPage(page, size);
-        List<Type> types = typeMapper.selectList();
-        return new PageInfo<>(types);
+        String key = "type";
+        List<Type> types;
+        List<Object> list = redisUtils.getPage(key, page, size);
+        if (list == null || list.size() == 0) {   //分页缓存为空
+            types = typeMapper.selectList();
+            //放入缓存
+            for (Type type : types) {
+                redisUtils.setPage(key, String.valueOf(type.getId()), type.getId().doubleValue(), type);
+            }
+        } else {
+            types = new ArrayList<>();
+            for (Object obj : list) {
+                types.add((Type) obj);
+            }
+        }
+        Page<Type> typePage = new Page<>();
+        typePage.setPageNum(page);
+        typePage.setPageSize(size);
+        typePage.setTotal(redisUtils.getPageSize(key));
+        PageInfo<Type> pageInfo = new PageInfo<>(typePage);
+        pageInfo.setList(types);
+        return pageInfo;
     }
 
     @Override
@@ -120,7 +152,7 @@ public class TypeServiceImpl implements TypeService {
         }
         typeMapper.insert(type);
         //放入缓存
-        redisUtils.set("type_id:" + type.getId(), type);
+        redisUtils.hSet("type", String.valueOf(type.getId()), type);
         return type;
     }
 
@@ -132,7 +164,7 @@ public class TypeServiceImpl implements TypeService {
         }
         typeMapper.update(type);
         //更新缓存
-        redisUtils.set("type_id:" + type.getId(), type);
+        redisUtils.hSet("type", String.valueOf(type.getId()), type);
         return type;
     }
 
@@ -153,7 +185,8 @@ public class TypeServiceImpl implements TypeService {
         if (flag) {
             //如果没有，才能删除
             typeMapper.delete(id);
-            redisUtils.del("type_id:" + id);
+            redisUtils.delPage("type", String.valueOf(id)); // redisUtils.hDel("type", String.valueOf(id)); 已经在delPage中执行了
+            redisUtils.remove("type_blogs", id);
         } else {
             throw new RuntimeException("该类型下还有所属博客！！！");
         }

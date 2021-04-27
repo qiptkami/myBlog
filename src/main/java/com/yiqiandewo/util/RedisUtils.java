@@ -5,6 +5,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -228,7 +229,7 @@ public class RedisUtils {
      * @param hashKey
      * @param value
      */
-    public void hSet(String key, Object hashKey, Object value) {
+    public void hSet(String key, String hashKey, Object value) {
         redisTemplate.opsForHash().put(key, hashKey, value);
     }
 
@@ -238,13 +239,13 @@ public class RedisUtils {
      * @param key
      * @param hashKey
      */
-    public void hGet(String key, Object hashKey) {
-        redisTemplate.opsForHash().get(key, hashKey);
+    public Object hGet(String key, String hashKey) {
+        return redisTemplate.opsForHash().get(key, hashKey);
     }
 
     /**
      * hgeall key
-     * 获取所有的数据
+     * 获取所有的数据  返回Map<hKey, hValue>
      * @param key
      * @return
      */
@@ -258,6 +259,10 @@ public class RedisUtils {
      */
     public void hDel(String key) {
         redisTemplate.opsForHash().delete(key);
+    }
+
+    public void hDel(String key, String heky) {
+        redisTemplate.opsForHash().delete(key, heky);
     }
 
     //Zset  有序集合
@@ -284,25 +289,29 @@ public class RedisUtils {
     }
 
     /**
-     * zrange key min max withscores
-     * 返回在[min, max]这个区间中的所有值 从小到大
-     * @param key
-     * @return
-     */
-    public Set<ZSetOperations.TypedTuple<Object>> zRangeWithScores(String key, long min, long max) {
-        return redisTemplate.opsForZSet().rangeWithScores(key, min, max);
-    }
-
-    /**
-     * zrevrange key min max withscores
+     * zrevrangebyscore key min max withscores
      * 返回在[min, max]这个区间中的所有值 从小到大
      * @param key
      * @param min
      * @param max
      * @return
      */
-    public Set<ZSetOperations.TypedTuple<Object>> zRevRangeWithScores(String key, long min, long max) {
-        return redisTemplate.opsForZSet().reverseRangeWithScores(key, min, max);
+    public Set<ZSetOperations.TypedTuple<Object>> zRevRangeWithScores(String key, double min, double max) {
+        return redisTemplate.opsForZSet().reverseRangeByScoreWithScores(key, min, max);
+    }
+
+    /**
+     * zrevrangebyscore key min max withscores limit offset count
+     * 相当于先按照score从大到小排序， 然后limit offset count  是相当于分页 每页count个 返回第offset-1页
+     * @param key
+     * @param min
+     * @param max
+     * @param offset
+     * @param count
+     * @return
+     */
+    public Set<ZSetOperations.TypedTuple<Object>> zRevRangeWithScores(String key, double min, double max, long offset, long count) {
+        return redisTemplate.opsForZSet().reverseRangeByScoreWithScores(key, min, max, offset, count);
     }
 
     /**
@@ -313,6 +322,56 @@ public class RedisUtils {
      */
     public void remove(String key, Object value) {
         redisTemplate.opsForZSet().remove(key, value);
+    }
+
+
+    //分页缓存  zset + hash
+
+    /***
+     * set 分页缓存
+     *   如果是blog的分页缓存 则key 就是 blog
+     *   zset key score value  （(double)blogId作为 score，value是blogId）
+     *   hset key hkey value  （hkey是blogId，value是blog的实体对象）
+     * @param key
+     * @param hkey
+     * @param score
+     * @param value
+     */
+    public void setPage(String key, String hkey, double score, Object value) {
+        this.zAdd(key + ":page", hkey, score);
+        this.hSet(key, hkey, value);
+    }
+
+    /**
+     * zrev
+     * get 分页信息
+     * @param key
+     * @param pageNum
+     * @param pageSize
+     */
+    public List<Object> getPage(String key, int pageNum, int pageSize) {
+        Set<ZSetOperations.TypedTuple<Object>> typedTuples = this.zRevRangeWithScores(key + ":page", Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, (pageNum - 1) * pageSize, pageSize);
+        List<Object> list = new ArrayList<>();
+        for (ZSetOperations.TypedTuple<Object> typedTuple : typedTuples) {
+            String hkey = String.valueOf(typedTuple.getValue());
+            Object o = hGet(key, hkey);
+            list.add(o);
+        }
+        return list;
+    }
+
+    public Long getPageSize(String key) {
+        return redisTemplate.opsForZSet().zCard(key + ":page");
+    }
+
+    /**
+     * del 分页中某条数据
+     * @param key
+     * @param hkey
+     */
+    public void delPage(String key, String hkey) {
+        this.remove(key + ":page", hkey);
+        this.hDel(key, hkey);
     }
 
 }
