@@ -1,7 +1,6 @@
 package com.yiqiandewo.service.impl;
 
 import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.yiqiandewo.mapper.TypeMapper;
 import com.yiqiandewo.pojo.Type;
@@ -49,14 +48,14 @@ public class TypeServiceImpl implements TypeService {
     public List<Type> selectList() {
         String key = "type";
         List<Type> types = new ArrayList<>();
-        Map<Object, Object> map = redisUtils.hGetAll(key);
-
-        if (map == null || map.size() == 0) {
+        boolean exists = redisUtils.exists(key);
+        if (!exists) {
             types = typeMapper.selectList();
             for (Type type : types) {
                 redisUtils.hSet(key, String.valueOf(type.getId()), type);
             }
         } else {
+            Map<Object, Object> map = redisUtils.hGetAll(key);
             Set<Map.Entry<Object, Object>> entries = map.entrySet();
             for (Map.Entry<Object, Object> entry : entries) {
                 types.add((Type) entry.getValue());
@@ -100,10 +99,11 @@ public class TypeServiceImpl implements TypeService {
             }
             Object typeId =  typedTuple.getValue();
             Integer score = typedTuple.getScore().intValue(); //数量
-            Type type = (Type) redisUtils.hGet("type", String.valueOf(typeId));
-            if (type == null) {
+            exists = redisUtils.exists("type");
+            if (!exists) {
                 this.selectList();
             }
+            Type type = (Type) redisUtils.hGet("type", String.valueOf(typeId));
             map.put(type, score);
             i++;
         }

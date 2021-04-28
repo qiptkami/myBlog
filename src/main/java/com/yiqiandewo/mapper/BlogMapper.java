@@ -18,9 +18,6 @@ public interface BlogMapper {
     //按照updateTime排序 查询size个
     List<Blog> selectListByUpdateTime(int size);
 
-    //查询所有published是true
-    List<Blog> selectListPublished();
-
     //首页查询
     List<Blog> selectListConditional(String query);
 

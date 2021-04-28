@@ -1,5 +1,6 @@
 package com.yiqiandewo.service.impl;
 
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.yiqiandewo.mapper.BlogMapper;
@@ -22,12 +23,14 @@ public class BlogServiceImpl implements BlogService {
 
     @Override
     public Blog selectOne(Long id) {
-        //首先查缓存   k - v
-        String key = "blog::" + id;
-        Blog blog = blogMapper.selectOneById(id);
-        blog.setViews(blog.getViews() + 1);
-        blogMapper.updateViews(blog.getId());
-        return blog;
+        //首先查缓存
+        String key = "blog";
+        boolean exists = redisUtils.exists(key);
+        if (!exists) {
+            Blog blog = blogMapper.selectOneById(id);
+            redisUtils.hSet(key, String.valueOf(id), blog);
+        }
+        return  (Blog) redisUtils.hGet(key, String.valueOf(id));
     }
 
     @Override
@@ -35,6 +38,11 @@ public class BlogServiceImpl implements BlogService {
         return blogMapper.selectOneByTitle(title);
     }
 
+    /**
+     * ranking
+     * @param size
+     * @return
+     */
     @Override
     public List<Blog> selectList(int size) {
         return blogMapper.selectListByUpdateTime(size);
@@ -42,15 +50,61 @@ public class BlogServiceImpl implements BlogService {
 
     @Override
     public PageInfo<Blog> selectList(int page, int size) {
-        PageHelper.startPage(page, size);
-        List<Blog> list = blogMapper.selectList();
-        return new PageInfo<>(list);
+        String key = "blog";
+        List<Blog> blogs;
+        boolean exists = redisUtils.exists(key);
+
+        if (!exists) {
+            blogs = blogMapper.selectList();
+            for (Blog blog : blogs) {
+                redisUtils.hSet(key, String.valueOf(blog.getId()), blog);
+            }
+        } else {
+            List<Object> list = redisUtils.getPage(key, page, size);
+            blogs = new ArrayList<>();
+            for (Object blog : list) {
+                blogs.add((Blog) blog);
+            }
+        }
+
+        Page<Blog> blogPage = new Page<>();
+        blogPage.setPageNum(page);
+        blogPage.setPageSize(size);
+        blogPage.setTotal(redisUtils.getPageSize(key));
+        PageInfo<Blog> pageInfo = new PageInfo<>(blogPage);
+        pageInfo.setList(blogs);
+        return pageInfo;
     }
 
     public PageInfo<Blog> selectList(int page, int size, boolean published) {
-        PageHelper.startPage(page, size);
-        List<Blog> list = blogMapper.selectListPublished();
-        return new PageInfo<>(list);
+        String key = "blog";
+
+        List<Blog> publishedList = new ArrayList<>();
+        List<Object> list = redisUtils.getPage(key, page, size);
+
+        if (list == null || list.size() == 0) {
+            List<Blog> blogs = blogMapper.selectList();
+            for (Blog blog : blogs) {
+                redisUtils.setPage(key, String.valueOf(blog.getId()), blog.getId().doubleValue(), blog);
+            }
+        }
+
+        list = redisUtils.getPage(key, page, size);
+        //将所有已发布的blog封装到publishedList中
+        for (Object o : list) {
+            Blog blog = (Blog) o;
+            if (blog.isPublished()) {
+                publishedList.add(blog);
+            }
+        }
+
+        Page<Blog> blogPage = new Page<>();
+        blogPage.setPageNum(page);
+        blogPage.setPageSize(size);
+        blogPage.setTotal(publishedList.size());
+        PageInfo<Blog> pageInfo = new PageInfo<>(blogPage);
+        pageInfo.setList(publishedList);
+        return pageInfo;
     }
 
     @Override
@@ -67,13 +121,17 @@ public class BlogServiceImpl implements BlogService {
         return new PageInfo<>(list);
     }
 
+    /**
+     * 归档
+     * @return
+     */
     public Map<String, List<Blog>> selectMap() {
         Map<String, List<Blog>> map = new LinkedHashMap<>();  //改成LinkedHashMap  排序的hashmap
-        //首先查询出所有的年份
+        //首先查询出所有的年份 create_time
         List<String> years = blogMapper.selectListYear();
 
         //然后封装一个 map<年份，blogs>
-        for (String year : years) {
+        for (String year : years)  {
             List<Blog> list = blogMapper.selectListByYear(year);
             map.put(year, list);
         }
@@ -83,12 +141,14 @@ public class BlogServiceImpl implements BlogService {
 
     @Override
     public Blog update(Long id, Blog blog) {
+        String key = "blog";
         Blog b = blogMapper.selectOneById(id);
         if (b == null) {
             return null;
         }
         blog.setUpdateTime(new Date());
         blogMapper.update(blog);
+        redisUtils.hSet(key, String.valueOf(blog.getId()), blog);
         return blog;
     }
 
@@ -104,7 +164,7 @@ public class BlogServiceImpl implements BlogService {
         blogMapper.insert(blog);
 
         String key = "type_blogs";
-
+        redisUtils.hSet("blog", String.valueOf(blog.getId()), blog);
         boolean exist = redisUtils.exists(key);
         if (exist) {
             redisUtils.zIncrby(key, blog.getType().getId());
@@ -115,7 +175,8 @@ public class BlogServiceImpl implements BlogService {
     @Override
     public void delete(Long id) {
         blogMapper.delete(id);
+        redisUtils.delPage("blog", String.valueOf(id));
+        redisUtils.zIncrby("type_blogs", id);
     }
-
 
 }
