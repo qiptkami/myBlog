@@ -11,6 +11,7 @@ public class Comment implements Serializable {
     private String content; //内容
     private String avatar; //头像地址
     private Date createTime; //评论时间
+    private boolean isAdminComment; //是否是管理员评论
 
     private Blog blog; //对一
 
@@ -18,17 +19,11 @@ public class Comment implements Serializable {
 
     private Comment parentComment; //父回复
 
-    public boolean isAdminComment() {
-        return isAdminComment;
+    public Comment() {
     }
 
     public void setAdminComment(boolean adminComment) {
         isAdminComment = adminComment;
-    }
-
-    private boolean isAdminComment; //是否是管理员评论
-
-    public Comment() {
     }
 
     public void setId(Long id) {
@@ -93,6 +88,10 @@ public class Comment implements Serializable {
 
     public Comment getParentComment() {
         return parentComment;
+    }
+
+    public boolean isAdminComment() {
+        return isAdminComment;
     }
 
     @Override

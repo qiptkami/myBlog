@@ -13,6 +13,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /*
 重定向代表之前的请求已结束，给客户端一个新的url，让客户端重新请求去获取资源，这个url可以是站外的，效率相对于转发要低，之前的request域已经失效，可以通过session来获得一些参数。
@@ -41,9 +42,10 @@ public class LoginController {
                 CookieUtils.set(response, "tokenInvalid", "请先登录", -1);
             }
             CookieUtils.delete(request, response, "token");
+            HttpSession session = request.getSession();
+            session.removeAttribute("user");
         }
         return "admin/login";
-
     }
 
     @PostMapping("/login")
@@ -65,6 +67,9 @@ public class LoginController {
         String token = JWTUtils.createToken(user);
         //将token存储在cookie中
         CookieUtils.set(response, "token", token, -1);
+        user.setPassword(null);
+        HttpSession session = request.getSession();
+        session.setAttribute("user", user);
 
         CookieUtils.delete(request, response, "tokenInvalid");
 
@@ -80,6 +85,8 @@ public class LoginController {
     public String logout(HttpServletRequest request, HttpServletResponse response) {
         CookieUtils.delete(request, response, "token");
         CookieUtils.delete(request, response, "tokenInvalid");
+        HttpSession session = request.getSession();
+        session.removeAttribute("user");
         return "redirect:/admin";
     }
 

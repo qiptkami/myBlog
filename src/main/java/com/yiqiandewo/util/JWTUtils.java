@@ -36,7 +36,7 @@ public class JWTUtils {
         header.put("typ", "JWT");
         header.put("alg", "HS256");
 
-        String token = JWT.create().withHeader(header).withClaim("username", user.getUsername()).withClaim("avatar", user.getAvatar())
+        String token = JWT.create().withHeader(header).withClaim("id", String.valueOf(user.getId())).withClaim("username", user.getUsername()).withClaim("avatar", user.getAvatar())
                 .withExpiresAt(date).sign(algorithm);  //withHeader是封装Token的header //withClaim是传入payload  //sign 是signature
 
         return token;

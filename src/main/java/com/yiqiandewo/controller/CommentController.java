@@ -3,6 +3,8 @@ import com.yiqiandewo.pojo.Comment;
 import com.yiqiandewo.pojo.User;
 import com.yiqiandewo.service.BlogService;
 import com.yiqiandewo.service.CommentService;
+import com.yiqiandewo.util.CookieUtils;
+import com.yiqiandewo.util.JWTUtils;
 import org.commonmark.ext.gfm.tables.TableBlock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,6 +14,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
@@ -35,19 +40,29 @@ public class CommentController {
     }
 
     @PostMapping("/comments")
-    public String insert(Comment comment, HttpSession session) {
+    public String insert(Comment comment, HttpServletRequest request) {
         Long blogId = comment.getBlog().getId();
-        User user = (User) session.getAttribute("user");
         comment.setBlog(blogService.selectOne(blogId));
-        if (user != null) {
-            comment.setAvatar(user.getAvatar());
-            comment.setNickname(user.getUsername());
-            comment.setAdminComment(true);
-        } else {
+
+        try {
+            /*Cookie cookie = CookieUtils.get(request, "token");
+            String token = cookie.getValue();
+            JWTUtils.verifyToken(token);//验证token令牌
+            //拿到token payload中的username
+            String username = JWTUtils.parserToken(token, "username");
+            String avatar = JWTUtils.parserToken(token, "avatar");
             comment.setAvatar(avatar);
-            comment.setAdminComment(false);
+            comment.setNickname(username);
+            comment.setAdminComment(true);*/
+        } catch (Exception e) {
+            System.out.println("签名无效！！！");
         }
+
+        //验证失败 说明是游客
+        comment.setAvatar(avatar);
+        comment.setAdminComment(false);
         commentService.insert(comment);
+
         return "redirect:/comments/" + blogId;
     }
 }

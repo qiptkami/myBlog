@@ -62,7 +62,7 @@
                 and b.`type_id` = #{typeId}
             </if>
             and b.`recommend` = #{recommend}
-        </where>
+        </where> order by b.id desc
     </select>
 
     <select id="selectListYear" resultType="String">

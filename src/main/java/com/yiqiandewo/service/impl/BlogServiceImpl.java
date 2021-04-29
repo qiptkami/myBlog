@@ -67,13 +67,7 @@ public class BlogServiceImpl implements BlogService {
             }
         }
 
-        Page<Blog> blogPage = new Page<>();
-        blogPage.setPageNum(page);
-        blogPage.setPageSize(size);
-        blogPage.setTotal(redisUtils.getPageSize(key));
-        PageInfo<Blog> pageInfo = new PageInfo<>(blogPage);
-        pageInfo.setList(blogs);
-        return pageInfo;
+        return getPageInfo(page, size, blogs, key);
     }
 
     public PageInfo<Blog> selectList(int page, int size, boolean published) {
@@ -97,14 +91,7 @@ public class BlogServiceImpl implements BlogService {
                 publishedList.add(blog);
             }
         }
-
-        Page<Blog> blogPage = new Page<>();
-        blogPage.setPageNum(page);
-        blogPage.setPageSize(size);
-        blogPage.setTotal(publishedList.size());
-        PageInfo<Blog> pageInfo = new PageInfo<>(blogPage);
-        pageInfo.setList(publishedList);
-        return pageInfo;
+        return this.getPageInfo(page, size, publishedList, key);
     }
 
     @Override
@@ -148,6 +135,7 @@ public class BlogServiceImpl implements BlogService {
         }
         blog.setUpdateTime(new Date());
         blogMapper.update(blog);
+        blog = blogMapper.selectOneById(id);
         redisUtils.hSet(key, String.valueOf(blog.getId()), blog);
         return blog;
     }
@@ -164,7 +152,7 @@ public class BlogServiceImpl implements BlogService {
         blogMapper.insert(blog);
 
         String key = "type_blogs";
-        redisUtils.hSet("blog", String.valueOf(blog.getId()), blog);
+        redisUtils.setPage("blog", String.valueOf(blog.getId()), blog.getId().doubleValue(), blog);
         boolean exist = redisUtils.exists(key);
         if (exist) {
             redisUtils.zIncrby(key, blog.getType().getId());
@@ -177,6 +165,18 @@ public class BlogServiceImpl implements BlogService {
         blogMapper.delete(id);
         redisUtils.delPage("blog", String.valueOf(id));
         redisUtils.zIncrby("type_blogs", id);
+    }
+
+    private PageInfo<Blog> getPageInfo(int page, int size, List<Blog> list, String key) {
+        Page<Blog> blogPage = new Page<>();
+        blogPage.setPageNum(page);
+        blogPage.setPageSize(size);
+        blogPage.setTotal(redisUtils.getPageSize(key));
+
+        PageInfo<Blog> pageInfo = new PageInfo<>(blogPage);
+        pageInfo.setList(list);
+
+        return pageInfo;
     }
 
 }

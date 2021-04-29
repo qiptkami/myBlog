@@ -3,6 +3,7 @@ package com.yiqiandewo.interceptor;
 import com.auth0.jwt.exceptions.AlgorithmMismatchException;
 import com.auth0.jwt.exceptions.SignatureVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
+import com.yiqiandewo.pojo.User;
 import com.yiqiandewo.util.CookieUtils;
 import com.yiqiandewo.util.JWTUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -10,6 +11,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,11 +26,22 @@ public class JWTInterceptor implements HandlerInterceptor {
             String token = cookie.getValue();
             JWTUtils.verifyToken(token);//验证token令牌
             //验证成功
+
+            //服务器重启 session没了 但是token未失效  这是将用户信息重新设置到session中
+
             //拿到token payload中的username
+            HttpSession session = request.getSession();
+
             String username = JWTUtils.parserToken(token, "username");
             String avatar = JWTUtils.parserToken(token, "avatar");
-            request.setAttribute("username", username);
-            request.setAttribute("avatar", avatar);
+            String id = JWTUtils.parserToken(token, "id");
+            Long userId = Long.parseLong(id);
+            //放在session中
+            User user = new User();
+            user.setId(userId);
+            user.setUsername(username);
+            user.setAvatar(avatar);
+            session.setAttribute("user", user);
             return true;  //放行
         } catch (SignatureVerificationException e) {
             e.printStackTrace();
@@ -45,6 +58,8 @@ public class JWTInterceptor implements HandlerInterceptor {
         }
 
         CookieUtils.delete(request, response, "token");
+        HttpSession session = request.getSession(); //清除用户信息
+        session.removeAttribute("user");
 
         if (CookieUtils.get(request, "tokenInvalid") == null) {
             CookieUtils.set(response, "tokenInvalid", "请先登录", -1);

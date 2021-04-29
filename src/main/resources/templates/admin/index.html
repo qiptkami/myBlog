@@ -21,7 +21,7 @@
     <div class="m-container-small m-padded-tb-big">
         <div class="ui container">
             <div class="ui success large message">
-                <h3 th:text="${#httpServletRequest.getAttribute('username')}"></h3>
+                <h3 th:text="${session.user.username}"></h3>
                     <p>欢迎登录</p>
             </div>
             <img src="https://i.loli.net/2021/03/29/h76qkT2t1zWNMCJ.jpg" alt=""  class="ui rounded bordered fluid image">

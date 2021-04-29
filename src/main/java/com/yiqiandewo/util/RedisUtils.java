@@ -1,5 +1,6 @@
 package com.yiqiandewo.util;
 
+import com.yiqiandewo.pojo.Blog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
@@ -361,6 +362,17 @@ public class RedisUtils {
     }
 
     public Long getPageSize(String key) {
+        if (key.equals("blog")) {   //因为blog里面存的是全部的博客  而前端只展示已经发布的博客 所以需要将未发布的排除s
+            List<Object> values = redisTemplate.opsForHash().values(key);
+            Long size = 0L;
+            for (Object obj : values) {
+                Blog blog = (Blog) obj;
+                if (blog.isPublished()) {
+                    size++;
+                }
+            }
+            return size;
+        }
         return redisTemplate.opsForZSet().zCard(key + ":page");
     }
 
