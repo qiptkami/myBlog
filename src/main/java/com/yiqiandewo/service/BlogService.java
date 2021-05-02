@@ -11,6 +11,9 @@ public interface BlogService {
 
     Blog update(Long id, Blog blog);
 
+    //访问量+1
+    void incrView(Long id, Blog blog);
+
     void delete(Long id);
 
     Blog selectOne(Long id);

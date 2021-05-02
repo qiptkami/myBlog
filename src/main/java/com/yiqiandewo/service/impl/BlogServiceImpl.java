@@ -30,7 +30,7 @@ public class BlogServiceImpl implements BlogService {
             Blog blog = blogMapper.selectOneById(id);
             redisUtils.hSet(key, String.valueOf(id), blog);
         }
-        return  (Blog) redisUtils.hGet(key, String.valueOf(id));
+        return (Blog) redisUtils.hGet(key, String.valueOf(id));
     }
 
     @Override
@@ -138,6 +138,14 @@ public class BlogServiceImpl implements BlogService {
         blog = blogMapper.selectOneById(id);
         redisUtils.hSet(key, String.valueOf(blog.getId()), blog);
         return blog;
+    }
+
+    @Override
+    public void incrView(Long id, Blog blog) {
+        blog.setViews(blog.getViews() + 1);
+        blogMapper.updateViews(id);
+        //更新缓存
+        redisUtils.hSet("blog", String.valueOf(id), blog);
     }
 
     @Override

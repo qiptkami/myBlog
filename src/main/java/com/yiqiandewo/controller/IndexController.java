@@ -51,6 +51,7 @@ public class IndexController {
     @GetMapping("/blog/{id}")
     public String blog(@PathVariable Long id, Model model) {
         Blog blog = blogService.selectOne(id);
+        blogService.incrView(id, blog);
         blog.setContent(MarkdownUtils.markdownToHtmlExtensions(blog.getContent()));
         model.addAttribute("blog", blog);
         return "blog";

@@ -34,6 +34,7 @@ public class JWTInterceptor implements HandlerInterceptor {
 
             String username = JWTUtils.parserToken(token, "username");
             String avatar = JWTUtils.parserToken(token, "avatar");
+            String email = JWTUtils.parserToken(token, "email");
             String id = JWTUtils.parserToken(token, "id");
             Long userId = Long.parseLong(id);
             //放在session中
@@ -41,6 +42,7 @@ public class JWTInterceptor implements HandlerInterceptor {
             user.setId(userId);
             user.setUsername(username);
             user.setAvatar(avatar);
+            user.setEmail(email);
             session.setAttribute("user", user);
             return true;  //放行
         } catch (SignatureVerificationException e) {
