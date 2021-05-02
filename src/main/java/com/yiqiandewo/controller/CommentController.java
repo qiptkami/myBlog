@@ -44,23 +44,19 @@ public class CommentController {
         Long blogId = comment.getBlog().getId();
         comment.setBlog(blogService.selectOne(blogId));
 
-        try {
-            /*Cookie cookie = CookieUtils.get(request, "token");
-            String token = cookie.getValue();
-            JWTUtils.verifyToken(token);//验证token令牌
-            //拿到token payload中的username
-            String username = JWTUtils.parserToken(token, "username");
-            String avatar = JWTUtils.parserToken(token, "avatar");
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
+
+        if (user != null) { //管理员
+            String avatar = user.getAvatar();
+            String username = user.getUsername();
             comment.setAvatar(avatar);
             comment.setNickname(username);
-            comment.setAdminComment(true);*/
-        } catch (Exception e) {
-            System.out.println("签名无效！！！");
+            comment.setAdminComment(true);
+        } else { //游客
+            comment.setAvatar(avatar);
+            comment.setAdminComment(false);
         }
-
-        //验证失败 说明是游客
-        comment.setAvatar(avatar);
-        comment.setAdminComment(false);
         commentService.insert(comment);
 
         return "redirect:/comments/" + blogId;

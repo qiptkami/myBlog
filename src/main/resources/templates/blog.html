@@ -112,7 +112,7 @@
                         <h3 class="ui dividing header" style="max-width: 100%">评论</h3>
                         <div class="comment" th:each="comment : ${comments}">
                             <a class="avatar">
-                                <img src="https://unsplash.it/100/100?image=1008" th:src="@{${comment.avatar}}">
+                                <img src="https://unsplash.it/100/100?image=1008" th:src="${comment.avatar}">
                             </a>
                             <div class="content">
                                 <a class="author">
@@ -132,7 +132,7 @@
                             <div class="comments" th:unless="${#arrays.length(comment.replyComment)} <= 0">
                                 <div class="comment" th:each="reply : ${comment.replyComment}">
                                     <a class="avatar">
-                                        <img src="https://unsplash.it/100/100?image=1001" th:src="@{${reply.avatar}}">
+                                        <img src="https://unsplash.it/100/100?image=1001" th:src="${reply.avatar}">
                                     </a>
                                     <div class="content">
                                         <a class="author">
