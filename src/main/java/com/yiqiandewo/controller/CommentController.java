@@ -1,11 +1,9 @@
 package com.yiqiandewo.controller;
+
 import com.yiqiandewo.pojo.Comment;
 import com.yiqiandewo.pojo.User;
 import com.yiqiandewo.service.BlogService;
 import com.yiqiandewo.service.CommentService;
-import com.yiqiandewo.util.CookieUtils;
-import com.yiqiandewo.util.JWTUtils;
-import org.commonmark.ext.gfm.tables.TableBlock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -14,9 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 

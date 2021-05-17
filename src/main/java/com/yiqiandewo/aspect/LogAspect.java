@@ -1,5 +1,6 @@
 package com.yiqiandewo.aspect;
 
+import com.yiqiandewo.util.IpInfoUtil;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -29,7 +30,10 @@ public class LogAspect {
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = attributes.getRequest();
         String url = request.getRequestURL().toString();
-        String ip = request.getRemoteAddr();
+
+        //String ip = request.getRemoteAddr(); //可能拿不到真实ip
+        String ip = IpInfoUtil.getIpAddr(request);
+
         String classMethod = pcj.getSignature().getDeclaringTypeName() + "." + pcj.getSignature().getName();
         Object[] args = pcj.getArgs();
         RequestLog requestLog = new RequestLog(url, ip, classMethod, args);
