@@ -4,7 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-public class IpInfoUtil {
+public class IpInfoUtils {
 
     /**
      * 获取客户端IP地址
