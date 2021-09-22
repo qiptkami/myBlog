@@ -151,7 +151,6 @@ public class TypeServiceImpl implements TypeService {
             return null;
         }
         typeMapper.insert(type);
-        type = this.selectOne(type.getName());
         //放入缓存
         redisUtils.setPage("type", String.valueOf(type.getId()), type.getId().doubleValue(), type);
         return type;

@@ -1,8 +1,9 @@
+
 spring:
   datasource:
     username: root
     password: yiqiandewo1
-    url: jdbc:mysql://119.45.192.221:3306/blog?serverTimezone=UTC&useUnicode=true&characterEnconding=utf-8
+    url: jdbc:mysql://120.24.218.221:3306/blog?serverTimezone=UTC&useUnicode=true&characterEnconding=utf-8
     driver-class-name: com.mysql.cj.jdbc.Driver
   thymeleaf:
     cache: false
@@ -14,7 +15,7 @@ spring:
   messages:
     basename: i18n.messages # 国际化的配置文件路径
   redis:
-    host: 119.45.192.221
+    host: 120.24.218.221
     port: 6379
     password: 123
 mybatis:
@@ -31,3 +32,7 @@ logging:
     com.yiqiandewo.mapper: debug  # 控制台打印sql
 
 comment.avatar: https://i.loli.net/2021/05/02/QAioDNPKlZVutY4.png
+server:
+  port: 80
+  servlet:
+    context-path: /blog # 项目名 ContextPath must start with '/' and not end with '/'

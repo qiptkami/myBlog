@@ -1,5 +1,6 @@
 package com.yiqiandewo;
 
+import com.yiqiandewo.mapper.BlogMapper;
 import com.yiqiandewo.mapper.TypeMapper;
 import com.yiqiandewo.pojo.Blog;
 import com.yiqiandewo.pojo.Type;
@@ -19,23 +20,10 @@ import java.util.Set;
 class BlogApplicationTests {
 
     @Autowired
-    private RedisUtils redisUtils;
-
-    @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
-
-    @Autowired
-    TypeMapper typeMapper;
+    BlogMapper blogMapper;
 
     @Test
     void test() {
-
-        String key = "blog:page";
-        Set<ZSetOperations.TypedTuple<Object>> typedTuples = redisUtils.zRevRangeWithScores(key, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, 0, 10);
-        for (ZSetOperations.TypedTuple<Object> typedTuple : typedTuples) {
-            System.out.println(typedTuple.getScore());
-            System.out.println(typedTuple.getValue());
-        }
-
+        Blog b = new Blog();;
     }
 }

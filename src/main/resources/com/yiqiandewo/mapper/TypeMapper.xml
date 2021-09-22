@@ -16,7 +16,7 @@
         </collection>
     </resultMap>
 
-    <insert id="insert" parameterType="com.yiqiandewo.pojo.Type">
+    <insert id="insert" parameterType="com.yiqiandewo.pojo.Type"  useGeneratedKeys="true" keyProperty="id">
         insert into t_type(name) values(#{name});
     </insert>
 

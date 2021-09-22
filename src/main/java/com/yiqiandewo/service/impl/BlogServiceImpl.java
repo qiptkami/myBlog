@@ -159,6 +159,7 @@ public class BlogServiceImpl implements BlogService {
         blog.setViews(0);
         blogMapper.insert(blog);
 
+
         String key = "type_blogs";
         redisUtils.setPage("blog", String.valueOf(blog.getId()), blog.getId().doubleValue(), blog);
         boolean exist = redisUtils.exists(key);

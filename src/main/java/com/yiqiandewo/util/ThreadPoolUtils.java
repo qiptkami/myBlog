@@ -11,14 +11,17 @@ public class ThreadPoolUtils {
      * 线程缓冲队列
      */
     private static BlockingQueue<Runnable> bqueue = new ArrayBlockingQueue<>(100);
+
     /**
      * 核心线程数，会一直存活，即使没有任务，线程池也会维护线程的最少数量
      */
     private static final int SIZE_CORE_POOL = 5;
+
     /**
      * 线程池维护线程的最大数量
      */
     private static final int SIZE_MAX_POOL = 10;
+
     /**
      * 线程池维护线程所允许的空闲时间
      */

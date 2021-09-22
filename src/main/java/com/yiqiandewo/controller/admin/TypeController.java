@@ -117,7 +117,12 @@ public class TypeController {
      */
     @DeleteMapping("/types/{id}")
     public String delete(@PathVariable Long id, RedirectAttributes attributes) {
-        typeService.delete(id);
+        try {
+            typeService.delete(id);
+        } catch (RuntimeException e) {
+            attributes.addFlashAttribute("errMsg", "该类型下还有所属博客！！！");
+            return "redirect:/admin/types";
+        }
         attributes.addFlashAttribute("successMsg", "删除成功");
         return "redirect:/admin/types";
     }
