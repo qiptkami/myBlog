@@ -24,6 +24,6 @@ class BlogApplicationTests {
 
     @Test
     void test() {
-        Blog b = new Blog();;
+        Blog b = new Blog();
     }
 }
