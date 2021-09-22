@@ -67,7 +67,7 @@ public class JWTInterceptor implements HandlerInterceptor {
             CookieUtils.set(response, "tokenInvalid", "请先登录", -1);
         }
 
-        response.sendRedirect("/admin");
+        response.sendRedirect("/blog/admin");
         return false;  //拦截
     }
 }

@@ -285,8 +285,8 @@ public class RedisUtils {
      * @param key
      * @param value
      */
-    public void zIncrby(String key, Object value) {
-        redisTemplate.opsForZSet().incrementScore(key, value, 1);
+    public void zIncrby(String key, Object value, double delta) {
+        redisTemplate.opsForZSet().incrementScore(key, value, delta);
     }
 
     /**
@@ -362,7 +362,7 @@ public class RedisUtils {
     }
 
     public Long getPageSize(String key) {
-        if (key.equals("blog")) {   //因为blog里面存的是全部的博客  而前端只展示已经发布的博客 所以需要将未发布的排除s
+        if (key.equals("blog")) {   //因为blog里面存的是全部的博客  而前端只展示已经发布的博客 所以需要将未发布的排除
             List<Object> values = redisTemplate.opsForHash().values(key);
             Long size = 0L;
             for (Object obj : values) {

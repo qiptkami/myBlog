@@ -159,21 +159,28 @@ public class BlogServiceImpl implements BlogService {
         blog.setViews(0);
         blogMapper.insert(blog);
 
+        //分页缓存
+        redisUtils.setPage("blog", String.valueOf(blog.getId()), blog.getId().doubleValue(), blog);
 
         String key = "type_blogs";
-        redisUtils.setPage("blog", String.valueOf(blog.getId()), blog.getId().doubleValue(), blog);
         boolean exist = redisUtils.exists(key);
         if (exist) {
-            redisUtils.zIncrby(key, blog.getType().getId());
+            //排行榜缓存 该type下博客数量+1
+            redisUtils.zIncrby(key, blog.getType().getId(), 1);
         }
         return blog;
     }
 
     @Override
     public void delete(Long id) {
+        Blog blog = (Blog) redisUtils.hGet("blog", String.valueOf(id));
         blogMapper.delete(id);
+        //删除分页缓存 blog 中的blog
         redisUtils.delPage("blog", String.valueOf(id));
-        redisUtils.zIncrby("type_blogs", id);
+        //排行榜缓存 该type下博客数量-1
+
+        redisUtils.zIncrby("type_blogs", blog.getType().getId(), -1);
+
     }
 
     private PageInfo<Blog> getPageInfo(int page, int size, List<Blog> list, String key) {

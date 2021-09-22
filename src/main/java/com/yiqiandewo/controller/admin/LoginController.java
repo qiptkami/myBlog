@@ -51,6 +51,7 @@ public class LoginController {
     @PostMapping("/login")
     public String login(String username, String password, HttpServletRequest request, HttpServletResponse response, RedirectAttributes attributes) {
         User user = userService.selectOne(username);
+        CookieUtils.delete(request, response, "tokenInvalid");
 
         if (user == null) {
             attributes.addFlashAttribute("message", "用户不存在！");
@@ -71,7 +72,6 @@ public class LoginController {
         HttpSession session = request.getSession();
         session.setAttribute("user", user);
 
-        CookieUtils.delete(request, response, "tokenInvalid");
 
         return "redirect:/admin/index";
     }
