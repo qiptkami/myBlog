@@ -30,7 +30,6 @@ public class ThreadPoolUtils {
     private static ThreadPoolExecutor pool = new ThreadPoolExecutor(SIZE_CORE_POOL, SIZE_MAX_POOL, ALIVE_TIME, TimeUnit.MILLISECONDS, bqueue, new ThreadPoolExecutor.CallerRunsPolicy());
 
     static {
-
         pool.prestartAllCoreThreads();
     }
 
