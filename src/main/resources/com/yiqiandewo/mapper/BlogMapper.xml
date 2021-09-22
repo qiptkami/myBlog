@@ -91,4 +91,5 @@
         insert into t_blog(`appreciation`, `comment_able`, `content`, `create_time`, `first_picture`, `flag`, `published`, `recommend`, `share_statement`, `title`, `update_time`, `views`, `type_id`, `user_id`, `description`)
         values(#{appreciation}, #{commentAble}, #{content}, #{createTime}, #{firstPicture}, #{flag}, #{published}, #{recommend}, #{shareStatement}, #{title}, #{updateTime}, #{views}, #{type.id}, #{user.id}, #{description});
     </insert>
+
 </mapper>
