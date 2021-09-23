@@ -176,7 +176,10 @@ public class TypeServiceImpl implements TypeService {
 
         for (Type type : map.keySet()) {
             if (type.getId().equals(id)) { //Long类型比较大小用equals
-                flag = false;
+                if (map.get(type) > 0) {
+                    flag = false;
+                    break;
+                }
             }
         }
 
@@ -184,6 +187,7 @@ public class TypeServiceImpl implements TypeService {
             //如果没有，才能删除
             typeMapper.delete(id);
             redisUtils.delPage("type", String.valueOf(id)); // redisUtils.hDel("type", String.valueOf(id)); 已经在delPage中执行了
+            redisUtils.remove("type_blogs", String.valueOf(id));
         } else {
             throw new RuntimeException("该类型下还有所属博客！！！");
         }

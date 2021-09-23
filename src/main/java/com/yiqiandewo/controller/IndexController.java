@@ -58,7 +58,7 @@ public class IndexController {
     }
 
     @GetMapping("/footer/newBlog")
-    public String footer(Model model){
+    public String footer(Model model) {
         List<Blog> list = blogService.selectList(3);
         model.addAttribute("newBlogs", list);
         return "commons/bar :: newBlogList";

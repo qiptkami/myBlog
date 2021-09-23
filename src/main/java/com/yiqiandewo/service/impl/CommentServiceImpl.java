@@ -16,7 +16,6 @@ public class CommentServiceImpl implements CommentService {
     @Autowired
     private CommentMapper commentMapper;
 
-
     private List<Comment> tempList = new ArrayList<>();
 
     /**
@@ -30,16 +29,18 @@ public class CommentServiceImpl implements CommentService {
         //首先查询出所有没有parent的comment
         List<Comment> list = commentMapper.selectListByBlog(blogId);
 
-        for (Comment comment : list) {
-            //查询出子回复  即所有parentId = comment.id 的评论
+        for (Comment comment : list) { //遍历父评论
+            //查询出子评论 即所有parentId = comment.id 的评论
             List<Comment> replyList = commentMapper.selectListReply(comment.getId());
-            for (Comment reply : replyList) {
+            for (Comment reply : replyList) { //遍历一级子评论
                 tempList.add(reply);
-                //子回复也可能有子回复
-                recReply(reply);
+                //子评论也可能有子评论
+                recReply(reply);//二级...三级...子评论
             }
+            //将一级子评论封装进父评论中
             comment.setReplyComment(tempList);
 
+            //前端显示的是 @父评论NickName，所以要查出父评论的NickName
             for (Comment c : tempList) {
                 c.getParentComment().setNickname(commentMapper.selectOne(c.getParentComment().getId()).getNickname());
             }
@@ -56,7 +57,7 @@ public class CommentServiceImpl implements CommentService {
             for (Comment reply : replyList) {
                 tempList.add(reply);  //如果不用全局变量  这个reply将无法返回
                 if (commentMapper.selectListReply(reply.getId()).size() > 0) {
-                    //子回复也可能有子回复
+                    //子评论也可能有子评论
                     recReply(reply);
                 }
             }

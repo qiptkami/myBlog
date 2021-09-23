@@ -83,7 +83,6 @@ public class TypeController {
         return "redirect:/admin/types";  //返回到 /admin/type 请求 再去查询
     }
 
-
     /**
      * 更新type，并重定向到type首页
      * @param id
