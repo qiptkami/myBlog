@@ -158,7 +158,7 @@
     }
 
     function loadData() {
-        $("#table-container").load(/*[[@{/admin/blogs/search}]]*/"/admin/blogs/search", {
+        $("#table-container").load("[[@{/admin/blogs/search}]]", {
             title : $("[name='title']").val(),
             typeId : $("[name='type']").val(),   //typeId会封装进controller中的与它参数名一致的参数   name='type' 然后找到对应name的value值
             recommend : $("[name='recommend']").prop('checked'),

@@ -251,8 +251,8 @@
         position:'left center'
     });
 
-    var serverUrl = /*[[#{blog.serverUrl}]]*/"127.0.0.1:8080";
-    var url = /*[[@{/blog/{id}(id=${blog.id})}]]*/"";
+    var serverUrl = /*[[#{blog.serverUrl}]]*/"127.0.0.1";
+    var url = "[[@{/blog/{id}(id=${blog.id})}]]";
     //动态生成二维码
     var qrcode = new QRCode("qrcode", { //指定div的ID显示生成的二维码
         text: serverUrl + url,
@@ -307,7 +307,7 @@
     });
 
     $(function () {
-        $("#comment-container").load(/*[[@{/comments/{id}(id=${blog.id})}]]*/"/comments/6");
+        $("#comment-container").load("[[@{/comments/{id}(id=${blog.id})}]]");
     })
 
     $('#comment-post-btn').click(function () {
@@ -321,7 +321,7 @@
     });
 
     function postData() {
-        $('#comment-container').load(/*[[@{/comments}]]*/"", {
+        $('#comment-container').load("[[@{/comments}]]", {
             "parentComment.id" : $("[name='parentComment.id']").val(),
             "blog.id" : $("[name='blog.id']").val(),
             "nickname" : $("[name='nickname']").val(),
