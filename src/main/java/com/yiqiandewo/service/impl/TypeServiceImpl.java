@@ -163,8 +163,9 @@ public class TypeServiceImpl implements TypeService {
             return null;
         }
         typeMapper.update(type);
-        //更新缓存
-        redisUtils.hSet("type", String.valueOf(type.getId()), type);
+        //删除缓存
+        redisUtils.hDel("type", String.valueOf(type.getId()));
+
         return type;
     }
 

@@ -136,7 +136,10 @@ public class BlogServiceImpl implements BlogService {
         blog.setUpdateTime(new Date());
         blogMapper.update(blog);
         blog = blogMapper.selectOneById(id);
-        redisUtils.hSet(key, String.valueOf(blog.getId()), blog);
+
+        //删除缓存
+        redisUtils.hDel(key, String.valueOf(blog.getId()));
+
         return blog;
     }
 
