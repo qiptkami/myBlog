@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 public class BlogServiceImpl implements BlogService {
@@ -145,7 +146,13 @@ public class BlogServiceImpl implements BlogService {
 
     @Override
     public void incrView(Long id, Blog blog) {
-        blog.setViews(blog.getViews() + 1);
+        AtomicInteger views;
+        do {
+            Blog b = blogMapper.selectOneById(id);
+            views = new AtomicInteger(b.getViews());
+        } while (!views.compareAndSet(views.intValue(), views.intValue() + 1)); //cas自旋
+
+        blog.setViews(views.intValue());
         blogMapper.updateViews(id);
         //更新缓存
         redisUtils.hSet("blog", String.valueOf(id), blog);
