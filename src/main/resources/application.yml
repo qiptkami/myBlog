@@ -1,8 +1,8 @@
 spring:
   datasource:
     username: root
-    password: yiqiandewo1
-    url: jdbc:mysql://120.24.218.221:3306/blog?serverTimezone=UTC&useUnicode=true&characterEnconding=utf-8
+    password: qikami
+    url: jdbc:mysql://101.43.240.27:3306/blog?serverTimezone=UTC&useUnicode=true&characterEnconding=utf-8
     driver-class-name: com.mysql.cj.jdbc.Driver
   thymeleaf:
     cache: false
@@ -14,9 +14,9 @@ spring:
   messages:
     basename: i18n.messages # 国际化的配置文件路径
   redis:
-    host: 120.24.218.221
+    host: 101.43.240.27
     port: 6379
-    password: 123
+    password: qikami
 mybatis:
   type-aliases-package: com.yiqiandewo.pojo
   mapper-locations: classpath:com/yiqiandewo/mapper/*.xml
